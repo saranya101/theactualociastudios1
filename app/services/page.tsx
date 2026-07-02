@@ -153,6 +153,7 @@ const serviceCategories = [
 
 const serviceJourney = [
   "Discover",
+  "Understand",
   "Trust",
   "Enquire",
   "Track",
@@ -172,14 +173,14 @@ export default function ServicesPage() {
           <div className="mt-6 grid gap-12 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-24">
             <div>
               <h1 className="max-w-4xl text-[2.9rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[4rem] md:text-[5rem]">
-                Digital services built around trust, enquiries and follow-up.
+                Digital services for trust, enquiries and follow-up.
               </h1>
             </div>
             <div>
               <p className="max-w-2xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9">
-                OCIA helps businesses improve the full digital journey, from
-                how they are discovered, to how customers understand them, to
-                how enquiries are captured, tracked and followed up.
+                OCIA improves the full digital journey: how customers find
+                you, understand you, enquire with you and get followed up
+                after they show interest.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <OciaButton href="/#final-cta" arrow>
@@ -235,9 +236,14 @@ export default function ServicesPage() {
                       <h3 className="text-[1.05rem] font-medium text-white">
                         {item.name}
                       </h3>
-                      <p className="mt-3 text-sm leading-7 text-white/58 md:text-[0.98rem]">
-                        {item.description}
-                      </p>
+                      <div className="mt-4">
+                        <p className="text-[0.62rem] uppercase tracking-[0.28em] text-white/32">
+                          What it fixes
+                        </p>
+                        <p className="mt-2 text-sm leading-7 text-white/58 md:text-[0.98rem]">
+                          {item.description}
+                        </p>
+                      </div>
                       <div className="mt-5 border-t border-white/8 pt-4">
                         <p className="text-[0.62rem] uppercase tracking-[0.28em] text-white/32">
                           Best for
@@ -271,12 +277,12 @@ export default function ServicesPage() {
       <section className="border-t border-white/8 px-5 py-24 sm:px-8 md:px-10 lg:px-14 lg:py-32 xl:px-20">
         <div className="mx-auto max-w-[1280px]">
           <h2 className="max-w-3xl text-[2.5rem] font-medium leading-[0.96] tracking-[-0.05em] text-white sm:text-[3.5rem] md:text-[4.2rem]">
-            Not separate services. One connected system.
+            Not separate services. One connected customer journey.
           </h2>
           <p className="mt-6 max-w-3xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9">
-            A website creates trust. SEO and local visibility bring attention.
-            Conversion flows turn attention into enquiries. CRM and automation
-            help you follow up before the lead goes cold.
+            A website creates credibility. SEO and local visibility bring
+            attention. Conversion flow turns attention into enquiries. CRM and
+            automation make sure those enquiries are not forgotten.
           </p>
 
           <div className="mt-12 grid gap-4 md:grid-cols-6">
@@ -296,7 +302,7 @@ export default function ServicesPage() {
       <section className="border-t border-white/8 px-5 py-24 sm:px-8 md:px-10 lg:px-14 lg:py-32 xl:px-20">
         <div className="mx-auto max-w-[920px] text-center">
           <h2 className="text-[2.5rem] font-medium leading-[0.96] tracking-[-0.05em] text-white sm:text-[3.5rem] md:text-[4.2rem]">
-            Not sure what your business needs first?
+            Not sure where to start?
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9">
             Start with an audit. We will identify the biggest gaps affecting
@@ -305,7 +311,7 @@ export default function ServicesPage() {
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <OciaButton href="/#final-cta" arrow>
-              Start the Conversation
+              Get a Recommendation
             </OciaButton>
             <OciaButton href="/#pricing" variant="secondary">
               View Packages

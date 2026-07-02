@@ -18,13 +18,13 @@ export default function OciaButton({
   className = "",
 }: OciaButtonProps) {
   const baseClassName =
-    "group inline-flex min-h-12 items-center justify-center gap-3 rounded-full px-6 text-sm transition duration-300";
+    "group inline-flex min-h-12 items-center justify-center gap-3 rounded-full px-6 text-sm tracking-[-0.01em] transition duration-300";
 
   const variantClassName =
     variant === "primary"
-      ? "border border-[rgba(255,255,255,0.34)] bg-[linear-gradient(180deg,#ffffff_0%,#d7e0ea_100%)] font-semibold text-[#061018] shadow-[0_12px_40px_rgba(180,210,255,0.12)] hover:-translate-y-0.5 hover:border-[rgba(255,255,255,0.42)] hover:bg-[linear-gradient(180deg,#ffffff_0%,#e5edf6_100%)] hover:shadow-[0_18px_46px_rgba(180,210,255,0.18)]"
+      ? "border border-[rgba(255,255,255,0.34)] bg-[linear-gradient(180deg,#ffffff_0%,#d7e0ea_100%)] font-semibold text-[#061018] shadow-[0_12px_40px_rgba(180,210,255,0.12)] hover:-translate-y-0.5 hover:border-[rgba(255,255,255,0.44)] hover:bg-[linear-gradient(180deg,#ffffff_0%,#e5edf6_100%)] hover:shadow-[0_18px_46px_rgba(180,210,255,0.2)]"
       : variant === "secondary"
-        ? "border border-white/14 bg-[rgba(255,255,255,0.04)] font-medium text-white/90 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-md hover:-translate-y-0.5 hover:border-[rgba(198,214,230,0.28)] hover:bg-[rgba(255,255,255,0.065)] hover:text-white"
+        ? "border border-white/14 bg-[rgba(255,255,255,0.045)] font-medium text-white/92 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-md hover:-translate-y-0.5 hover:border-[rgba(198,214,230,0.3)] hover:bg-[rgba(255,255,255,0.075)] hover:text-white hover:shadow-[0_10px_30px_rgba(125,154,187,0.08)]"
         : "min-h-0 rounded-none border-0 px-0 font-medium text-[rgba(197,216,234,0.88)] hover:text-white";
 
   return (

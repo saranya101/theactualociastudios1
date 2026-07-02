@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
+import HashResetOnLoad from "./components/HashResetOnLoad";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -19,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={outfit.variable}>{children}</body>
+      <body className={outfit.variable}>
+        <HashResetOnLoad />
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,5 +1,5 @@
-import Link from "next/link";
 import OciaButton from "../components/OciaButton";
+import { CALENDLY_URL } from "../lib/ocia-links";
 
 const serviceCategories = [
   {
@@ -183,7 +183,7 @@ export default function ServicesPage() {
                 after they show interest.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <OciaButton href="/#final-cta" arrow>
+                <OciaButton href={CALENDLY_URL} arrow>
                   Get a Recommendation
                 </OciaButton>
                 <OciaButton href="/#pricing" variant="secondary">
@@ -201,7 +201,7 @@ export default function ServicesPage() {
             Start with clarity, then build the right system.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <OciaButton href="/#final-cta" arrow className="sm:min-w-[180px]">
+            <OciaButton href={CALENDLY_URL} arrow className="sm:min-w-[180px]">
               Get a Recommendation
             </OciaButton>
             <OciaButton href="/#pricing" variant="secondary" className="sm:min-w-[180px]">
@@ -265,7 +265,7 @@ export default function ServicesPage() {
                 </div>
               </div>
               <div className="mt-8">
-                <OciaButton href="/#final-cta" arrow variant="secondary">
+                <OciaButton href={CALENDLY_URL} arrow variant="secondary">
                   Get a Recommendation
                 </OciaButton>
               </div>
@@ -310,7 +310,7 @@ export default function ServicesPage() {
             next step.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <OciaButton href="/#final-cta" arrow>
+            <OciaButton href={CALENDLY_URL} arrow>
               Get a Recommendation
             </OciaButton>
             <OciaButton href="/#pricing" variant="secondary">

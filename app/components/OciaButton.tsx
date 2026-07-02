@@ -17,6 +17,7 @@ export default function OciaButton({
   arrow = false,
   className = "",
 }: OciaButtonProps) {
+  const isExternal = /^https?:\/\//.test(href);
   const baseClassName =
     "group inline-flex min-h-12 items-center justify-center gap-3 rounded-full px-6 text-sm tracking-[-0.01em] transition duration-300";
 
@@ -27,8 +28,8 @@ export default function OciaButton({
         ? "border border-white/14 bg-[rgba(255,255,255,0.045)] font-medium text-white/92 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-md hover:-translate-y-0.5 hover:border-[rgba(198,214,230,0.3)] hover:bg-[rgba(255,255,255,0.075)] hover:text-white hover:shadow-[0_10px_30px_rgba(125,154,187,0.08)]"
         : "min-h-0 rounded-none border-0 px-0 font-medium text-[rgba(197,216,234,0.88)] hover:text-white";
 
-  return (
-    <Link href={href} className={`${baseClassName} ${variantClassName} ${className}`.trim()}>
+  const content = (
+    <>
       <span className={variant === "primary" ? "text-[#061018]" : undefined}>{children}</span>
       {arrow ? (
         <span
@@ -44,6 +45,25 @@ export default function OciaButton({
           →
         </span>
       ) : null}
+    </>
+  );
+
+  if (isExternal) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`${baseClassName} ${variantClassName} ${className}`.trim()}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={`${baseClassName} ${variantClassName} ${className}`.trim()}>
+      {content}
     </Link>
   );
 }

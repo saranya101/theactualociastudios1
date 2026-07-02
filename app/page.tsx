@@ -7,16 +7,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLayoutEffect, useRef, useState } from "react";
 import OciaButton from "./components/OciaButton";
+import { CALENDLY_URL } from "./lib/ocia-links";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const navItems = [
-  { label: "Work", href: "#work" },
+  { label: "Work", href: "/#work" },
   { label: "Services", href: "/services" },
-  { label: "Solutions", href: "#system" },
-  { label: "Process", href: "#process" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Contact", href: "#final-cta" },
+  { label: "Solutions", href: "/#solutions" },
+  { label: "Process", href: "/#process" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "Contact", href: CALENDLY_URL, external: true },
 ];
 
 const decisionQuestions = [
@@ -306,12 +307,12 @@ const faqs = [
 ];
 
 const footerLinks = [
-  { label: "Work", href: "#work" },
+  { label: "Work", href: "/#work" },
   { label: "Services", href: "/services" },
-  { label: "Solutions", href: "#system" },
-  { label: "Process", href: "#process" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Contact", href: "#final-cta" },
+  { label: "Solutions", href: "/#solutions" },
+  { label: "Process", href: "/#process" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "Contact", href: CALENDLY_URL, external: true },
 ];
 
 const sectionRevealTargets = [
@@ -636,13 +637,19 @@ export default function HomePage() {
           </Link>
 
           <nav className="flex max-w-full items-center gap-4 overflow-x-auto pb-1 text-[0.62rem] uppercase tracking-[0.24em] whitespace-nowrap text-white/64 [scrollbar-width:none] md:gap-7 md:pb-0 md:text-[0.7rem]">
-            {navItems.map((item) =>
+              {navItems.map((item) =>
               item.href.startsWith("/") ? (
                 <Link key={item.label} href={item.href} className="transition duration-300 hover:text-white">
                   {item.label}
                 </Link>
               ) : (
-                <a key={item.label} href={item.href} className="transition duration-300 hover:text-white">
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
+                  className="transition duration-300 hover:text-white"
+                >
                   {item.label}
                 </a>
               ),
@@ -739,7 +746,7 @@ export default function HomePage() {
                     </p>
 
                     <div className="mt-9">
-                      <OciaButton href="#final-cta" arrow>
+                      <OciaButton href={CALENDLY_URL} arrow>
                         Book a Discovery Call
                       </OciaButton>
                     </div>
@@ -824,7 +831,7 @@ export default function HomePage() {
                 </p>
 
                 <div data-decision-cta className="invisible mt-10 flex justify-center opacity-0">
-                  <OciaButton href="#final-cta" arrow>
+                  <OciaButton href={CALENDLY_URL} arrow>
                     Get a Website Review
                   </OciaButton>
                 </div>
@@ -866,7 +873,7 @@ export default function HomePage() {
       </section>
 
       <section
-        id="system"
+        id="solutions"
         data-system-section
         className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_16%_18%,rgba(102,130,160,0.1),transparent_20%),linear-gradient(180deg,#050912_0%,#07101a_100%)] px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
       >
@@ -1003,7 +1010,7 @@ export default function HomePage() {
               Explore All Services
             </OciaButton>
             <div className="mt-4">
-              <OciaButton href="#final-cta" arrow variant="tertiary">
+              <OciaButton href={CALENDLY_URL} arrow variant="tertiary">
                 Talk to Us
               </OciaButton>
             </div>
@@ -1061,12 +1068,12 @@ export default function HomePage() {
             </div>
 
             <div data-audit-card className="mt-10">
-              <OciaButton href="#final-cta" arrow>
+              <OciaButton href={CALENDLY_URL} arrow>
                 Get a Recommendation
               </OciaButton>
             </div>
             <div data-audit-card className="mt-4">
-              <OciaButton href="#final-cta" variant="secondary">
+              <OciaButton href={CALENDLY_URL} variant="secondary">
                 Request a Website Review
               </OciaButton>
             </div>
@@ -1252,7 +1259,7 @@ export default function HomePage() {
                     ))}
                   </div>
                   <div className="mt-8">
-                    <OciaButton href="#final-cta" arrow variant="secondary">
+                    <OciaButton href={CALENDLY_URL} arrow variant="secondary">
                       {item.cta}
                     </OciaButton>
                   </div>
@@ -1320,7 +1327,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-10">
-            <OciaButton href="#final-cta" arrow variant="secondary">
+            <OciaButton href={CALENDLY_URL} arrow variant="secondary">
               Talk Through Your Project
             </OciaButton>
           </div>
@@ -1430,7 +1437,7 @@ export default function HomePage() {
                 </div>
                 <div className="mt-8">
                   <OciaButton
-                    href="#final-cta"
+                    href={CALENDLY_URL}
                     variant={pkg.featured ? "primary" : "secondary"}
                     arrow={pkg.featured}
                     className="w-full"
@@ -1447,7 +1454,7 @@ export default function HomePage() {
               Not sure where to start?
             </p>
             <div className="mt-4 md:mt-0">
-              <OciaButton href="#final-cta" arrow>
+              <OciaButton href={CALENDLY_URL} arrow>
                 Get a Recommendation
               </OciaButton>
             </div>
@@ -1514,7 +1521,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-10">
-            <OciaButton href="#final-cta" arrow variant="secondary">
+            <OciaButton href={CALENDLY_URL} arrow variant="secondary">
               See What We Can Improve
             </OciaButton>
           </div>
@@ -1589,7 +1596,7 @@ export default function HomePage() {
           </div>
 
           <div data-faq-item className="mt-10 flex justify-start">
-            <OciaButton href="#final-cta" arrow variant="secondary">
+            <OciaButton href={CALENDLY_URL} arrow variant="secondary">
               Talk Through Your Project
             </OciaButton>
           </div>
@@ -1628,10 +1635,10 @@ export default function HomePage() {
             data-final-cta
             className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
-            <OciaButton href="#final-cta" arrow>
+            <OciaButton href={CALENDLY_URL} arrow>
               Start the Conversation
             </OciaButton>
-            <OciaButton href="#pricing" variant="secondary">
+            <OciaButton href="/#pricing" variant="secondary">
               View Growth Systems
             </OciaButton>
           </div>
@@ -1656,12 +1663,18 @@ export default function HomePage() {
                   {link.label}
                 </Link>
               ) : (
-                <a key={link.label} href={link.href} className="transition hover:text-white">
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition hover:text-white"
+                >
                   {link.label}
                 </a>
               ),
             )}
-            <OciaButton href="#final-cta" arrow variant="tertiary">
+            <OciaButton href={CALENDLY_URL} arrow variant="tertiary">
               Talk to Us
             </OciaButton>
           </div>

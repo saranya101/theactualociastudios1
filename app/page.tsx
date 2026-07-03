@@ -30,21 +30,33 @@ const decisionQuestions = [
 const systemPillars = [
   {
     number: "01",
-    name: "Attract",
-    title: "Make the business easier to find and easier to understand.",
-    body: "SEO foundations, local visibility, service clarity and landing pages that help the right customers discover you with less confusion.",
+    name: "First impression",
+    body: "Visitors understand who you are within seconds.",
+    desktopOffset: "lg:-translate-y-8",
   },
   {
     number: "02",
-    name: "Convert",
-    title: "Turn attention into enquiries with clearer pages and stronger calls to action.",
-    body: "Website redesign, trust signals, CRO, enquiry forms and WhatsApp CTAs that guide visitors towards taking the next step.",
+    name: "Trust signals",
+    body: "Your visuals, structure, and proof make the business feel credible.",
+    desktopOffset: "lg:translate-y-10",
   },
   {
     number: "03",
-    name: "Follow Up",
-    title: "Track and respond to leads before they go cold.",
-    body: "CRM, WhatsApp automation, booking systems, AI chatbots and follow-up workflows that reduce manual gaps after interest appears.",
+    name: "Clear offer",
+    body: "Services are positioned clearly so people know what to ask for.",
+    desktopOffset: "lg:-translate-y-3",
+  },
+  {
+    number: "04",
+    name: "Enquiry / booking",
+    body: "The call-to-action leads naturally into a form, WhatsApp, or Calendly.",
+    desktopOffset: "lg:translate-y-12",
+  },
+  {
+    number: "05",
+    name: "Follow-up system",
+    body: "Leads can be organised, tracked, and followed up instead of getting lost.",
+    desktopOffset: "lg:-translate-y-10",
   },
 ];
 
@@ -878,15 +890,17 @@ export default function HomePage() {
         className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_16%_18%,rgba(102,130,160,0.1),transparent_20%),linear-gradient(180deg,#050912_0%,#07101a_100%)] px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_18%,rgba(94,124,154,0.12),transparent_22%),radial-gradient(circle_at_18%_82%,rgba(62,82,108,0.1),transparent_24%)]" />
+        <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(rgba(228,236,245,0.14)_0.7px,transparent_0.7px)] [background-size:34px_34px]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent_16%,transparent_84%,rgba(255,255,255,0.02))]" />
         <div className="relative z-20 mx-auto max-w-[1280px]">
             <p
               data-reveal-intro
               data-group="system"
               className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
             >
-            The Ocia System
+            Digital Path
             </p>
-          <div className="mt-6 grid gap-12 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-24">
+          <div className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)] lg:gap-20">
             <div>
               <h2
                 data-reveal-intro
@@ -901,39 +915,98 @@ export default function HomePage() {
                 data-group="system"
                 className="max-w-2xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9"
               >
-              We connect the pieces that usually sit apart: website, messaging,
-              SEO, enquiry flow, CRM, automation and AI support. The result is
-              a digital presence that does more than look good — it helps the
-              business respond, convert and grow.
+              Your website should not stop at looking good. It should guide
+              visitors from trust, to enquiry, to action, with every step
+              feeling clear and intentional.
             </p>
           </div>
 
-          <div className="mt-18 grid gap-5 lg:grid-cols-3">
-            {systemPillars.map((pillar) => (
-              <article
-                key={pillar.title}
-                data-system-card
-                className="group rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.018))] px-7 py-8 transition duration-300 hover:-translate-y-1 hover:border-[rgba(198,216,234,0.24)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.028))] hover:shadow-[0_26px_60px_rgba(8,16,28,0.18)] md:min-h-[320px] md:px-8 md:py-9"
+          <div className="relative mt-18">
+            <div className="pointer-events-none absolute left-0 right-0 top-1/2 hidden -translate-y-1/2 lg:block">
+              <div className="relative h-px bg-[linear-gradient(90deg,rgba(214,228,242,0.04)_0%,rgba(214,228,242,0.45)_16%,rgba(168,195,221,0.7)_50%,rgba(214,228,242,0.45)_84%,rgba(214,228,242,0.04)_100%)] shadow-[0_0_26px_rgba(168,195,221,0.22)]" />
+              {systemPillars.map((pillar, index) => (
+                <div
+                  key={`${pillar.number}-node`}
+                  className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[rgba(220,232,244,0.42)] bg-[rgba(215,228,241,0.12)] shadow-[0_0_0_6px_rgba(192,211,230,0.05),0_0_22px_rgba(180,208,234,0.22)]"
+                  style={{ left: `${6 + index * 22}%` }}
+                >
+                  <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(236,243,250,0.9)]" />
+                </div>
+              ))}
+              <div className="absolute left-[14%] top-[-28px] h-1 w-1 rounded-full bg-white/50 shadow-[0_0_12px_rgba(214,228,242,0.2)]" />
+              <div className="absolute left-[38%] top-[18px] h-1.5 w-1.5 rounded-full bg-white/40 shadow-[0_0_14px_rgba(214,228,242,0.2)]" />
+              <div className="absolute left-[63%] top-[-20px] h-1 w-1 rounded-full bg-white/50 shadow-[0_0_12px_rgba(214,228,242,0.2)]" />
+              <div className="absolute right-[10%] top-[20px] h-1.5 w-1.5 rounded-full bg-white/45 shadow-[0_0_14px_rgba(214,228,242,0.18)]" />
+            </div>
+
+            <div className="relative space-y-6 lg:hidden">
+              <div className="pointer-events-none absolute bottom-6 left-5 top-6 w-px bg-[linear-gradient(180deg,rgba(214,228,242,0.04)_0%,rgba(214,228,242,0.48)_18%,rgba(168,195,221,0.72)_50%,rgba(214,228,242,0.48)_82%,rgba(214,228,242,0.04)_100%)] shadow-[0_0_24px_rgba(168,195,221,0.18)]" />
+              {systemPillars.map((pillar) => (
+                <article
+                  key={pillar.number}
+                  data-system-card
+                  className="group relative ml-8 rounded-[1.8rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.024))] px-6 py-6 shadow-[0_20px_50px_rgba(6,12,22,0.18)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(198,216,234,0.24)] hover:shadow-[0_28px_60px_rgba(10,18,30,0.24)]"
+                >
+                  <span className="pointer-events-none absolute -left-[1.88rem] top-8 h-4 w-4 rounded-full border border-[rgba(220,232,244,0.42)] bg-[rgba(215,228,241,0.12)] shadow-[0_0_0_5px_rgba(192,211,230,0.05),0_0_20px_rgba(180,208,234,0.22)]" />
+                  <span className="text-[0.66rem] uppercase tracking-[0.34em] text-white/32">
+                    {pillar.number}
+                  </span>
+                  <h3 className="mt-5 text-[1.35rem] font-medium tracking-[-0.04em] text-white">
+                    {pillar.name}
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-white/64">
+                    {pillar.body}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <div className="relative hidden gap-5 lg:grid lg:grid-cols-5 lg:items-start">
+              {systemPillars.map((pillar) => (
+                <article
+                  key={pillar.number}
+                  data-system-card
+                  className={`group relative rounded-[1.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.022))] px-6 py-6 shadow-[0_20px_55px_rgba(6,12,22,0.16)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(198,216,234,0.24)] hover:shadow-[0_30px_70px_rgba(10,18,30,0.24)] ${pillar.desktopOffset ?? ""}`}
+                >
+                  <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(233,239,245,0.4),transparent)] opacity-80" />
+                  <div className="pointer-events-none absolute -top-10 left-1/2 h-10 w-px -translate-x-1/2 bg-[linear-gradient(180deg,rgba(214,228,242,0.28),transparent)]" />
+                  <div className="pointer-events-none absolute -top-12 left-1/2 h-4 w-4 -translate-x-1/2 rounded-full border border-[rgba(220,232,244,0.42)] bg-[rgba(215,228,241,0.12)] shadow-[0_0_0_5px_rgba(192,211,230,0.05),0_0_22px_rgba(180,208,234,0.22)]">
+                    <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(236,243,250,0.9)]" />
+                  </div>
+                  <span className="text-[0.66rem] uppercase tracking-[0.34em] text-white/32">
+                    {pillar.number}
+                  </span>
+                  <h3 className="mt-5 text-[1.4rem] font-medium tracking-[-0.04em] text-white">
+                    {pillar.name}
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-white/64">
+                    {pillar.body}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-14">
+            <Link
+              href="#services"
+              data-system-card
+              className="inline-flex items-center gap-3 text-sm font-medium text-white/82 transition hover:text-white"
+            >
+              <span>Explore what we build</span>
+              <span
+                aria-hidden="true"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/12 bg-white/[0.03] text-white/70 transition hover:border-white/20 hover:bg-white/[0.05]"
               >
-                <span className="text-[0.66rem] uppercase tracking-[0.34em] text-white/30">
-                  {pillar.number}
-                </span>
-                <h3 className="mt-8 text-[1.7rem] font-medium tracking-[-0.045em] text-white md:text-[2.2rem]">
-                  {pillar.name}
-                </h3>
-                <p className="mt-5 text-[0.7rem] uppercase tracking-[0.34em] text-white/34">
-                  {pillar.title}
-                </p>
-                <p className="mt-6 max-w-2xl text-sm leading-7 text-white/60 md:text-[1rem] md:leading-8">
-                  {pillar.body}
-                </p>
-              </article>
-            ))}
+                →
+              </span>
+            </Link>
           </div>
         </div>
       </section>
 
       <section
+        id="services"
         data-services-preview-section
         className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_84%_22%,rgba(124,154,188,0.08),transparent_18%),linear-gradient(180deg,#03060b_0%,#07101a_100%)] px-5 py-30 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
       >

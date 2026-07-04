@@ -6,7 +6,9 @@ import Lenis from "lenis";
 import Image from "next/image";
 import Link from "next/link";
 import { useLayoutEffect, useRef, useState } from "react";
+import ConstellationWhale from "./components/ConstellationWhale";
 import OciaButton from "./components/OciaButton";
+import SceneSection from "./components/SceneSection";
 import { CALENDLY_URL } from "./lib/ocia-links";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -30,32 +32,32 @@ const decisionQuestions = [
 const systemPillars = [
   {
     number: "01",
-    name: "First impression",
-    body: "Visitors understand who you are within seconds.",
+    name: "Land",
+    body: "They understand what you do.",
     desktopOffset: "lg:-translate-y-8",
   },
   {
     number: "02",
-    name: "Trust signals",
-    body: "Your visuals, structure, and proof make the business feel credible.",
+    name: "Trust",
+    body: "The business feels credible.",
     desktopOffset: "lg:translate-y-10",
   },
   {
     number: "03",
-    name: "Clear offer",
-    body: "Services are positioned clearly so people know what to ask for.",
+    name: "Choose",
+    body: "The offer feels clear.",
     desktopOffset: "lg:-translate-y-3",
   },
   {
     number: "04",
-    name: "Enquiry / booking",
-    body: "The call-to-action leads naturally into a form, WhatsApp, or Calendly.",
+    name: "Enquire",
+    body: "The next step feels easy.",
     desktopOffset: "lg:translate-y-12",
   },
   {
     number: "05",
-    name: "Follow-up system",
-    body: "Leads can be organised, tracked, and followed up instead of getting lost.",
+    name: "Follow up",
+    body: "The lead does not get lost.",
     desktopOffset: "lg:-translate-y-10",
   },
 ];
@@ -550,31 +552,31 @@ export default function HomePage() {
             stagger: 0.08,
             duration: 0.7,
             immediateRender: false,
-          }, "intro")
-          .to("[data-decision-copy]", { opacity: 0.72, immediateRender: false }, "question-1")
-          .to("[data-decision-progress='0']", { autoAlpha: 0.78, y: 0, immediateRender: false }, "question-1")
-          .to("[data-decision-question='0']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, "question-1")
-          .to("[data-decision-line]", { scaleX: 0.38, opacity: 0.52, immediateRender: false }, "question-1")
-          .to("[data-decision-progress='0']", { autoAlpha: 0, y: -10, immediateRender: false }, "question-1-out")
-          .to("[data-decision-question='0']", { y: -20, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, "question-1-out")
-          .to("[data-decision-progress='1']", { autoAlpha: 0.78, y: 0, immediateRender: false }, "question-2")
-          .to("[data-decision-question='1']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, "question-2")
-          .to("[data-decision-line]", { scaleX: 0.58, opacity: 0.62, immediateRender: false }, "question-2")
-          .to("[data-decision-progress='1']", { autoAlpha: 0, y: -10, immediateRender: false }, "question-2-out")
-          .to("[data-decision-question='1']", { y: -20, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, "question-2-out")
-          .to("[data-decision-progress='2']", { autoAlpha: 0.78, y: 0, immediateRender: false }, "question-3")
-          .to("[data-decision-question='2']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, "question-3")
-          .to("[data-decision-line]", { scaleX: 0.78, opacity: 0.72, immediateRender: false }, "question-3")
-          .to("[data-decision-progress='2']", { autoAlpha: 0, y: -10, immediateRender: false }, "question-3-out")
-          .to("[data-decision-question='2']", { y: -20, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, "question-3-out")
-          .to("[data-decision-progress='3']", { autoAlpha: 0.78, y: 0, immediateRender: false }, "question-4")
-          .to("[data-decision-question='3']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, "question-4")
-          .to("[data-decision-line]", { scaleX: 1, opacity: 0.86, immediateRender: false }, "question-4")
-          .to("[data-decision-progress='3']", { autoAlpha: 0, y: -10, immediateRender: false }, "question-4-out")
-          .to("[data-decision-question='3']", { y: -16, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, "question-4-out")
-          .to("[data-decision-final]", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, "final")
-          .to("[data-decision-cta]", { y: 0, autoAlpha: 1, immediateRender: false }, "final")
-          .to("[data-decision-copy]", { opacity: 1, immediateRender: false }, "final");
+          }, 0)
+          .to("[data-decision-copy]", { opacity: 0.78, immediateRender: false }, 0.16)
+          .to("[data-decision-progress='0']", { autoAlpha: 0.78, y: 0, immediateRender: false }, 0.16)
+          .to("[data-decision-question='0']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, 0.16)
+          .to("[data-decision-line]", { scaleX: 0.38, opacity: 0.52, immediateRender: false }, 0.16)
+          .to("[data-decision-progress='0']", { autoAlpha: 0, y: -10, immediateRender: false }, 0.38)
+          .to("[data-decision-question='0']", { y: -20, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, 0.38)
+          .to("[data-decision-progress='1']", { autoAlpha: 0.78, y: 0, immediateRender: false }, 0.46)
+          .to("[data-decision-question='1']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, 0.46)
+          .to("[data-decision-line]", { scaleX: 0.58, opacity: 0.62, immediateRender: false }, 0.46)
+          .to("[data-decision-progress='1']", { autoAlpha: 0, y: -10, immediateRender: false }, 0.68)
+          .to("[data-decision-question='1']", { y: -20, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, 0.68)
+          .to("[data-decision-progress='2']", { autoAlpha: 0.78, y: 0, immediateRender: false }, 0.76)
+          .to("[data-decision-question='2']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, 0.76)
+          .to("[data-decision-line]", { scaleX: 0.78, opacity: 0.72, immediateRender: false }, 0.76)
+          .to("[data-decision-progress='2']", { autoAlpha: 0, y: -10, immediateRender: false }, 0.98)
+          .to("[data-decision-question='2']", { y: -20, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, 0.98)
+          .to("[data-decision-progress='3']", { autoAlpha: 0.78, y: 0, immediateRender: false }, 1.06)
+          .to("[data-decision-question='3']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, 1.06)
+          .to("[data-decision-line]", { scaleX: 1, opacity: 0.86, immediateRender: false }, 1.06)
+          .to("[data-decision-progress='3']", { autoAlpha: 0, y: -10, immediateRender: false }, 1.28)
+          .to("[data-decision-question='3']", { y: -16, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, 1.28)
+          .to("[data-decision-final]", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, 1.38)
+          .to("[data-decision-cta]", { y: 0, autoAlpha: 1, immediateRender: false }, 1.42)
+          .to("[data-decision-copy]", { opacity: 1, immediateRender: false }, 1.38);
       });
 
       media.add("(max-width: 767px)", () => {
@@ -632,8 +634,11 @@ export default function HomePage() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <main ref={pageRef} className="relative isolate overflow-x-clip bg-[#05070b] text-white">
-      <header
+    <div className="ocia-page-atmosphere">
+      <div className="ocia-atmosphere-bg" />
+      <main ref={pageRef} className="relative z-10 isolate overflow-x-clip bg-transparent text-white">
+        <ConstellationWhale />
+        <header
         className={`fixed inset-x-0 top-0 z-[90] transition-all duration-500 ${
           headerScrolled
             ? "border-b border-white/10 bg-[rgba(3,6,12,0.72)] shadow-[0_18px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl"
@@ -668,9 +673,9 @@ export default function HomePage() {
             )}
           </nav>
         </div>
-      </header>
+        </header>
 
-      <section ref={heroSectionRef} className="relative h-svh overflow-hidden">
+        <section ref={heroSectionRef} className="relative h-svh overflow-hidden">
         <div className="relative h-svh overflow-hidden">
           <div className="absolute inset-0 z-0 bg-[#030508]" />
 
@@ -768,11 +773,12 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+        </section>
 
-      <section
+        <SceneSection
         data-decision-section
-        className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_50%_18%,rgba(108,138,166,0.1),transparent_24%),linear-gradient(180deg,#030408_0%,#060910_100%)]"
+        tone="night"
+        className="border-t border-white/8"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_24%_20%,rgba(114,144,178,0.1),transparent_24%),radial-gradient(circle_at_82%_78%,rgba(76,102,132,0.08),transparent_24%)]" />
         <div
@@ -882,21 +888,21 @@ export default function HomePage() {
             </p>
           </div>
         </div>
-      </section>
+        </SceneSection>
 
-      <section
+      <SceneSection
         id="solutions"
         data-system-section
-        className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_16%_18%,rgba(102,130,160,0.1),transparent_20%),linear-gradient(180deg,#050912_0%,#07101a_100%)] px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
+        tone="night"
+        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
       >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_18%,rgba(94,124,154,0.12),transparent_22%),radial-gradient(circle_at_18%_82%,rgba(62,82,108,0.1),transparent_24%)]" />
-        <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(rgba(228,236,245,0.14)_0.7px,transparent_0.7px)] [background-size:34px_34px]" />
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent_16%,transparent_84%,rgba(255,255,255,0.02))]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(182,208,232,0.16),transparent_18%),radial-gradient(circle_at_78%_20%,rgba(118,150,184,0.1),transparent_22%),radial-gradient(circle_at_50%_84%,rgba(94,126,156,0.12),transparent_26%)]" />
+        <div className="pointer-events-none absolute inset-x-0 top-[26%] h-[44%] bg-[radial-gradient(ellipse_at_center,rgba(216,229,240,0.16),rgba(216,229,240,0)_72%)] blur-3xl" />
         <div className="relative z-20 mx-auto max-w-[1280px]">
             <p
               data-reveal-intro
               data-group="system"
-              className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
+              className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/42 sm:text-[0.72rem]"
             >
             Digital Path
             </p>
@@ -907,7 +913,7 @@ export default function HomePage() {
                 data-group="system"
                 className="max-w-4xl text-[2.8rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.7rem] md:text-[4.75rem]"
               >
-                A complete digital path from first impression to follow-up.
+                Every enquiry starts before the form.
               </h2>
             </div>
               <p
@@ -915,75 +921,114 @@ export default function HomePage() {
                 data-group="system"
                 className="max-w-2xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9"
               >
-              Your website should not stop at looking good. It should guide
-              visitors from trust, to enquiry, to action, with every step
-              feeling clear and intentional.
+              Before someone books a call, they have already judged your
+              credibility, clarity, and value. We design that journey
+              intentionally.
             </p>
           </div>
 
-          <div className="relative mt-18">
-            <div className="pointer-events-none absolute left-0 right-0 top-1/2 hidden -translate-y-1/2 lg:block">
-              <div className="relative h-px bg-[linear-gradient(90deg,rgba(214,228,242,0.04)_0%,rgba(214,228,242,0.45)_16%,rgba(168,195,221,0.7)_50%,rgba(214,228,242,0.45)_84%,rgba(214,228,242,0.04)_100%)] shadow-[0_0_26px_rgba(168,195,221,0.22)]" />
-              {systemPillars.map((pillar, index) => (
-                <div
-                  key={`${pillar.number}-node`}
-                  className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[rgba(220,232,244,0.42)] bg-[rgba(215,228,241,0.12)] shadow-[0_0_0_6px_rgba(192,211,230,0.05),0_0_22px_rgba(180,208,234,0.22)]"
-                  style={{ left: `${6 + index * 22}%` }}
-                >
-                  <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(236,243,250,0.9)]" />
-                </div>
-              ))}
-              <div className="absolute left-[14%] top-[-28px] h-1 w-1 rounded-full bg-white/50 shadow-[0_0_12px_rgba(214,228,242,0.2)]" />
-              <div className="absolute left-[38%] top-[18px] h-1.5 w-1.5 rounded-full bg-white/40 shadow-[0_0_14px_rgba(214,228,242,0.2)]" />
-              <div className="absolute left-[63%] top-[-20px] h-1 w-1 rounded-full bg-white/50 shadow-[0_0_12px_rgba(214,228,242,0.2)]" />
-              <div className="absolute right-[10%] top-[20px] h-1.5 w-1.5 rounded-full bg-white/45 shadow-[0_0_14px_rgba(214,228,242,0.18)]" />
-            </div>
+          <div className="relative mt-18 rounded-[2.25rem] border border-white/10 bg-[rgba(5,12,20,0.62)] px-6 py-8 shadow-[0_24px_80px_rgba(4,10,18,0.28),0_0_0_1px_rgba(138,168,196,0.05)] backdrop-blur-[18px] sm:px-8 md:px-10 lg:px-12 lg:py-12">
+            <div className="pointer-events-none absolute inset-0 rounded-[2.25rem] bg-[radial-gradient(circle_at_16%_20%,rgba(168,194,220,0.08),transparent_20%),radial-gradient(circle_at_80%_18%,rgba(120,150,184,0.1),transparent_18%),radial-gradient(circle_at_52%_84%,rgba(120,150,184,0.08),transparent_26%)]" />
+            <div className="pointer-events-none absolute inset-x-[8%] top-[22%] hidden h-20 rounded-full bg-[radial-gradient(circle,rgba(184,204,223,0.08),transparent_64%)] blur-3xl lg:block" />
+            <div className="pointer-events-none absolute inset-0 opacity-18 [background-image:linear-gradient(115deg,transparent_0%,rgba(132,160,188,0.06)_46%,transparent_52%),radial-gradient(rgba(162,188,212,0.14)_0.6px,transparent_0.6px)] [background-size:100%_100%,34px_34px]" />
 
             <div className="relative space-y-6 lg:hidden">
-              <div className="pointer-events-none absolute bottom-6 left-5 top-6 w-px bg-[linear-gradient(180deg,rgba(214,228,242,0.04)_0%,rgba(214,228,242,0.48)_18%,rgba(168,195,221,0.72)_50%,rgba(214,228,242,0.48)_82%,rgba(214,228,242,0.04)_100%)] shadow-[0_0_24px_rgba(168,195,221,0.18)]" />
+              <div className="pointer-events-none absolute bottom-6 left-5 top-6 w-px bg-[linear-gradient(180deg,rgba(88,111,138,0.08)_0%,rgba(118,147,176,0.44)_18%,rgba(127,160,191,0.72)_50%,rgba(118,147,176,0.44)_82%,rgba(88,111,138,0.08)_100%)] shadow-[0_0_24px_rgba(128,156,184,0.14)]" />
               {systemPillars.map((pillar) => (
                 <article
                   key={pillar.number}
                   data-system-card
-                  className="group relative ml-8 rounded-[1.8rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.024))] px-6 py-6 shadow-[0_20px_50px_rgba(6,12,22,0.18)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(198,216,234,0.24)] hover:shadow-[0_28px_60px_rgba(10,18,30,0.24)]"
+                  className="group relative ml-8 rounded-[1.7rem] border border-white/10 bg-[rgba(8,18,28,0.62)] px-6 py-6 shadow-[0_18px_42px_rgba(4,10,18,0.22)] backdrop-blur-[18px] transition duration-300 hover:-translate-y-1 hover:border-[rgba(182,208,232,0.24)] hover:shadow-[0_26px_54px_rgba(8,18,30,0.28)]"
                 >
-                  <span className="pointer-events-none absolute -left-[1.88rem] top-8 h-4 w-4 rounded-full border border-[rgba(220,232,244,0.42)] bg-[rgba(215,228,241,0.12)] shadow-[0_0_0_5px_rgba(192,211,230,0.05),0_0_20px_rgba(180,208,234,0.22)]" />
-                  <span className="text-[0.66rem] uppercase tracking-[0.34em] text-white/32">
+                  <span className="pointer-events-none absolute -left-[1.88rem] top-8 h-4 w-4 rounded-full border border-[rgba(160,190,218,0.4)] bg-[rgba(201,218,232,0.18)] shadow-[0_0_0_5px_rgba(160,190,218,0.12),0_0_18px_rgba(160,190,218,0.16)]" />
+                  <span className="text-[0.66rem] uppercase tracking-[0.34em] text-white/36">
                     {pillar.number}
                   </span>
                   <h3 className="mt-5 text-[1.35rem] font-medium tracking-[-0.04em] text-white">
                     {pillar.name}
                   </h3>
-                  <p className="mt-4 text-sm leading-7 text-white/64">
+                  <p className="mt-4 text-sm leading-7 text-white/58">
                     {pillar.body}
                   </p>
                 </article>
               ))}
             </div>
 
-            <div className="relative hidden gap-5 lg:grid lg:grid-cols-5 lg:items-start">
+            <div className="relative hidden lg:block">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 1200 340"
+                className="pointer-events-none absolute inset-x-0 top-10 h-[340px] w-full"
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  <linearGradient id="signalLine" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="rgba(147,176,203,0.08)" />
+                    <stop offset="25%" stopColor="rgba(131,160,190,0.34)" />
+                    <stop offset="50%" stopColor="rgba(168,198,226,0.52)" />
+                    <stop offset="75%" stopColor="rgba(131,160,190,0.34)" />
+                    <stop offset="100%" stopColor="rgba(147,176,203,0.08)" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M 30 195 C 170 95, 280 255, 430 185 S 700 85, 845 175 S 1035 255, 1170 145"
+                  fill="none"
+                  stroke="url(#signalLine)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M 30 195 C 170 95, 280 255, 430 185 S 700 85, 845 175 S 1035 255, 1170 145"
+                  fill="none"
+                  stroke="rgba(201,220,238,0.18)"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeDasharray="2 16"
+                />
+              </svg>
+
+              <div className="pointer-events-none absolute inset-x-0 top-10 h-[340px]">
+                {[
+                  { left: "6%", top: "49%" },
+                  { left: "27%", top: "26%" },
+                  { left: "48%", top: "47%" },
+                  { left: "69%", top: "21%" },
+                  { left: "90%", top: "42%" },
+                ].map((node, index) => (
+                  <div
+                    key={`desktop-node-${index}`}
+                    className="absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[rgba(160,190,218,0.32)] bg-[rgba(201,218,232,0.18)] shadow-[0_0_0_6px_rgba(160,190,218,0.12),0_0_18px_rgba(144,173,201,0.18)]"
+                    style={{ left: node.left, top: node.top }}
+                  >
+                    <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(220,235,248,0.88)]" />
+                  </div>
+                ))}
+                <div className="absolute left-[15%] top-[18%] h-1.5 w-1.5 rounded-full bg-[rgba(220,235,248,0.54)] shadow-[0_0_12px_rgba(139,166,194,0.18)]" />
+                <div className="absolute left-[35%] top-[66%] h-1 w-1 rounded-full bg-[rgba(220,235,248,0.62)] shadow-[0_0_12px_rgba(151,177,200,0.18)]" />
+                <div className="absolute left-[58%] top-[12%] h-1.5 w-1.5 rounded-full bg-[rgba(220,235,248,0.52)] shadow-[0_0_12px_rgba(137,164,191,0.18)]" />
+                <div className="absolute left-[77%] top-[65%] h-1 w-1 rounded-full bg-[rgba(220,235,248,0.6)] shadow-[0_0_12px_rgba(151,177,200,0.18)]" />
+              </div>
+
+            <div className="relative hidden gap-5 lg:grid lg:grid-cols-5 lg:items-start lg:pt-6">
               {systemPillars.map((pillar) => (
                 <article
                   key={pillar.number}
                   data-system-card
-                  className={`group relative rounded-[1.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.022))] px-6 py-6 shadow-[0_20px_55px_rgba(6,12,22,0.16)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(198,216,234,0.24)] hover:shadow-[0_30px_70px_rgba(10,18,30,0.24)] ${pillar.desktopOffset ?? ""}`}
+                  className={`group relative rounded-[1.85rem] border border-white/10 bg-[rgba(8,18,28,0.62)] px-6 py-6 shadow-[0_18px_42px_rgba(4,10,18,0.22)] backdrop-blur-[18px] transition duration-300 hover:-translate-y-1 hover:border-[rgba(182,208,232,0.24)] hover:shadow-[0_28px_58px_rgba(8,18,30,0.28)] ${pillar.desktopOffset ?? ""}`}
                 >
-                  <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(233,239,245,0.4),transparent)] opacity-80" />
-                  <div className="pointer-events-none absolute -top-10 left-1/2 h-10 w-px -translate-x-1/2 bg-[linear-gradient(180deg,rgba(214,228,242,0.28),transparent)]" />
-                  <div className="pointer-events-none absolute -top-12 left-1/2 h-4 w-4 -translate-x-1/2 rounded-full border border-[rgba(220,232,244,0.42)] bg-[rgba(215,228,241,0.12)] shadow-[0_0_0_5px_rgba(192,211,230,0.05),0_0_22px_rgba(180,208,234,0.22)]">
-                    <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(236,243,250,0.9)]" />
-                  </div>
-                  <span className="text-[0.66rem] uppercase tracking-[0.34em] text-white/32">
+                  <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(173,201,226,0.18),transparent)]" />
+                  <span className="text-[0.66rem] uppercase tracking-[0.34em] text-white/36">
                     {pillar.number}
                   </span>
                   <h3 className="mt-5 text-[1.4rem] font-medium tracking-[-0.04em] text-white">
                     {pillar.name}
                   </h3>
-                  <p className="mt-4 text-sm leading-7 text-white/64">
+                  <p className="mt-4 text-sm leading-7 text-white/58">
                     {pillar.body}
                   </p>
                 </article>
               ))}
+            </div>
             </div>
           </div>
 
@@ -991,24 +1036,25 @@ export default function HomePage() {
             <Link
               href="#services"
               data-system-card
-              className="inline-flex items-center gap-3 text-sm font-medium text-white/82 transition hover:text-white"
+              className="inline-flex items-center gap-3 text-sm font-medium text-white/84 transition hover:text-white"
             >
               <span>Explore what we build</span>
               <span
                 aria-hidden="true"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/12 bg-white/[0.03] text-white/70 transition hover:border-white/20 hover:bg-white/[0.05]"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/14 bg-white/[0.05] text-white/72 shadow-[0_10px_20px_rgba(10,20,34,0.16)] transition hover:border-white/22 hover:bg-white/[0.09] hover:text-white"
               >
                 →
               </span>
             </Link>
           </div>
         </div>
-      </section>
+        </SceneSection>
 
-      <section
+        <SceneSection
         id="services"
         data-services-preview-section
-        className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_84%_22%,rgba(124,154,188,0.08),transparent_18%),linear-gradient(180deg,#03060b_0%,#07101a_100%)] px-5 py-30 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
+        tone="night"
+        className="border-t border-white/8 px-5 py-30 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(233,239,245,0.24),transparent)]" />
         <div className="relative z-20 mx-auto max-w-[1320px]">
@@ -1089,11 +1135,12 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+        </SceneSection>
 
-      <section
+        <SceneSection
         data-audit-section
-        className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_80%_16%,rgba(118,150,184,0.08),transparent_18%),linear-gradient(180deg,#04070d_0%,#07101a_100%)] px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-36 xl:px-20"
+        tone="night"
+        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-36 xl:px-20"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_20%,rgba(112,142,172,0.12),transparent_24%),radial-gradient(circle_at_20%_76%,rgba(74,98,128,0.1),transparent_28%)]" />
         <div className="relative z-20 mx-auto grid max-w-[1280px] gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-20">
@@ -1128,7 +1175,7 @@ export default function HomePage() {
                 <article
                   key={gap.title}
                   data-audit-card
-                  className="rounded-[1.7rem] border border-white/10 bg-white/[0.022] p-6"
+                  className="rounded-[1.7rem] border border-white/12 bg-[rgba(8,18,28,0.48)] p-6 backdrop-blur-[18px]"
                 >
                   <h3 className="text-[1.2rem] font-medium tracking-[-0.035em] text-white">
                     {gap.title}
@@ -1154,7 +1201,7 @@ export default function HomePage() {
 
           <article
             data-audit-visual
-            className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.018))] p-6 shadow-[0_18px_70px_rgba(4,10,18,0.22)] md:p-8"
+            className="rounded-[2rem] border border-white/12 bg-[rgba(8,18,28,0.48)] p-6 shadow-[0_18px_70px_rgba(4,10,18,0.22)] backdrop-blur-[18px] md:p-8"
           >
             <div className="flex items-center justify-between">
               <p className="text-[0.66rem] uppercase tracking-[0.34em] text-white/34">
@@ -1199,12 +1246,13 @@ export default function HomePage() {
             </div>
           </article>
         </div>
-      </section>
+        </SceneSection>
 
-      <section
+        <SceneSection
         id="work"
         data-work-section
-        className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_18%_18%,rgba(122,154,188,0.08),transparent_18%),linear-gradient(180deg,#030509_0%,#06101a_100%)] px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
+        tone="night"
+        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
       >
         <div className="relative z-20 mx-auto max-w-[1280px]">
           <p
@@ -1236,7 +1284,7 @@ export default function HomePage() {
               <article
                 key={item.title}
                 data-build-preview
-                className={`grid items-center gap-8 rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.018))] p-7 shadow-[0_18px_60px_rgba(4,12,22,0.14)] md:p-10 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] ${
+                className={`grid items-center gap-8 rounded-[2rem] border border-white/12 bg-[rgba(8,18,28,0.48)] p-7 shadow-[0_18px_60px_rgba(4,12,22,0.14)] backdrop-blur-[18px] md:p-10 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] ${
                   index % 2 === 1 ? "lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1" : ""
                 }`}
               >
@@ -1342,12 +1390,13 @@ export default function HomePage() {
           </div>
 
         </div>
-      </section>
+        </SceneSection>
 
-      <section
+        <SceneSection
         id="process"
         data-process-section
-        className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_18%_18%,rgba(106,136,166,0.08),transparent_18%),linear-gradient(180deg,#04070d_0%,#09121d_100%)] px-5 py-30 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
+        tone="night"
+        className="border-t border-white/8 px-5 py-30 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
       >
         <div className="relative z-20 mx-auto max-w-[1280px]">
           <p
@@ -1379,7 +1428,7 @@ export default function HomePage() {
               <article
                 key={step.title}
                 data-process-step
-                className="relative rounded-[1.45rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.014))] p-5 transition duration-300 hover:-translate-y-1 hover:border-[rgba(197,216,234,0.24)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] lg:min-h-[235px]"
+                className="relative rounded-[1.45rem] border border-white/12 bg-[rgba(8,18,28,0.48)] p-5 backdrop-blur-[18px] transition duration-300 hover:-translate-y-1 hover:border-[rgba(197,216,234,0.24)] hover:bg-[rgba(8,18,28,0.56)] lg:min-h-[235px]"
               >
                 <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/12 bg-[#0c141d] text-[0.66rem] uppercase tracking-[0.2em] text-white/38">
                   {step.number}
@@ -1405,17 +1454,18 @@ export default function HomePage() {
             </OciaButton>
           </div>
         </div>
-      </section>
+        </SceneSection>
 
-      <section
+      <SceneSection
         id="pricing"
         data-growth-section
-        className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_76%_18%,rgba(80,108,138,0.12),transparent_20%),linear-gradient(180deg,#020307_0%,#050810_24%,#04070c_100%)] px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
+        tone="night"
+        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
       >
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-black via-black/45 to-transparent" />
-          <div className="absolute left-[8%] top-[12%] h-64 w-64 rounded-full bg-[rgba(108,134,164,0.06)] blur-3xl" />
-          <div className="absolute right-[10%] bottom-[16%] h-80 w-80 rounded-full bg-[rgba(88,118,150,0.08)] blur-3xl" />
+          <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-[rgba(10,18,28,0.3)] via-[rgba(10,18,28,0.1)] to-transparent" />
+          <div className="absolute left-[8%] top-[12%] h-64 w-64 rounded-full bg-[rgba(108,134,164,0.1)] blur-3xl" />
+          <div className="absolute right-[10%] bottom-[16%] h-80 w-80 rounded-full bg-[rgba(158,188,218,0.08)] blur-3xl" />
         </div>
 
         <div className="relative z-20 mx-auto max-w-[1320px]">
@@ -1423,7 +1473,7 @@ export default function HomePage() {
             <p
               data-reveal-intro
               data-group="growth"
-              className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
+              className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/42 sm:text-[0.72rem]"
             >
               Growth Systems
             </p>
@@ -1437,7 +1487,7 @@ export default function HomePage() {
             <p
               data-reveal-intro
               data-group="growth"
-              className="mt-6 max-w-2xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9"
+              className="mt-6 max-w-2xl text-base leading-8 text-white/68 md:text-[1.08rem] md:leading-9"
             >
               Start small with a credible website, or build a complete system
               for enquiries, automation and follow-up.
@@ -1447,10 +1497,10 @@ export default function HomePage() {
               data-group="growth"
               className="mt-8 flex flex-wrap gap-3 text-[0.68rem] uppercase tracking-[0.28em] text-white/54"
             >
-              <span className="rounded-full border border-white/10 px-4 py-2">Fixed scope</span>
-              <span className="rounded-full border border-white/10 px-4 py-2">Strategy included</span>
-              <span className="rounded-full border border-white/10 px-4 py-2">Built for trust</span>
-              <span className="rounded-full border border-white/10 px-4 py-2">Launch support</span>
+              <span className="rounded-full border border-white/12 bg-white/[0.04] px-4 py-2">Fixed scope</span>
+              <span className="rounded-full border border-white/12 bg-white/[0.04] px-4 py-2">Strategy included</span>
+              <span className="rounded-full border border-white/12 bg-white/[0.04] px-4 py-2">Built for trust</span>
+              <span className="rounded-full border border-white/12 bg-white/[0.04] px-4 py-2">Launch support</span>
             </div>
           </div>
 
@@ -1461,12 +1511,12 @@ export default function HomePage() {
                 data-growth-card
                 className={`group relative flex h-full flex-col overflow-hidden rounded-[2rem] border p-6 md:p-8 ${
                   pkg.featured
-                    ? "border-[rgba(206,223,240,0.34)] bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] shadow-[0_0_0_1px_rgba(206,223,240,0.12),0_24px_80px_rgba(18,32,50,0.28)] lg:-translate-y-3"
-                    : "border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.012))]"
-                } transition-transform duration-300 hover:-translate-y-1 hover:border-white/20`}
+                    ? "border-[rgba(184,206,228,0.28)] bg-[rgba(9,18,28,0.72)] shadow-[0_24px_80px_rgba(4,10,18,0.32),0_0_0_1px_rgba(184,206,228,0.08)] backdrop-blur-[18px] lg:-translate-y-3"
+                    : "border-white/10 bg-[rgba(5,12,20,0.62)] shadow-[0_24px_80px_rgba(4,10,18,0.24)] backdrop-blur-[18px]"
+                } transition-transform duration-300 hover:-translate-y-1 hover:border-[rgba(158,180,198,0.32)]`}
               >
                 {pkg.featured ? (
-                  <span className="mb-6 inline-flex w-fit rounded-full border border-white/18 bg-white/8 px-3 py-1 text-[0.64rem] font-semibold uppercase tracking-[0.28em] text-white">
+                  <span className="mb-6 inline-flex w-fit rounded-full border border-[rgba(184,206,228,0.26)] bg-[rgba(184,206,228,0.08)] px-3 py-1 text-[0.64rem] font-semibold uppercase tracking-[0.28em] text-[rgba(218,232,244,0.9)]">
                     Most Popular
                   </span>
                 ) : null}
@@ -1486,10 +1536,10 @@ export default function HomePage() {
                   {pkg.description}
                 </p>
                 <div className="mt-6 flex flex-wrap gap-2">
-                  <span className="rounded-full border border-white/10 px-3 py-1 text-[0.64rem] uppercase tracking-[0.28em] text-white/52">
+                  <span className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-[0.64rem] uppercase tracking-[0.28em] text-white/54">
                     {pkg.timeline}
                   </span>
-                  <span className="rounded-full border border-white/10 px-3 py-1 text-[0.64rem] uppercase tracking-[0.28em] text-white/52">
+                  <span className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-[0.64rem] uppercase tracking-[0.28em] text-white/54">
                     Strategy-led
                   </span>
                 </div>
@@ -1511,8 +1561,8 @@ export default function HomePage() {
                 <div className="mt-8">
                   <OciaButton
                     href={CALENDLY_URL}
-                    variant={pkg.featured ? "primary" : "secondary"}
-                    arrow={pkg.featured}
+                    variant="primary"
+                    arrow
                     className="w-full"
                   >
                     {pkg.cta}
@@ -1522,22 +1572,23 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="mt-12 rounded-[1.7rem] border border-white/10 bg-white/[0.02] px-6 py-6 md:flex md:items-center md:justify-between md:gap-6">
-            <p className="text-sm leading-7 text-white/58 md:text-[0.98rem]">
+          <div className="mt-12 rounded-[1.7rem] border border-white/12 bg-[linear-gradient(180deg,rgba(8,18,28,0.66),rgba(8,18,28,0.52))] px-6 py-6 shadow-[0_18px_44px_rgba(3,10,18,0.2)] backdrop-blur-[16px] md:flex md:items-center md:justify-between md:gap-6">
+            <p className="text-sm leading-7 text-white/62 md:text-[0.98rem]">
               Not sure where to start?
             </p>
             <div className="mt-4 md:mt-0">
-              <OciaButton href={CALENDLY_URL} arrow>
+              <OciaButton href={CALENDLY_URL} arrow variant="secondary">
                 Get a Recommendation
               </OciaButton>
             </div>
           </div>
         </div>
-      </section>
+        </SceneSection>
 
-      <section
+      <SceneSection
         data-proof-section
-        className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_80%_20%,rgba(116,146,178,0.08),transparent_18%),linear-gradient(180deg,#04070d_0%,#09111a_100%)] px-5 py-30 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
+        tone="night"
+        className="border-t border-white/8 px-5 py-30 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
       >
         <div className="relative z-20 mx-auto max-w-[1280px]">
           <p
@@ -1599,11 +1650,12 @@ export default function HomePage() {
             </OciaButton>
           </div>
         </div>
-      </section>
+      </SceneSection>
 
-      <section
+      <SceneSection
         data-faq-section
-        className="relative overflow-hidden border-t border-white/8 bg-[linear-gradient(180deg,#04070c_0%,#050810_100%)] px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
+        tone="night"
+        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
       >
         <div className="relative z-20 mx-auto max-w-[1120px]">
           <p
@@ -1631,8 +1683,8 @@ export default function HomePage() {
                   data-faq-item
                   className={`rounded-[1.6rem] border px-6 py-5 transition duration-300 md:px-7 ${
                     isOpen
-                      ? "border-[rgba(203,219,234,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] shadow-[0_10px_30px_rgba(18,32,50,0.14)]"
-                      : "border-white/10 bg-white/[0.02] hover:border-white/18 hover:bg-white/[0.03]"
+                      ? "border-white/16 bg-[rgba(8,18,28,0.58)] shadow-[0_10px_30px_rgba(18,32,50,0.18)] backdrop-blur-[18px]"
+                      : "border-white/10 bg-[rgba(8,18,28,0.46)] backdrop-blur-[18px] hover:border-white/18 hover:bg-[rgba(8,18,28,0.56)]"
                   }`}
                 >
                   <button
@@ -1674,19 +1726,22 @@ export default function HomePage() {
             </OciaButton>
           </div>
         </div>
-      </section>
+      </SceneSection>
 
-      <section
+      <SceneSection
         id="final-cta"
         data-final-section
-        className="relative overflow-hidden border-t border-white/8 bg-[radial-gradient(circle_at_50%_18%,rgba(112,142,172,0.16),transparent_20%),linear-gradient(180deg,#020307_0%,#04070c_100%)] px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
+        tone="night"
+        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
       >
-        <div className="pointer-events-none absolute left-1/2 top-12 h-56 w-56 -translate-x-1/2 rounded-full bg-[rgba(206,223,240,0.08)] blur-3xl" />
+        <div className="pointer-events-none absolute inset-x-0 -top-12 h-24 bg-[linear-gradient(180deg,rgba(120,152,184,0.05),rgba(120,152,184,0))] blur-3xl" />
+        <div className="pointer-events-none absolute left-1/2 top-14 h-64 w-[34rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(164,190,214,0.1),rgba(164,190,214,0.03)_42%,transparent_74%)] blur-3xl" />
+        <div className="pointer-events-none absolute inset-x-[16%] bottom-0 h-36 bg-[radial-gradient(ellipse_at_center,rgba(214,228,240,0.08),rgba(214,228,240,0)_70%)] blur-3xl" />
         <div className="relative z-20 mx-auto max-w-[920px] text-center">
           <p
             data-reveal-intro
             data-group="final"
-            className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
+            className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/42 sm:text-[0.72rem]"
           >
             Start
           </p>
@@ -1716,15 +1771,15 @@ export default function HomePage() {
             </OciaButton>
           </div>
         </div>
-      </section>
+        </SceneSection>
 
-      <footer className="border-t border-white/8 bg-[#03060a] px-5 py-10 text-white/56 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+        <footer className="border-t border-white/8 bg-[linear-gradient(180deg,rgba(5,10,17,0.68),rgba(6,12,20,0.88))] px-5 py-10 text-white/56 sm:px-8 md:px-10 lg:px-14 xl:px-20">
         <div className="mx-auto grid max-w-[1320px] gap-10 md:grid-cols-[minmax(0,1fr)_auto]">
           <div>
-            <p className="text-[0.72rem] font-medium uppercase tracking-[0.42em] text-white/86">
+            <p className="text-[0.72rem] font-medium uppercase tracking-[0.42em] text-white">
               OCIA Studios
             </p>
-            <p className="mt-4 max-w-md text-sm leading-7 text-white/50">
+            <p className="mt-4 max-w-md text-sm leading-7 text-white/56">
               Premium digital systems for ambitious businesses.
             </p>
           </div>
@@ -1753,10 +1808,11 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="mx-auto mt-8 max-w-[1320px] border-t border-white/8 pt-6 text-xs uppercase tracking-[0.24em] text-white/28">
+        <div className="mx-auto mt-8 max-w-[1320px] border-t border-white/8 pt-6 text-xs uppercase tracking-[0.24em] text-white/38">
           © {currentYear} OCIA Studios
         </div>
-      </footer>
-    </main>
+        </footer>
+      </main>
+    </div>
   );
 }

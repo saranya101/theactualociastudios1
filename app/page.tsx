@@ -2,10 +2,14 @@
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  motion,
+  useReducedMotion,
+} from "framer-motion";
 import Lenis from "lenis";
-import Image from "next/image";
+import { DM_Serif_Display } from "next/font/google";
 import Link from "next/link";
-import { useLayoutEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
 import ConstellationWhale from "./components/ConstellationWhale";
 import OciaButton from "./components/OciaButton";
 import SceneSection from "./components/SceneSection";
@@ -13,310 +17,325 @@ import { CALENDLY_URL } from "./lib/ocia-links";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const dmSerifDisplay = DM_Serif_Display({
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
 const navItems = [
   { label: "Work", href: "/#work" },
   { label: "Services", href: "/services" },
-  { label: "Solutions", href: "/#solutions" },
   { label: "Process", href: "/#process" },
   { label: "Pricing", href: "/#pricing" },
-  { label: "Contact", href: CALENDLY_URL, external: true },
+  { label: "Contact", href: "/#contact" },
 ];
 
-const decisionQuestions = [
-  "Do you look established?",
-  "Is your offer clear?",
-  "Can they trust you?",
-  "Is it easy to take action?",
+const heroShowcaseCards = [
+  {
+    title: "Website Redesign",
+    subtitle: "Built for credibility and enquiries",
+    type: "website",
+    image: null,
+    accent: "from-[#d9ecfa] via-[#eef7ff] to-[#ffffff]",
+    desktopWidth: "w-[20rem] xl:w-[21rem]",
+    desktopHeight: "h-[25rem] xl:h-[27rem]",
+    desktopShift: "mt-4",
+    rotate: -1.5,
+    mobileWidth: "w-[18rem]",
+  },
+  {
+    title: "Client Landing Page",
+    subtitle: "Clearer offer, stronger CTA flow",
+    type: "landing",
+    image: null,
+    accent: "from-[#efe1cc] via-[#faf0e4] to-[#ffffff]",
+    desktopWidth: "w-[21rem] xl:w-[22rem]",
+    desktopHeight: "h-[25.75rem] xl:h-[27.75rem]",
+    desktopShift: "mt-1",
+    rotate: 1,
+    mobileWidth: "w-[18rem]",
+  },
+  {
+    title: "Lead Flow",
+    subtitle: "Visitor → enquiry → follow-up",
+    type: "flow",
+    image: null,
+    accent: "from-[#dbe9d2] via-[#eef7e8] to-[#ffffff]",
+    desktopWidth: "w-[22rem] xl:w-[23rem]",
+    desktopHeight: "h-[26rem] xl:h-[28rem]",
+    desktopShift: "mt-5",
+    rotate: -0.5,
+    mobileWidth: "w-[18rem]",
+  },
+  {
+    title: "WhatsApp Automation",
+    subtitle: "Faster replies to warm leads",
+    type: "chat",
+    image: null,
+    accent: "from-[#d7f0e7] via-[#ebfaf4] to-[#ffffff]",
+    desktopWidth: "w-[19rem] xl:w-[20rem]",
+    desktopHeight: "h-[25.25rem] xl:h-[27.25rem]",
+    desktopShift: "mt-2",
+    rotate: 1.5,
+    mobileWidth: "w-[17rem]",
+  },
+  {
+    title: "Booking Flow",
+    subtitle: "Less friction before appointments",
+    type: "booking",
+    image: null,
+    accent: "from-[#f2e4cf] via-[#fcf3e8] to-[#ffffff]",
+    desktopWidth: "w-[18rem] xl:w-[19rem]",
+    desktopHeight: "h-[24.5rem] xl:h-[26.5rem]",
+    desktopShift: "mt-6",
+    rotate: -1,
+    mobileWidth: "w-[17rem]",
+  },
+  {
+    title: "CRM Follow-up",
+    subtitle: "Stop opportunities going cold",
+    type: "crm",
+    image: null,
+    accent: "from-[#dde1f7] via-[#eef0ff] to-[#ffffff]",
+    desktopWidth: "w-[19.5rem] xl:w-[20.5rem]",
+    desktopHeight: "h-[25.25rem] xl:h-[27.25rem]",
+    desktopShift: "mt-3",
+    rotate: 0.75,
+    mobileWidth: "w-[17rem]",
+  },
+  {
+    title: "SEO Visibility",
+    subtitle: "Help the right people find you",
+    type: "seo",
+    image: null,
+    accent: "from-[#dce4fa] via-[#edf2ff] to-[#ffffff]",
+    desktopWidth: "w-[18.5rem] xl:w-[19.5rem]",
+    desktopHeight: "h-[24.75rem] xl:h-[26.75rem]",
+    desktopShift: "mt-5",
+    rotate: -1.25,
+    mobileWidth: "w-[17rem]",
+  },
+  {
+    title: "Website Audit",
+    subtitle: "Find where leads are leaking",
+    type: "audit",
+    image: null,
+    accent: "from-[#e9d7c8] via-[#f6e9dc] to-[#fff8f1]",
+    desktopWidth: "w-[20rem] xl:w-[21rem]",
+    desktopHeight: "h-[25.5rem] xl:h-[27.5rem]",
+    desktopShift: "mt-2",
+    rotate: 1,
+    mobileWidth: "w-[18rem]",
+  },
+  {
+    title: "Business System",
+    subtitle: "Website, automation, and follow-up connected",
+    type: "system",
+    image: null,
+    accent: "from-[#d6e9f5] via-[#eef8ff] to-[#ffffff]",
+    desktopWidth: "w-[21rem] xl:w-[22rem]",
+    desktopHeight: "h-[26rem] xl:h-[28rem]",
+    desktopShift: "mt-4",
+    rotate: -0.75,
+    mobileWidth: "w-[18rem]",
+  },
 ];
 
-const systemPillars = [
+const problemCards = [
   {
-    number: "01",
-    name: "Land",
-    body: "They understand what you do.",
-    desktopOffset: "lg:-translate-y-8",
+    title: "Visitors do not trust fast enough",
+    body: "Unclear messaging, weak proof, and poor design make people hesitate before they enquire.",
   },
   {
-    number: "02",
-    name: "Trust",
-    body: "The business feels credible.",
-    desktopOffset: "lg:translate-y-10",
+    title: "Enquiries are harder than they should be",
+    body: "Weak CTAs, messy forms, and poor booking flows stop interested visitors from taking action.",
   },
   {
-    number: "03",
-    name: "Choose",
-    body: "The offer feels clear.",
-    desktopOffset: "lg:-translate-y-3",
-  },
-  {
-    number: "04",
-    name: "Enquire",
-    body: "The next step feels easy.",
-    desktopOffset: "lg:translate-y-12",
-  },
-  {
-    number: "05",
-    name: "Follow up",
-    body: "The lead does not get lost.",
-    desktopOffset: "lg:-translate-y-10",
+    title: "Leads slip through the cracks",
+    body: "Slow replies, inconsistent WhatsApp handling, and no CRM follow-up turn warm leads cold.",
   },
 ];
 
-const servicesPreview = [
-  {
-    category: "Website & Brand",
-    outcome:
-      "Create a sharper first impression so customers trust the business faster.",
-    services: ["Website Redesign", "Branding & Positioning", "UX / Visual Hierarchy", "Mobile Responsiveness"],
-  },
-  {
-    category: "Growth & Visibility",
-    outcome:
-      "Increase visibility and turn more high-intent traffic into real enquiries.",
-    services: ["SEO", "Google Business Profile Optimisation", "Lead Generation", "Landing Pages"],
-  },
-  {
-    category: "Automation & Follow-up",
-    outcome:
-      "Respond faster, track leads cleanly and prevent opportunities from going cold.",
-    services: ["WhatsApp / Enquiry Automation", "CRM / Lead Management", "Appointment Booking System", "Automated Follow-up Systems"],
-  },
-  {
-    category: "AI & Digital Systems",
-    outcome:
-      "Use AI and practical system design to reduce manual work and support growth.",
-    services: ["AI Chatbot", "Website Audit Reports", "Service Recommendation Engine", "E-commerce Improvement"],
-  },
+const valueChips = [
+  "Improve trust",
+  "Increase enquiries",
+  "Reduce friction",
+  "Capture more leads",
+  "Respond faster",
+  "Follow up better",
 ];
 
-const auditGaps = [
-  {
-    title: "Trust",
-    body: "Does your current website make the business feel credible within seconds?",
-  },
-  {
-    title: "Enquiries",
-    body: "Is the page guiding visitors clearly towards calling, messaging or booking?",
-  },
-  {
-    title: "Follow-up",
-    body: "Are leads tracked and followed up before they lose interest?",
-  },
+const auditChecklist = [
+  "Homepage and messaging review",
+  "Trust and credibility review",
+  "CTA and enquiry flow review",
+  "SEO basics review",
+  "Booking and contact flow review",
+  "Quick-win opportunities",
+  "Recommended next steps",
 ];
 
-const whatWeFix = [
+const servicePillars = [
   {
-    number: "01",
-    title: "Weak first impression",
-    body: "Your website does not immediately make the business feel credible, current or professional.",
-  },
-  {
-    number: "02",
-    title: "Unclear offer",
-    body: "Visitors cannot quickly understand what you do, who it is for and why they should choose you.",
-  },
-  {
-    number: "03",
-    title: "Low enquiry conversion",
-    body: "People visit, but the page does not guide them clearly towards calling, messaging or booking.",
-  },
-  {
-    number: "04",
-    title: "Missed follow-up",
-    body: "Leads come in through different channels, but there is no clean system to track, respond and follow up.",
-  },
-];
-
-const buildPreviews = [
-  {
-    id: "01",
-    title: "Website Trust System",
-    description:
-      "A premium website structure for businesses that need to look established, explain services clearly and guide visitors toward enquiry.",
+    title: "Website & Conversion",
+    text: "Redesign your website so it looks credible, feels easier to use, and leads visitors toward action.",
     includes: [
-      "Service-led page structure",
-      "Trust signals",
-      "Mobile-first layout",
-      "Clear enquiry CTAs",
+      "Website Redesign",
+      "Conversion Optimisation",
+      "CTA Improvements",
+      "Enquiry Flow",
     ],
-    cta: "Build a Credible Website",
-    visualType: "website",
   },
   {
-    id: "02",
-    title: "Lead Flow System",
-    description:
-      "A cleaner enquiry flow that captures leads from forms, WhatsApp or booking links and keeps them organised.",
-    includes: [
-      "Enquiry forms",
-      "WhatsApp CTA",
-      "Lead stages",
-      "Follow-up reminders",
-    ],
-    cta: "Improve My Lead Flow",
-    visualType: "pipeline",
+    title: "Search & Visibility",
+    text: "Improve your visibility so the right people can find your business when they are searching.",
+    includes: ["SEO", "Local Search", "Page Structure", "Content Improvements"],
   },
   {
-    id: "03",
-    title: "Automation & AI System",
-    description:
-      "Automation and AI support that help businesses respond faster, answer common questions and reduce manual follow-up.",
+    title: "Automation & Lead Handling",
+    text: "Respond faster, qualify leads better, and stop enquiries from slipping through the cracks.",
     includes: [
-      "WhatsApp automation",
-      "AI chatbot",
-      "Booking flow",
-      "Follow-up workflow",
+      "WhatsApp Automation",
+      "CRM",
+      "Lead Tracking",
+      "Follow-up Workflows",
     ],
-    cta: "Explore Automation",
-    visualType: "automation",
+  },
+  {
+    title: "Growth Support",
+    text: "Add tools and content that support trust, booking, and conversion.",
+    includes: [
+      "AI Chatbot",
+      "Appointment Booking System",
+      "E-commerce Improvement",
+      "Social Media Content",
+    ],
+  },
+];
+
+const funnelSteps = [
+  {
+    label: "Traffic",
+    body: "Can the right people find you?",
+  },
+  {
+    label: "Trust",
+    body: "Do they believe you are credible?",
+  },
+  {
+    label: "Action",
+    body: "Is the next step obvious?",
+  },
+  {
+    label: "Response",
+    body: "Are enquiries handled quickly?",
+  },
+  {
+    label: "Follow-up",
+    body: "Are leads tracked until they convert?",
   },
 ];
 
 const processSteps = [
   {
-    number: "01",
-    title: "Discover",
-    body: "We understand the business, audience, offer, current website and goals.",
+    step: "Audit",
+    body: "We review your website, trust signals, SEO basics, enquiry journey, booking flow, and lead handling process.",
   },
   {
-    number: "02",
-    title: "Diagnose",
-    body: "We identify what is weakening trust, clarity, enquiry flow or follow-up.",
+    step: "Identify",
+    body: "We pinpoint the highest-impact issues and recommend the best service mix based on what is actually limiting growth.",
   },
   {
-    number: "03",
-    title: "Design the system",
-    body: "We plan the pages, messaging, CTAs, lead paths and automation touchpoints.",
+    step: "Improve",
+    body: "We redesign, optimise, automate, or rebuild the weak parts of your funnel.",
   },
   {
-    number: "04",
-    title: "Build & connect",
-    body: "We design and develop the website, integrations and workflows.",
-  },
-  {
-    number: "05",
-    title: "Launch & refine",
-    body: "We test, launch and improve based on real use and business priorities.",
+    step: "Grow",
+    body: "You get a stronger online presence, more qualified enquiries, and a better system for converting interest into revenue.",
   },
 ];
 
-const growthSystems = [
+const outcomeCards = [
+  "A website that builds more trust",
+  "Clearer messaging that improves response",
+  "Better conversion from existing traffic",
+  "More enquiries from the right people",
+  "Less friction in forms and booking",
+  "Faster response to leads",
+  "Better follow-up and less leakage",
+  "A clearer growth plan based on real gaps",
+];
+
+const industries = [
+  "Aesthetic clinics",
+  "Dental clinics",
+  "Medical clinics",
+  "Interior design firms",
+  "Home services",
+  "Restaurants and hospitality",
+  "Legal and professional services",
+  "Local service businesses",
+];
+
+const whyOciaCards = [
   {
-    title: "Presence System",
-    price: "From SGD 1,500",
-    forLabel: "Businesses that need credibility online.",
-    description:
-      "A focused website build for businesses that need to look professional, explain their offer clearly and give customers an easy way to enquire.",
-    timeline: "2–3 weeks",
-    cta: "Start with Presence",
-    featured: false,
-    includes: [
-      "Landing page or small website",
-      "Mobile-responsive design",
-      "Basic brand direction",
-      "Contact / enquiry flow",
-      "WhatsApp CTA",
-      "Basic on-page SEO",
-      "Analytics setup",
-      "14-day bug-fix support",
-    ],
+    title: "We look at the full funnel",
+    body: "We do not only judge the website design. We look at visibility, trust, enquiry flow, response speed, and follow-up.",
   },
   {
-    title: "Growth System",
-    price: "From SGD 3,500",
-    forLabel: "Businesses that want more enquiries.",
-    description:
-      "A website and lead-generation system designed around clearer messaging, stronger conversion flow, SEO foundations and enquiry capture.",
-    timeline: "3–5 weeks",
-    cta: "Build My Growth System",
-    featured: true,
-    includes: [
-      "Multi-page website",
-      "Custom responsive design",
-      "Conversion Rate Optimisation",
-      "Lead generation setup",
-      "Landing pages and enquiry forms",
-      "WhatsApp CTAs",
-      "Google Business Profile Optimisation",
-      "SEO foundations",
-      "Analytics and event tracking",
-      "Social proof / testimonials section",
-      "30-day support",
-    ],
+    title: "We recommend based on evidence",
+    body: "The audit shows what is actually limiting growth before we suggest what to fix.",
   },
   {
-    title: "Premium System",
-    price: "From SGD 5,800",
-    forLabel: "Businesses that need a complete digital ecosystem.",
-    description:
-      "A complete digital system with website strategy, CRM, automation, AI support, conversion tracking and launch optimisation.",
-    timeline: "5–8 weeks",
-    cta: "Discuss Premium System",
-    featured: false,
-    includes: [
-      "Advanced website or web experience",
-      "Brand positioning and messaging",
-      "CRM / Lead Management",
-      "WhatsApp / Enquiry Automation",
-      "AI Chatbot",
-      "Appointment Booking System",
-      "Advanced SEO setup",
-      "Conversion tracking and analytics",
-      "E-commerce or enquiry flow improvement",
-      "Priority optimisation support",
-    ],
+    title: "We build practical systems",
+    body: "From SEO and conversion to WhatsApp, booking, CRM, and follow-up, we focus on what helps enquiries become opportunities.",
   },
 ];
 
-const proofBlocks = [
-  {
-    title: "Clarity",
-    body: "Customers should understand what you do, who you help and why it matters without digging.",
-  },
-  {
-    title: "Credibility",
-    body: "Visual quality, structure, proof and messaging should make the business feel established.",
-  },
-  {
-    title: "Conversion",
-    body: "Every page should guide visitors toward a clear action: call, message, book or enquire.",
-  },
-  {
-    title: "Continuity",
-    body: "After the enquiry, lead tracking and follow-up systems help prevent opportunities from going cold.",
-  },
+const improvementCards = [
+  "Clearer messaging so visitors understand your value faster",
+  "Stronger CTA placement so more visitors take action",
+  "Better trust signals so the business feels more credible",
+  "Improved enquiry flow so fewer leads drop off",
+  "Better booking experience so prospects can move faster",
+  "Cleaner follow-up systems so warm leads do not get lost",
 ];
 
 const faqs = [
   {
-    question: "Do I need a full website or just improvements?",
+    question: "Do you only do website redesign?",
     answer:
-      "It depends on what is currently holding the business back. Some businesses need a full redesign, while others need better messaging, CTAs, SEO or follow-up systems. We usually begin by understanding the gaps first.",
+      "No. Website redesign is one part of the work, but we also improve SEO, conversion flow, WhatsApp handling, booking journeys, CRM setup, automation and follow-up.",
   },
   {
-    question: "How long does a project take?",
+    question: "What if I already have a website?",
     answer:
-      "Most projects take 2–8 weeks depending on scope, content, approvals and integrations. Smaller presence sites are faster, while CRM, automation or AI systems need more planning and testing.",
+      "That is completely fine. Many businesses we help already have a live site. We review what is underperforming and recommend whether to optimise, restructure, or redesign.",
   },
   {
-    question: "How much does it cost?",
+    question: "How do I know which service I need?",
     answer:
-      "Packages start from SGD 1,500. Final pricing depends on the number of pages, design complexity, integrations, automations and support required.",
+      "That is exactly why the audit comes first. We use it to identify whether the biggest gap is trust, visibility, conversion, response speed, or follow-up.",
   },
   {
-    question: "Can you help with leads, not just design?",
+    question: "Can you help us get more leads, not just improve design?",
     answer:
-      "Yes. OCIA works beyond visual design. We help with landing pages, enquiry flows, SEO foundations, WhatsApp CTAs, CRM tracking, automation and follow-up systems.",
+      "Yes. The focus is on more qualified enquiries and a stronger system behind them, not visual polish for its own sake.",
   },
   {
-    question: "Will I own the website?",
+    question: "Do you help with follow-up and CRM too?",
     answer:
-      "Yes. Once the project is completed and payment is settled, you own the agreed final website and deliverables.",
+      "Yes. We can improve WhatsApp workflows, contact handling, CRM setup, reminders, lead tracking and practical automation so leads do not get lost.",
   },
   {
-    question: "Can you support us after launch?",
+    question: "Do you work with local service businesses?",
     answer:
-      "Yes. We can help with launch checks, improvements, optimisation and ongoing support depending on the package or arrangement.",
+      "Yes. OCIA is especially well suited to service businesses where trust, visibility, and a clean enquiry process directly affect revenue.",
+  },
+  {
+    question: "What happens after the free audit?",
+    answer:
+      "We show you the main opportunities, explain what is limiting performance, and recommend the best next step. If it makes sense to work together, we plan the right scope from there.",
   },
 ];
 
@@ -326,31 +345,724 @@ const footerLinks = [
   { label: "Solutions", href: "/#solutions" },
   { label: "Process", href: "/#process" },
   { label: "Pricing", href: "/#pricing" },
-  { label: "Contact", href: CALENDLY_URL, external: true },
+  { label: "Contact", href: "/#contact" },
 ];
 
-const sectionRevealTargets = [
-  { trigger: "[data-system-section]", intro: "[data-reveal-intro][data-group='system']", body: "[data-system-card]" },
-  { trigger: "[data-services-preview-section]", intro: "[data-reveal-intro][data-group='services']", body: "[data-service-group]" },
-  { trigger: "[data-audit-section]", intro: "[data-reveal-intro][data-group='audit']", body: "[data-audit-card], [data-audit-visual]" },
-  { trigger: "[data-work-section]", intro: "[data-reveal-intro][data-group='work']", body: "[data-build-preview]" },
-  { trigger: "[data-process-section]", intro: "[data-reveal-intro][data-group='process']", body: "[data-process-step]" },
-  { trigger: "[data-growth-section]", intro: "[data-reveal-intro][data-group='growth']", body: "[data-growth-card]" },
-  { trigger: "[data-proof-section]", intro: "[data-reveal-intro][data-group='proof']", body: "[data-proof-card]" },
-  { trigger: "[data-faq-section]", intro: "[data-reveal-intro][data-group='faq']", body: "[data-faq-item]" },
-  { trigger: "[data-final-section]", intro: "[data-reveal-intro][data-group='final']", body: "[data-final-cta]" },
+const sectionRevealSelectors = [
+  "[data-problem-section]",
+  "[data-value-section]",
+  "[data-audit-section]",
+  "[data-services-section]",
+  "[data-funnel-section]",
+  "[data-process-section]",
+  "[data-outcomes-section]",
+  "[data-industries-section]",
+  "[data-why-section]",
+  "[data-improvement-section]",
+  "[data-faq-section]",
+  "[data-final-section]",
 ];
+
+function SectionIntro({
+  label,
+  title,
+  body,
+  align = "left",
+}: {
+  label: string;
+  title: string;
+  body: string;
+  align?: "left" | "center";
+}) {
+  return (
+    <div
+      data-reveal-intro
+      className={align === "center" ? "mx-auto max-w-4xl text-center" : "max-w-3xl"}
+    >
+      <p className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/42 sm:text-[0.72rem]">
+        {label}
+      </p>
+      <h2 className="mt-5 text-[2.45rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.4rem] md:text-[4.35rem]">
+        {title}
+      </h2>
+      <p className="mt-6 max-w-3xl text-[1rem] leading-8 text-white/68 md:text-[1.08rem]">
+        {body}
+      </p>
+    </div>
+  );
+}
+
+function HeroHeadline() {
+  const reduceMotion = useReducedMotion();
+
+  const lineTransition = (delay: number) => ({
+    duration: 0.78,
+    delay,
+    ease: [0.22, 1, 0.36, 1] as const,
+  });
+
+  return (
+    <div className="mx-auto mt-7 max-w-[54rem] sm:max-w-[58rem]">
+      <div
+        className={`${dmSerifDisplay.className} text-[3.2rem] font-normal leading-[0.88] tracking-[-0.045em] text-[#071827] sm:text-[4.7rem] md:text-[6.25rem] lg:text-[7.1rem] xl:text-[7.9rem]`}
+        style={{ fontFeatureSettings: '"liga" 0, "clig" 0' }}
+      >
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+          animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={lineTransition(0.08)}
+          className="block"
+        >
+          We make{" "}
+          <motion.span
+            initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+            animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={lineTransition(0.18)}
+            className="inline-block"
+          >
+            websites
+          </motion.span>
+        </motion.div>
+
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+          animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={lineTransition(0.26)}
+          className="mt-1 block"
+        >
+          people actually
+        </motion.div>
+
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 22 }}
+          animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={lineTransition(0.38)}
+          className="mt-1 block"
+        >
+          <span className="relative inline-flex items-end">
+            <motion.span
+              initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+              animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              transition={lineTransition(0.44)}
+              className="relative z-10 inline-block"
+            >
+              enquire
+            </motion.span>
+            <motion.span
+              aria-hidden="true"
+              initial={
+                reduceMotion
+                  ? false
+                  : { scaleX: 0, opacity: 0.35, x: "-10%" }
+              }
+              animate={
+                reduceMotion
+                  ? undefined
+                  : { scaleX: 1, opacity: 0.95, x: "0%" }
+              }
+              transition={{
+                duration: 0.72,
+                delay: 0.52,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="absolute bottom-[0.18em] left-[-0.04em] right-[-0.04em] z-0 h-[0.22em] origin-left rounded-full bg-[linear-gradient(90deg,rgba(126,178,220,0.12),rgba(126,178,220,0.42),rgba(190,220,245,0.18))]"
+            />
+            <motion.span
+              aria-hidden="true"
+              initial={reduceMotion ? false : { x: "-120%", opacity: 0 }}
+              animate={reduceMotion ? undefined : { x: "110%", opacity: [0, 0.7, 0] }}
+              transition={{
+                duration: 0.88,
+                delay: 0.58,
+                ease: "easeInOut",
+              }}
+              className="absolute bottom-[0.08em] left-0 z-[1] h-[0.28em] w-[45%] rounded-full bg-[linear-gradient(90deg,rgba(255,255,255,0),rgba(219,239,255,0.8),rgba(255,255,255,0))] blur-[2px]"
+            />
+          </span>{" "}
+          <motion.span
+            initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+            animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={lineTransition(0.48)}
+            className="inline-block"
+          >
+            from.
+          </motion.span>
+          <motion.span
+            data-hero-accent
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.88, y: 10 }}
+            animate={reduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              duration: 0.6,
+              delay: 0.62,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="ml-3 inline-flex translate-y-[-0.08em] items-center rounded-full px-3 py-[0.35rem] text-[0.76rem] font-bold tracking-[-0.01em] text-[#071827] shadow-[0_8px_24px_rgba(63,139,198,0.12)] sm:ml-4 sm:px-4 sm:py-2 sm:text-[0.82rem] md:text-[0.88rem]"
+            style={{
+              background: "rgba(205, 229, 247, 0.75)",
+              border: "1px solid rgba(7, 24, 39, 0.12)",
+              boxShadow: "0 8px 24px rgba(63, 139, 198, 0.12)",
+              fontFamily: "Outfit, ui-sans-serif, system-ui, sans-serif",
+            }}
+          >
+            Finally.
+          </motion.span>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+function ShowcaseCardVisual({ type }: { type: string }) {
+  if (type === "audit") {
+    return (
+      <div className="h-full rounded-[1.45rem] bg-[#102130] p-4 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="flex h-full flex-col">
+          <div className="flex items-center justify-between">
+            <span className="text-[0.62rem] uppercase tracking-[0.22em] text-white/58">Audit Score</span>
+            <span className="rounded-full bg-white/10 px-2 py-1 text-[0.62rem] text-white/72">72%</span>
+          </div>
+          <div className="mt-4 flex items-end justify-between">
+            <div>
+              <div className="text-[0.62rem] uppercase tracking-[0.18em] text-white/44">Opportunity</div>
+              <div className="mt-2 text-4xl font-semibold tracking-[-0.06em]">+18%</div>
+            </div>
+            <div className="rounded-[1rem] bg-white/8 px-3 py-2 text-right">
+              <div className="text-[0.6rem] uppercase tracking-[0.16em] text-white/42">Priority</div>
+              <div className="mt-1 text-sm text-white/76">Trust + CTA</div>
+            </div>
+          </div>
+          <div className="mt-5 h-2 rounded-full bg-white/10">
+            <div className="h-full w-[72%] rounded-full bg-[linear-gradient(90deg,#8ec1e7,#dbeaf5)]" />
+          </div>
+          <div className="mt-5 grid flex-1 gap-2 text-[0.74rem] text-white/72">
+            {["Trust signals", "CTA clarity", "Booking friction", "SEO basics"].map((item) => (
+              <div key={item} className="flex items-center gap-2 rounded-[0.95rem] bg-white/6 px-3 py-2.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#b8d6eb]" />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "website") {
+    return (
+      <div className="h-full rounded-[1.45rem] bg-[#102130] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="flex h-full flex-col overflow-hidden rounded-[1.15rem] bg-[#f6f3ec]">
+          <div className="flex items-center gap-1 border-b border-[#d6dde4] px-3 py-2">
+            <span className="h-2 w-2 rounded-full bg-[#c8d7e3]" />
+            <span className="h-2 w-2 rounded-full bg-[#e4cba6]" />
+            <span className="h-2 w-2 rounded-full bg-[#a7c8e3]" />
+          </div>
+          <div className="grid flex-1 gap-3 p-3">
+            <div className="relative h-28 overflow-hidden rounded-[1rem] bg-[linear-gradient(135deg,#dceaf5,#f8fbff)]">
+              <div className="absolute left-4 top-4 space-y-2">
+                <div className="h-3 w-24 rounded-full bg-[#102130]/14" />
+                <div className="h-3 w-16 rounded-full bg-[#102130]/10" />
+              </div>
+              <div className="absolute bottom-4 left-4 flex gap-2">
+                <div className="rounded-full bg-[#102130] px-3 py-1.5 text-[0.6rem] uppercase tracking-[0.18em] text-white">
+                  Enquire
+                </div>
+                <div className="rounded-full bg-white px-3 py-1.5 text-[0.6rem] uppercase tracking-[0.18em] text-[#102130]">
+                  Audit
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-[1.2fr_0.8fr] gap-3">
+              <div className="rounded-[0.95rem] bg-[#102130]/5 p-3">
+                <div className="space-y-2">
+                  <div className="h-3 w-3/4 rounded-full bg-[#162535]/18" />
+                  <div className="h-3 w-1/2 rounded-full bg-[#162535]/12" />
+                  <div className="h-12 rounded-[0.8rem] bg-white/80" />
+                </div>
+              </div>
+              <div className="grid gap-3">
+                <div className="rounded-[0.9rem] bg-[#102130] p-3 text-white/74">
+                  <div className="text-[0.58rem] uppercase tracking-[0.16em] text-white/42">Trust</div>
+                  <div className="mt-3 text-xl font-semibold tracking-[-0.04em] text-white">94%</div>
+                </div>
+                <div className="rounded-[0.9rem] bg-[#bdd8ec]/55 p-3">
+                  <div className="text-[0.58rem] uppercase tracking-[0.16em] text-[#274158]">CTA</div>
+                  <div className="mt-3 h-2 rounded-full bg-white/70" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "landing") {
+    return (
+      <div className="h-full rounded-[1.45rem] bg-[#102130] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="flex h-full flex-col rounded-[1.15rem] bg-[#f6f3ec] p-3">
+          <div className="grid flex-1 gap-3">
+            <div className="flex items-center justify-between rounded-[1rem] bg-[linear-gradient(135deg,#deebf5,#f8fbff)] px-4 py-4">
+              <div className="space-y-2">
+                <div className="h-3 w-28 rounded-full bg-[#0f1f2d]/18" />
+                <div className="h-3 w-20 rounded-full bg-[#0f1f2d]/10" />
+              </div>
+              <div className="rounded-full bg-white px-3 py-1 text-[0.62rem] font-medium text-[#0f1f2d]">
+                CTA
+              </div>
+            </div>
+            <div className="grid grid-cols-[1.1fr_0.9fr] gap-3">
+              <div className="grid gap-3">
+                <div className="rounded-[0.95rem] bg-white p-3">
+                  <div className="h-3 w-20 rounded-full bg-[#0f1f2d]/14" />
+                  <div className="mt-3 h-14 rounded-[0.8rem] bg-[#0f1f2d]/6" />
+                </div>
+                <div className="rounded-[0.95rem] bg-[#0f1f2d]/6 p-3">
+                  <div className="h-3 w-16 rounded-full bg-[#0f1f2d]/14" />
+                  <div className="mt-3 space-y-2">
+                    <div className="h-2 rounded-full bg-[#0f1f2d]/10" />
+                    <div className="h-2 w-3/4 rounded-full bg-[#0f1f2d]/8" />
+                  </div>
+                </div>
+              </div>
+              <div className="grid gap-3">
+                <div className="rounded-[0.95rem] bg-[#0f1f2d] p-3 text-white/74">
+                  <div className="text-[0.62rem] uppercase tracking-[0.16em] text-white/46">
+                    Clarity
+                  </div>
+                  <div className="mt-5 text-2xl font-semibold tracking-[-0.04em] text-white">
+                    +31%
+                  </div>
+                </div>
+                <div className="rounded-[0.95rem] bg-[#bed9ec]/55 p-3">
+                  <div className="text-[0.58rem] uppercase tracking-[0.16em] text-[#274158]">Form</div>
+                  <div className="mt-3 h-10 rounded-[0.7rem] bg-white/85" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "flow") {
+    return (
+      <div className="h-full rounded-[1.45rem] bg-[#102130] p-4 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="flex h-full flex-col">
+          <div className="grid grid-cols-4 items-center gap-2 text-center text-[0.65rem] uppercase tracking-[0.18em] text-white/60">
+            {["Visit", "Form", "WhatsApp", "CRM"].map((item) => (
+              <div key={item} className="rounded-[0.95rem] bg-white/6 px-2 py-3">
+                {item}
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex items-center justify-between px-2 text-[#bdd8ec]">
+            <span>→</span>
+            <span>→</span>
+            <span>→</span>
+          </div>
+          <div className="mt-5 grid flex-1 gap-3">
+            <div className="rounded-[1rem] bg-white/6 p-3">
+              <div className="text-[0.58rem] uppercase tracking-[0.16em] text-white/46">Conversion Rate</div>
+              <div className="mt-3 flex items-end gap-2">
+                <span className="text-3xl font-semibold tracking-[-0.05em] text-white">28%</span>
+                <span className="text-sm text-white/52">lift</span>
+              </div>
+            </div>
+            <div className="grid grid-cols-[1.2fr_0.8fr] gap-3">
+              <div className="rounded-[0.95rem] bg-[#bdd8ec]/12 p-3">
+                <div className="h-2 rounded-full bg-white/16" />
+                <div className="mt-4 space-y-2">
+                  <div className="h-2 w-5/6 rounded-full bg-white/10" />
+                  <div className="h-2 w-2/3 rounded-full bg-white/10" />
+                </div>
+              </div>
+              <div className="rounded-[0.95rem] bg-white/7 p-3 text-center">
+                <div className="text-[0.58rem] uppercase tracking-[0.16em] text-white/42">Warm Leads</div>
+                <div className="mt-4 text-2xl font-semibold tracking-[-0.05em] text-white">42</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "seo") {
+    return (
+      <div className="h-full rounded-[1.45rem] bg-[#102130] p-4 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="flex h-full flex-col">
+          <div className="rounded-[1rem] bg-white/8 px-3 py-2 text-[0.72rem] text-white/72">
+            service business web design singapore
+          </div>
+          <div className="mt-4 rounded-[1rem] bg-[#f8fbff] p-4 text-[#102130]">
+            <div className="text-[0.68rem] uppercase tracking-[0.16em] text-[#577085]">Ranking Lift</div>
+            <div className="mt-3 flex items-end gap-2">
+              <span className="text-4xl font-semibold tracking-[-0.05em]">#3</span>
+              <span className="text-sm text-[#5c7385]">local pack</span>
+            </div>
+            <div className="mt-4 h-2 rounded-full bg-[#0f1f2d]/8">
+              <div className="h-full w-[68%] rounded-full bg-[linear-gradient(90deg,#8ec1e7,#b8d6eb)]" />
+            </div>
+          </div>
+          <div className="mt-4 grid flex-1 grid-cols-2 gap-3">
+            <div className="rounded-[0.95rem] bg-white/6 p-3">
+              <div className="text-[0.58rem] uppercase tracking-[0.16em] text-white/42">Visibility</div>
+              <div className="mt-4 text-2xl font-semibold tracking-[-0.04em] text-white">82%</div>
+            </div>
+            <div className="rounded-[0.95rem] bg-[#bdd8ec]/14 p-3">
+              <div className="text-[0.58rem] uppercase tracking-[0.16em] text-white/42">Clicks</div>
+              <div className="mt-4 text-2xl font-semibold tracking-[-0.04em] text-white">+41%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "chat") {
+    return (
+      <div className="h-full rounded-[1.45rem] bg-[#102130] p-4 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="flex h-full flex-col">
+          <div className="rounded-[1rem] bg-white/7 px-3 py-2 text-[0.62rem] uppercase tracking-[0.18em] text-white/46">
+            WhatsApp Assistant
+          </div>
+          <div className="mt-4 grid flex-1 gap-3">
+            <div className="ml-auto w-[78%] rounded-[1rem] rounded-br-sm bg-[#d4ecdf] px-3 py-3 text-sm text-[#163225]">
+              Hi, do you have availability this week?
+            </div>
+            <div className="w-[74%] rounded-[1rem] rounded-bl-sm bg-white/9 px-3 py-3 text-sm text-white/78">
+              Yes, we have openings on Tuesday and Thursday afternoon.
+            </div>
+            <div className="ml-auto w-[70%] rounded-[1rem] rounded-br-sm bg-[#8fc2e8] px-3 py-3 text-sm text-[#102130]">
+              Great, sending the booking link now.
+            </div>
+            <div className="rounded-[1rem] bg-white/7 p-3">
+              <div className="text-[0.58rem] uppercase tracking-[0.16em] text-white/42">Response Time</div>
+              <div className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-white">-62%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "booking") {
+    return (
+      <div className="h-full rounded-[1.45rem] bg-[#102130] p-4 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="flex h-full flex-col">
+          <div className="text-[0.62rem] uppercase tracking-[0.18em] text-white/44">Booking Calendar</div>
+          <div className="mt-4 grid grid-cols-3 gap-2 text-center text-[0.68rem] text-white/76">
+            {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+              <div
+                key={day}
+                className={`rounded-[0.9rem] px-2 py-3 ${
+                  index === 2 ? "bg-[#bdd8ec] text-[#102130]" : "bg-white/8"
+                }`}
+              >
+                {day}
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 grid flex-1 gap-3">
+            <div className="rounded-[1rem] bg-white/7 p-3">
+              <div className="text-[0.58rem] uppercase tracking-[0.16em] text-white/42">Selected Slot</div>
+              <div className="mt-3 text-xl font-semibold tracking-[-0.04em] text-white">Wed, 2:30 PM</div>
+            </div>
+            <div className="rounded-[1rem] bg-[#bdd8ec]/16 p-3">
+              <div className="text-[0.58rem] uppercase tracking-[0.16em] text-white/42">Confirmation</div>
+              <div className="mt-3 h-10 rounded-[0.8rem] bg-white/80" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "crm") {
+    return (
+      <div className="h-full rounded-[1.45rem] bg-[#102130] p-3 text-white/74 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="flex h-full flex-col gap-3">
+          <div className="grid grid-cols-4 gap-2">
+            {[
+              ["New", "4"],
+              ["Qualified", "7"],
+              ["Follow-up", "3"],
+              ["Won", "2"],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-[0.95rem] bg-white/7 p-3">
+                <div className="text-[0.58rem] uppercase tracking-[0.16em] text-white/42">{label}</div>
+                <div className="mt-3 text-xl font-semibold tracking-[-0.05em] text-white">{value}</div>
+              </div>
+            ))}
+          </div>
+          <div className="grid flex-1 grid-cols-4 gap-2">
+            {[2, 3, 2, 1].map((count, columnIndex) => (
+              <div key={columnIndex} className="rounded-[0.95rem] bg-white/6 p-2">
+                <div className="grid gap-2">
+                  {Array.from({ length: count }).map((_, itemIndex) => (
+                    <div key={itemIndex} className="rounded-[0.7rem] bg-white/10 px-2 py-2.5" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "system") {
+    return (
+      <div className="h-full rounded-[1.45rem] bg-[#102130] p-4 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="flex h-full flex-col">
+          <div className="grid grid-cols-[1.1fr_0.9fr] gap-3">
+            <div className="rounded-[1rem] bg-white/7 p-3">
+              <div className="text-[0.62rem] uppercase tracking-[0.18em] text-white/44">Website</div>
+              <div className="mt-3 h-20 rounded-[0.8rem] bg-[linear-gradient(135deg,rgba(189,216,236,0.78),rgba(255,255,255,0.24))]" />
+            </div>
+            <div className="rounded-[1rem] bg-white/7 p-3">
+              <div className="text-[0.62rem] uppercase tracking-[0.18em] text-white/44">Automation</div>
+              <div className="mt-3 grid gap-2">
+                <div className="h-3 rounded-full bg-white/14" />
+                <div className="h-3 w-2/3 rounded-full bg-white/10" />
+                <div className="h-10 rounded-[0.8rem] bg-white/7" />
+              </div>
+            </div>
+          </div>
+          <div className="mt-3 rounded-[1rem] bg-white/7 p-3">
+            <div className="flex items-center justify-between text-[0.62rem] uppercase tracking-[0.18em] text-white/44">
+              <span>Connected Funnel</span>
+              <span>Live</span>
+            </div>
+            <div className="mt-4 flex items-center justify-between text-[#bcd8ea]">
+              <span className="rounded-full bg-white/7 px-3 py-2 text-[0.68rem] uppercase tracking-[0.14em] text-white/68">
+                Enquiry
+              </span>
+              <span>→</span>
+              <span className="rounded-full bg-white/7 px-3 py-2 text-[0.68rem] uppercase tracking-[0.14em] text-white/68">
+                Follow-up
+              </span>
+              <span>→</span>
+              <span className="rounded-full bg-white/7 px-3 py-2 text-[0.68rem] uppercase tracking-[0.14em] text-white/68">
+                CRM
+              </span>
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              <div className="h-10 rounded-[0.8rem] bg-white/8" />
+              <div className="h-10 rounded-[0.8rem] bg-white/10" />
+              <div className="h-10 rounded-[0.8rem] bg-white/8" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3 rounded-[1.25rem] bg-[#102130] p-4 text-white">
+      <div className="grid gap-2">
+        {[
+          { label: "Trust section", done: true },
+          { label: "CTA hierarchy", done: true },
+          { label: "Form friction", done: false },
+        ].map((item) => (
+          <div key={item.label} className="flex items-center gap-3 rounded-[0.9rem] bg-white/7 px-3 py-2 text-sm">
+            <span
+              className={`h-4 w-4 rounded-full border ${
+                item.done ? "border-[#b9d7eb] bg-[#b9d7eb]" : "border-white/24 bg-transparent"
+              }`}
+            />
+            <span className="text-white/76">{item.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HeroShowcaseRibbon() {
+  const reduceMotion = useReducedMotion();
+  const reelBandRef = useRef<HTMLDivElement | null>(null);
+  const reelTrackRef = useRef<HTMLDivElement | null>(null);
+  const reelSetRef = useRef<HTMLDivElement | null>(null);
+  const targetSpeedRef = useRef(1);
+  const currentSpeedRef = useRef(1);
+  const offsetRef = useRef(0);
+  const cardRotations = [-1.4, 0.9, -0.45, 1.25, -0.95, 0.7, -1.15, 0.9, -0.6];
+  const cardOffsets = [8, 0, 10, 2, 12, 4, 10, 1, 7];
+
+  useEffect(() => {
+    const track = reelTrackRef.current;
+    const set = reelSetRef.current;
+
+    if (!track || !set) {
+      return;
+    }
+
+    if (reduceMotion) {
+      track.style.transform = "translate3d(0px, 0, 0)";
+      return;
+    }
+
+    let frameId = 0;
+    let lastTime = 0;
+    let setWidth = set.offsetWidth;
+    const normalLoopDuration = 36;
+    const hoverSpeedMultiplier = 0.45;
+
+    const updateWidth = () => {
+      setWidth = set.offsetWidth;
+    };
+
+    updateWidth();
+    const resizeObserver = new ResizeObserver(updateWidth);
+    resizeObserver.observe(set);
+
+    const tick = (time: number) => {
+      if (!lastTime) {
+        lastTime = time;
+      }
+
+      const delta = Math.min((time - lastTime) / 1000, 0.05);
+      lastTime = time;
+
+      const baseSpeed = setWidth > 0 ? setWidth / normalLoopDuration : 0;
+      const nextTarget = targetSpeedRef.current === 1 ? 1 : hoverSpeedMultiplier;
+      currentSpeedRef.current += (nextTarget - currentSpeedRef.current) * Math.min(delta * 5.5, 1);
+      offsetRef.current -= baseSpeed * currentSpeedRef.current * delta;
+
+      if (setWidth > 0 && offsetRef.current <= -setWidth) {
+        offsetRef.current += setWidth;
+      }
+
+      track.style.transform = `translate3d(${offsetRef.current}px, 0, 0)`;
+      frameId = window.requestAnimationFrame(tick);
+    };
+
+    frameId = window.requestAnimationFrame(tick);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      resizeObserver.disconnect();
+    };
+  }, [reduceMotion]);
+
+  return (
+    <>
+      <div data-hero-ribbon className="mt-8 hidden w-full lg:block">
+        <div className="relative left-1/2 w-screen -translate-x-1/2 px-0 pt-12">
+          <div
+            ref={reelBandRef}
+            onMouseEnter={() => {
+              targetSpeedRef.current = 0.32;
+            }}
+            onMouseLeave={() => {
+              targetSpeedRef.current = 1;
+            }}
+            className="relative h-[38rem] overflow-x-hidden overflow-y-visible pt-4 pb-[5.5rem]"
+          >
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-28 bg-[linear-gradient(90deg,#fbf7f1_0%,rgba(251,247,241,0.92)_35%,rgba(251,247,241,0))]" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-28 bg-[linear-gradient(270deg,#ede7db_0%,rgba(237,231,219,0.92)_35%,rgba(237,231,219,0))]" />
+
+            <div
+              ref={reelTrackRef}
+              className="flex h-full w-max items-end will-change-transform"
+            >
+              {[0, 1].map((loop) => (
+                <div
+                  key={loop}
+                  ref={loop === 0 ? reelSetRef : undefined}
+                  className="flex h-full items-end gap-6 pr-6 pl-6"
+                >
+                  {heroShowcaseCards.map((card, index) => (
+                    <article
+                      key={`${loop}-${card.title}`}
+                      data-hero-card
+                      className="group relative h-[29rem] w-[23.5rem] shrink-0 overflow-hidden rounded-[2rem] border border-black/8 bg-[rgba(255,255,255,0.9)] p-5 text-left shadow-[0_26px_80px_rgba(22,34,48,0.14)] backdrop-blur-md transition duration-300 [transform:translateY(var(--card-shift))_rotate(var(--card-rotate))] group-hover:[transform:translateY(calc(var(--card-shift)-4px))_rotate(var(--card-rotate))] hover:shadow-[0_30px_88px_rgba(22,34,48,0.18)]"
+                      style={{
+                        ["--card-shift" as string]: `${cardOffsets[index % cardOffsets.length]}px`,
+                        ["--card-rotate" as string]: `${cardRotations[index % cardRotations.length]}deg`,
+                      }}
+                    >
+                      <div className={`absolute inset-x-0 top-0 h-32 bg-[linear-gradient(180deg,var(--tw-gradient-stops))] ${card.accent}`} />
+                      <div className="absolute inset-x-0 top-16 h-28 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.62),rgba(255,255,255,0))]" />
+
+                      <div className="relative grid h-full grid-rows-[minmax(0,1fr)_6.5rem] gap-4">
+                        <div className="min-h-0 overflow-hidden rounded-[1.55rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.4),rgba(255,255,255,0.12))] shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]">
+                          {card.image ? null : <ShowcaseCardVisual type={card.type} />}
+                        </div>
+
+                        <div className="grid h-[6.5rem] grid-cols-[minmax(0,1fr)_auto] items-start gap-4 rounded-[1.2rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,255,255,0.8))] px-4 py-3 shadow-[0_12px_28px_rgba(20,30,44,0.08)]">
+                          <div className="min-w-0">
+                            <h3 className="text-[1.12rem] font-semibold leading-6 tracking-[-0.04em] text-[#102130]">
+                              {card.title}
+                            </h3>
+                            <p className="mt-1 max-w-[14rem] text-[0.9rem] leading-5 text-[#526777]">
+                              {card.subtitle}
+                            </p>
+                          </div>
+                          <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-lg text-[#102130] shadow-[0_8px_16px_rgba(15,31,45,0.08)] transition duration-300 group-hover:translate-x-0.5">
+                            ↗
+                          </span>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-hero-ribbon className="mt-10 w-full overflow-x-auto pb-3 lg:hidden [scrollbar-width:none]">
+        <div className="flex min-w-max gap-4 px-1">
+          {heroShowcaseCards.map((card) => (
+            <article
+              key={card.title}
+              data-hero-card
+              className={`group relative ${card.mobileWidth} h-[25rem] shrink-0 overflow-hidden rounded-[2rem] border border-black/8 bg-white/88 p-4 text-left shadow-[0_24px_50px_rgba(28,42,56,0.08)] backdrop-blur-md transition duration-300`}
+            >
+              <div className={`absolute inset-x-0 top-0 h-28 bg-[linear-gradient(180deg,var(--tw-gradient-stops))] ${card.accent}`} />
+              <div className="absolute inset-x-0 top-16 h-20 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.52),rgba(255,255,255,0))]" />
+              <div className="relative grid h-full grid-rows-[minmax(0,1fr)_6rem] gap-4">
+                <div className="min-h-0 overflow-hidden rounded-[1.25rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.28),rgba(255,255,255,0.08))]">
+                  {card.image ? null : <ShowcaseCardVisual type={card.type} />}
+                </div>
+
+                <div className="grid h-[6rem] grid-cols-[minmax(0,1fr)_auto] items-start gap-4 rounded-[1.1rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.74))] px-3 py-3">
+                  <div>
+                    <h3 className="text-[1.05rem] font-semibold leading-6 tracking-[-0.04em] text-[#102130]">
+                      {card.title}
+                    </h3>
+                    <p className="mt-1 max-w-[13rem] text-[0.9rem] leading-6 text-[#526777]">
+                      {card.subtitle}
+                    </p>
+                  </div>
+                  <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/76 text-lg text-[#102130] shadow-[0_8px_16px_rgba(15,31,45,0.08)]">
+                    ↗
+                  </span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
 
 export default function HomePage() {
   const pageRef = useRef<HTMLDivElement | null>(null);
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const [openFaq, setOpenFaq] = useState<number>(0);
   const [headerScrolled, setHeaderScrolled] = useState(false);
+  const [auditSubmitted, setAuditSubmitted] = useState(false);
 
   useLayoutEffect(() => {
     const page = pageRef.current;
     const heroSection = heroSectionRef.current;
-    let onPointerMove: ((event: PointerEvent) => void) | undefined;
     let lenis: Lenis | undefined;
     let rafId = 0;
 
@@ -360,16 +1072,15 @@ export default function HomePage() {
 
     const ctx = gsap.context(() => {
       lenis = new Lenis({
-        duration: 1.2,
+        duration: 1.16,
         smoothWheel: true,
-        wheelMultiplier: 0.95,
+        wheelMultiplier: 0.92,
       });
 
       lenis.on("scroll", ScrollTrigger.update);
       let lastHeaderState = false;
       lenis.on("scroll", ({ scroll }: { scroll: number }) => {
         const nextHeaderState = scroll > 28;
-
         if (nextHeaderState !== lastHeaderState) {
           lastHeaderState = nextHeaderState;
           setHeaderScrolled(nextHeaderState);
@@ -383,246 +1094,140 @@ export default function HomePage() {
 
       rafId = window.requestAnimationFrame(raf);
 
-      gsap.set("[data-hero-bg]", {
-        transformOrigin: "center center",
-        scale: 1,
-        x: 0,
-        y: 0,
-      });
-      gsap.set("[data-hero-mist]", { x: -36, opacity: 0.34 });
-      gsap.set("[data-hero-shimmer]", { x: 18, opacity: 0.14 });
-      gsap.set("[data-hero-haze]", { x: -12, y: 0, opacity: 0.14 });
-      gsap.set("[data-hero-shadow]", { opacity: 0.14 });
-      gsap.set("[data-hero-glow]", { xPercent: -50, yPercent: -50, x: 0, y: 0 });
       gsap.set("[data-hero-copy]", { y: 0, opacity: 1 });
-      gsap.set("[data-hero-particles]", { opacity: 0.14 });
+      gsap.set("[data-hero-ribbon]", { y: 0, opacity: 1 });
+      gsap.set("[data-hero-accent]", { y: 0, rotate: 0, opacity: 1 });
+      gsap.set("[data-hero-orb]", { y: 0, x: 0, opacity: 0.8 });
 
-      gsap.set("[data-reveal-intro]", { y: 34, opacity: 0 });
-      gsap.set("[data-decision-question]", {
-        y: 40,
-        autoAlpha: 0,
-        filter: "blur(8px)",
-      });
-      gsap.set("[data-decision-progress]", { autoAlpha: 0, y: 16 });
-      gsap.set("[data-decision-final]", {
-        y: 40,
-        autoAlpha: 0,
-        filter: "blur(6px)",
-      });
-      gsap.set("[data-decision-cta]", { y: 24, autoAlpha: 0 });
-      gsap.set("[data-system-card]", { y: 34, opacity: 0 });
-      gsap.set("[data-service-group]", { y: 34, opacity: 0 });
-      gsap.set("[data-audit-card]", { y: 34, opacity: 0 });
-      gsap.set("[data-audit-visual]", { y: 34, opacity: 0 });
-      gsap.set("[data-build-preview]", { y: 38, opacity: 0 });
-      gsap.set("[data-process-step]", { y: 28, opacity: 0 });
-      gsap.set("[data-growth-card]", { y: 38, opacity: 0 });
-      gsap.set("[data-proof-card]", { y: 30, opacity: 0 });
-      gsap.set("[data-faq-item]", { y: 24, opacity: 0 });
-      gsap.set("[data-final-cta]", { y: 34, opacity: 0 });
+      gsap.set("[data-reveal-intro]", { y: 28, opacity: 0 });
+      gsap.set("[data-reveal-card]", { y: 32, opacity: 0 });
+      gsap.set("[data-reveal-chip]", { y: 22, opacity: 0 });
+      gsap.set("[data-reveal-line]", { scaleX: 0.35, opacity: 0.18, transformOrigin: "left center" });
+      gsap.set("[data-reveal-form]", { y: 28, opacity: 0 });
 
-      gsap.to("[data-hero-mist]", {
-        x: 18,
-        duration: 11,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-      });
-
-      gsap.to("[data-hero-haze]", {
-        x: 18,
-        y: -8,
-        opacity: 0.2,
-        duration: 14,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-      });
-
-      gsap.to("[data-hero-shimmer]", {
-        x: 34,
-        opacity: 0.19,
-        duration: 7.5,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-      });
-
-      gsap.to("[data-hero-particles]", {
-        opacity: 0.22,
+      gsap.to("[data-hero-accent]", {
         y: -6,
-        duration: 6.5,
+        rotate: -4,
+        duration: 3.8,
         ease: "sine.inOut",
         yoyo: true,
         repeat: -1,
       });
 
-      const glowX = gsap.quickTo("[data-hero-glow]", "x", {
-        duration: 0.8,
-        ease: "power3.out",
+      gsap.to("[data-hero-orb]", {
+        x: 18,
+        y: -12,
+        opacity: 1,
+        duration: 8.5,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
       });
-      const glowY = gsap.quickTo("[data-hero-glow]", "y", {
-        duration: 0.8,
-        ease: "power3.out",
-      });
-
-      onPointerMove = (event: PointerEvent) => {
-        const bounds = heroSection.getBoundingClientRect();
-        glowX(event.clientX - bounds.left);
-        glowY(event.clientY - bounds.top);
-      };
-
-      heroSection.addEventListener("pointermove", onPointerMove);
 
       gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
           trigger: heroSection,
           start: "top top",
-          end: "+=235%",
-          pin: true,
+          end: "bottom top",
           scrub: 1,
-          anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       })
-        .to("[data-hero-bg]", { scale: 1.3, y: -88, x: 8, immediateRender: false }, 0)
-        .to("[data-hero-mist]", { x: 72, opacity: 0.4, immediateRender: false }, 0)
-        .to("[data-hero-shimmer]", { x: -42, opacity: 0.16, immediateRender: false }, 0)
-        .to("[data-hero-copy]", { y: -96, opacity: 0, immediateRender: false }, 0.28)
-        .to("[data-hero-shadow]", { opacity: 0.62, immediateRender: false }, 0);
+        .to("[data-hero-copy]", { y: -64, opacity: 0.22, immediateRender: false }, 0)
+        .to("[data-hero-ribbon]", { y: -22, opacity: 0.84, immediateRender: false }, 0)
+        .to("[data-hero-divider]", { opacity: 1, immediateRender: false }, 0.18);
 
-      sectionRevealTargets.forEach((section) => {
-        gsap.timeline({
-          defaults: { ease: "power2.out" },
-          scrollTrigger: {
-            trigger: section.trigger,
-            start: "top 78%",
-            end: "top 28%",
-            scrub: 1,
-            invalidateOnRefresh: true,
-          },
-        }).to(section.intro, {
-          y: 0,
-          opacity: 1,
-          stagger: 0.08,
-          duration: 0.85,
-          immediateRender: false,
-        });
+      sectionRevealSelectors.forEach((selector) => {
+        const section = page.querySelector(selector);
+        if (!section) {
+          return;
+        }
 
-        gsap.timeline({
-          defaults: { ease: "power2.out" },
-          scrollTrigger: {
-            trigger: section.trigger,
-            start: "top 72%",
-            end: "top 24%",
-            scrub: 1,
-            invalidateOnRefresh: true,
-          },
-        }).to(section.body, {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.85,
-          immediateRender: false,
-        });
-      });
+        const intro = section.querySelectorAll("[data-reveal-intro]");
+        const cards = section.querySelectorAll("[data-reveal-card], [data-reveal-form]");
+        const chips = section.querySelectorAll("[data-reveal-chip]");
+        const lines = section.querySelectorAll("[data-reveal-line]");
 
-      const media = gsap.matchMedia();
-
-      media.add("(min-width: 768px)", () => {
-        gsap.set("[data-decision-copy]", { opacity: 1 });
-        gsap.set("[data-decision-line]", { scaleX: 0.2, opacity: 0.28, transformOrigin: "left center" });
-
-        gsap.timeline({
-          defaults: { ease: "power2.out" },
-          scrollTrigger: {
-            trigger: "[data-decision-section]",
-            start: "top top",
-            end: "+=220%",
-            pin: "[data-decision-pin]",
-            scrub: 1,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        })
-          .to("[data-reveal-intro][data-group='decision']", {
+        if (intro.length) {
+          gsap.timeline({
+            defaults: { ease: "power2.out" },
+            scrollTrigger: {
+              trigger: section,
+              start: "top 78%",
+              end: "top 30%",
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
+          }).to(intro, {
             y: 0,
             opacity: 1,
             stagger: 0.08,
-            duration: 0.7,
+            duration: 0.82,
             immediateRender: false,
-          }, 0)
-          .to("[data-decision-copy]", { opacity: 0.78, immediateRender: false }, 0.16)
-          .to("[data-decision-progress='0']", { autoAlpha: 0.78, y: 0, immediateRender: false }, 0.16)
-          .to("[data-decision-question='0']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, 0.16)
-          .to("[data-decision-line]", { scaleX: 0.38, opacity: 0.52, immediateRender: false }, 0.16)
-          .to("[data-decision-progress='0']", { autoAlpha: 0, y: -10, immediateRender: false }, 0.38)
-          .to("[data-decision-question='0']", { y: -20, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, 0.38)
-          .to("[data-decision-progress='1']", { autoAlpha: 0.78, y: 0, immediateRender: false }, 0.46)
-          .to("[data-decision-question='1']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, 0.46)
-          .to("[data-decision-line]", { scaleX: 0.58, opacity: 0.62, immediateRender: false }, 0.46)
-          .to("[data-decision-progress='1']", { autoAlpha: 0, y: -10, immediateRender: false }, 0.68)
-          .to("[data-decision-question='1']", { y: -20, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, 0.68)
-          .to("[data-decision-progress='2']", { autoAlpha: 0.78, y: 0, immediateRender: false }, 0.76)
-          .to("[data-decision-question='2']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, 0.76)
-          .to("[data-decision-line]", { scaleX: 0.78, opacity: 0.72, immediateRender: false }, 0.76)
-          .to("[data-decision-progress='2']", { autoAlpha: 0, y: -10, immediateRender: false }, 0.98)
-          .to("[data-decision-question='2']", { y: -20, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, 0.98)
-          .to("[data-decision-progress='3']", { autoAlpha: 0.78, y: 0, immediateRender: false }, 1.06)
-          .to("[data-decision-question='3']", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, 1.06)
-          .to("[data-decision-line]", { scaleX: 1, opacity: 0.86, immediateRender: false }, 1.06)
-          .to("[data-decision-progress='3']", { autoAlpha: 0, y: -10, immediateRender: false }, 1.28)
-          .to("[data-decision-question='3']", { y: -16, autoAlpha: 0, filter: "blur(4px)", immediateRender: false }, 1.28)
-          .to("[data-decision-final]", { y: 0, autoAlpha: 1, filter: "blur(0px)", immediateRender: false }, 1.38)
-          .to("[data-decision-cta]", { y: 0, autoAlpha: 1, immediateRender: false }, 1.42)
-          .to("[data-decision-copy]", { opacity: 1, immediateRender: false }, 1.38);
+          });
+        }
+
+        if (cards.length) {
+          gsap.timeline({
+            defaults: { ease: "power2.out" },
+            scrollTrigger: {
+              trigger: section,
+              start: "top 72%",
+              end: "top 24%",
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
+          }).to(cards, {
+            y: 0,
+            opacity: 1,
+            stagger: 0.1,
+            duration: 0.84,
+            immediateRender: false,
+          });
+        }
+
+        if (chips.length) {
+          gsap.timeline({
+            defaults: { ease: "power2.out" },
+            scrollTrigger: {
+              trigger: section,
+              start: "top 70%",
+              end: "top 20%",
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
+          }).to(chips, {
+            y: 0,
+            opacity: 1,
+            stagger: 0.06,
+            duration: 0.72,
+            immediateRender: false,
+          });
+        }
+
+        if (lines.length) {
+          gsap.timeline({
+            defaults: { ease: "power2.out" },
+            scrollTrigger: {
+              trigger: section,
+              start: "top 68%",
+              end: "top 18%",
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
+          }).to(lines, {
+            scaleX: 1,
+            opacity: 1,
+            stagger: 0.08,
+            duration: 0.72,
+            immediateRender: false,
+          });
+        }
       });
-
-      media.add("(max-width: 767px)", () => {
-        gsap.set("[data-decision-mobile-item]", { y: 26, opacity: 0 });
-
-        gsap.timeline({
-          defaults: { ease: "power2.out" },
-          scrollTrigger: {
-            trigger: "[data-decision-mobile]",
-            start: "top 80%",
-            end: "top 28%",
-            scrub: 1,
-            invalidateOnRefresh: true,
-          },
-        }).to("[data-reveal-intro][data-group='decision-mobile']", {
-          y: 0,
-          opacity: 1,
-          stagger: 0.08,
-          duration: 0.7,
-          immediateRender: false,
-        });
-
-        gsap.timeline({
-          defaults: { ease: "power2.out" },
-          scrollTrigger: {
-            trigger: "[data-decision-mobile]",
-            start: "top 72%",
-            end: "bottom 24%",
-            scrub: 1,
-            invalidateOnRefresh: true,
-          },
-        }).to("[data-decision-mobile-item]", {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.8,
-          immediateRender: false,
-        });
-      });
-
     }, page);
 
     return () => {
-      if (onPointerMove) {
-        heroSection.removeEventListener("pointermove", onPointerMove);
-      }
       if (rafId) {
         window.cancelAnimationFrame(rafId);
       }
@@ -631,1186 +1236,763 @@ export default function HomePage() {
     };
   }, []);
 
+  const handleAuditSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setAuditSubmitted(true);
+    event.currentTarget.reset();
+  };
+
   const currentYear = new Date().getFullYear();
 
   return (
     <div className="ocia-page-atmosphere">
       <div className="ocia-atmosphere-bg" />
+
       <main ref={pageRef} className="relative z-10 isolate overflow-x-clip bg-transparent text-white">
         <ConstellationWhale />
-        <header
-        className={`fixed inset-x-0 top-0 z-[90] transition-all duration-500 ${
-          headerScrolled
-            ? "border-b border-white/10 bg-[rgba(3,6,12,0.72)] shadow-[0_18px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl"
-            : "bg-transparent"
-        }`}
-      >
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-5 py-4 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-          <Link
-            href="/"
-            className="shrink-0 text-[0.72rem] font-medium uppercase tracking-[0.42em] text-white/92 transition hover:text-white sm:text-xs"
-          >
-            OCIA Studios
-          </Link>
 
-          <nav className="flex max-w-full items-center gap-4 overflow-x-auto pb-1 text-[0.62rem] uppercase tracking-[0.24em] whitespace-nowrap text-white/64 [scrollbar-width:none] md:gap-7 md:pb-0 md:text-[0.7rem]">
-              {navItems.map((item) =>
-              item.href.startsWith("/") ? (
-                <Link key={item.label} href={item.href} className="transition duration-300 hover:text-white">
-                  {item.label}
-                </Link>
-              ) : (
-                <a
+        <header
+          className="fixed inset-x-0 top-0 z-[90] px-4 pt-4 transition-all duration-500 sm:px-6 lg:px-8"
+        >
+          <div
+            className={`mx-auto flex max-w-[1280px] items-center justify-between gap-4 rounded-full px-5 py-3 shadow-[0_16px_50px_rgba(7,24,39,0.08)] ring-1 ring-[rgba(7,24,39,0.08)] backdrop-blur-[18px] transition-all duration-500 sm:px-6 lg:grid lg:grid-cols-[auto_1fr_auto] lg:gap-6 lg:px-8 ${
+              headerScrolled
+                ? "bg-[rgba(255,255,255,0.82)] shadow-[0_18px_54px_rgba(7,24,39,0.14)]"
+                : "bg-[rgba(255,255,255,0.58)]"
+            }`}
+          >
+            <Link
+              href="/"
+              className="flex shrink-0 items-center gap-3 text-[#071827] transition hover:text-[#071827]"
+              style={{ color: "#071827", opacity: 1 }}
+            >
+              <span className="relative inline-flex h-[1.35rem] w-[1.35rem] shrink-0 items-center justify-center rounded-full border border-[rgba(7,24,39,0.7)] bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.96),rgba(220,229,239,0.68)_48%,rgba(7,24,39,0.06)_100%)] shadow-[0_6px_18px_rgba(7,24,39,0.12)]">
+                <span className="h-[0.28rem] w-[0.28rem] rounded-full bg-[#071827]" />
+                <span className="absolute inset-[0.18rem] rounded-full border border-[rgba(7,24,39,0.14)]" />
+                <span className="absolute h-[0.8rem] w-px rotate-[34deg] rounded-full bg-[linear-gradient(180deg,rgba(7,24,39,0),rgba(7,24,39,0.42),rgba(7,24,39,0))]" />
+              </span>
+              <span className="text-[0.68rem] font-extrabold uppercase tracking-[0.2em] text-[#071827] sm:text-[0.72rem]">
+                Ocia Studios
+              </span>
+            </Link>
+
+            <nav
+              className="hidden items-center justify-center gap-2 text-[0.72rem] font-medium text-[#294052] md:flex lg:gap-3"
+            >
+              {navItems.map((item, index) => (
+                <Link
                   key={item.label}
                   href={item.href}
-                  target={item.external ? "_blank" : undefined}
-                  rel={item.external ? "noopener noreferrer" : undefined}
-                  className="transition duration-300 hover:text-white"
+                  className={`inline-flex items-center rounded-full px-3.5 py-2 transition duration-300 ${
+                    index === 0
+                      ? "bg-[rgba(7,24,39,0.07)] text-[#071827]"
+                      : "text-[#294052] hover:bg-[rgba(7,24,39,0.06)] hover:text-[#071827]"
+                  }`}
                 >
-                  {item.label}
-                </a>
-              ),
-            )}
-          </nav>
-        </div>
+                  <span className="tracking-[0.08em]">
+                    {item.label}
+                  </span>
+                  {index === 0 ? (
+                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#071827]" />
+                  ) : null}
+                </Link>
+              ))}
+            </nav>
+
+            <Link
+              href="/#contact"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[rgba(7,24,39,0.9)] bg-[#071827] px-4 text-[0.84rem] font-semibold tracking-[-0.01em] text-white shadow-[0_16px_36px_rgba(7,24,39,0.18)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#0d2232] hover:shadow-[0_20px_42px_rgba(7,24,39,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#89bee7] focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:px-5 sm:text-sm"
+            >
+              Get My Free Audit
+            </Link>
+          </div>
         </header>
 
-        <section ref={heroSectionRef} className="relative h-svh overflow-hidden">
-        <div className="relative h-svh overflow-hidden">
-          <div className="absolute inset-0 z-0 bg-[#030508]" />
-
-          <Image
-            src="/assets/ocia/hero-shoreline.png"
-            alt="Dark shoreline at dusk"
-            fill
-            priority
-            sizes="100vw"
-            data-hero-bg
-            className="absolute inset-0 z-10 h-full w-full object-cover object-center will-change-transform"
-          />
-
-          <Image
-            src="/assets/ocia/mist-overlay.png"
-            alt=""
-            fill
-            sizes="100vw"
-            aria-hidden="true"
-            data-hero-mist
-            className="pointer-events-none absolute inset-0 z-20 h-full w-full object-cover object-center opacity-[0.34] mix-blend-screen will-change-transform"
-          />
-
+        <section
+          ref={heroSectionRef}
+          className="relative overflow-x-hidden overflow-y-visible bg-[linear-gradient(180deg,#fbf8f3_0%,#f7f2ea_34%,#f2ebdf_68%,#ece4d8_100%)] text-[#0f1f2d]"
+        >
           <div
-            data-hero-shimmer
-            className="pointer-events-none absolute bottom-[12%] right-[-2%] z-30 h-[24%] w-[48%] rounded-[100%] opacity-[0.14] mix-blend-screen blur-3xl will-change-transform md:bottom-[10%] md:h-[27%] md:w-[44%]"
+            data-hero-orb
+            className="pointer-events-none absolute left-[8%] top-[18%] z-0 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgba(168,202,230,0.34)_0%,rgba(168,202,230,0.12)_44%,rgba(168,202,230,0)_72%)] blur-3xl"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-0 opacity-[0.03]"
             style={{
-              background:
-                "radial-gradient(ellipse at center, rgba(223,232,244,0.44) 0%, rgba(192,212,236,0.22) 26%, rgba(110,140,174,0.08) 52%, rgba(110,140,174,0) 78%)",
+              backgroundImage:
+                "radial-gradient(circle at 20% 20%, rgba(7,24,39,0.1) 0.45px, transparent 0.68px), radial-gradient(circle at 80% 30%, rgba(7,24,39,0.08) 0.4px, transparent 0.64px), radial-gradient(circle at 50% 70%, rgba(7,24,39,0.06) 0.36px, transparent 0.6px)",
+              backgroundSize: "20px 20px, 24px 24px, 28px 28px",
+              backgroundPosition: "0 0, 8px 10px, 12px 5px",
             }}
           />
-
           <div
-            data-hero-haze
-            className="pointer-events-none absolute inset-0 z-20 bg-[radial-gradient(circle_at_58%_18%,rgba(196,216,236,0.12),transparent_16%),radial-gradient(circle_at_72%_34%,rgba(128,162,198,0.12),transparent_24%),radial-gradient(circle_at_60%_58%,rgba(98,128,160,0.08),transparent_22%)] will-change-transform"
-          />
-          <div className="absolute inset-0 z-20 bg-[radial-gradient(circle_at_62%_18%,rgba(158,188,218,0.22),transparent_18%),radial-gradient(circle_at_64%_42%,rgba(110,146,182,0.1),transparent_28%),linear-gradient(90deg,rgba(2,4,8,0.74)_0%,rgba(2,4,8,0.56)_24%,rgba(2,4,8,0.18)_50%,rgba(2,4,8,0.12)_68%,rgba(2,4,8,0.42)_100%)]" />
-          <div className="absolute inset-0 z-20 bg-[linear-gradient(180deg,rgba(2,5,10,0.18)_0%,rgba(2,5,10,0.02)_34%,rgba(2,5,10,0.08)_64%,rgba(2,5,10,0.3)_100%)]" />
-          <div
-            data-hero-shadow
-            className="absolute inset-0 z-30 bg-[linear-gradient(180deg,rgba(1,3,7,0.02)_0%,rgba(1,3,7,0.1)_52%,rgba(1,3,7,0.26)_100%)] opacity-[0.14]"
+            aria-hidden="true"
+            className="pointer-events-none absolute left-[-10%] top-[12%] z-0 h-[22rem] w-[34rem] rounded-[999px] bg-[radial-gradient(ellipse_at_center,rgba(248,244,238,0.9)_0%,rgba(248,244,238,0.5)_38%,rgba(248,244,238,0.08)_64%,rgba(248,244,238,0)_100%)] opacity-80 blur-3xl sm:left-[-4%] sm:w-[38rem] md:w-[42rem] lg:h-[24rem] lg:w-[46rem]"
           />
           <div
-            data-hero-glow
-            className="pointer-events-none absolute left-0 top-0 z-30 hidden h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(210,225,240,0.1)_0%,rgba(126,160,194,0.05)_34%,rgba(126,160,194,0)_72%)] blur-3xl md:block"
+            aria-hidden="true"
+            className="pointer-events-none absolute right-[-10%] top-[16%] z-0 h-[20rem] w-[28rem] rounded-[999px] bg-[radial-gradient(ellipse_at_center,rgba(202,216,228,0.42)_0%,rgba(202,216,228,0.18)_42%,rgba(202,216,228,0.04)_66%,rgba(202,216,228,0)_100%)] opacity-90 blur-3xl sm:right-[-4%] sm:w-[32rem] md:h-[22rem] md:w-[36rem] lg:top-[18%] lg:h-[24rem] lg:w-[40rem]"
           />
           <div
-            data-hero-particles
-            className="pointer-events-none absolute inset-0 z-30 opacity-[0.14] [background-image:radial-gradient(rgba(235,242,248,0.14)_0.7px,transparent_0.7px)] [background-size:26px_26px]"
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/2 top-[6%] z-0 h-[11rem] w-[22rem] -translate-x-1/2 rounded-[999px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.44)_0%,rgba(255,255,255,0.18)_40%,rgba(255,255,255,0)_74%)] opacity-75 blur-3xl md:h-[13rem] md:w-[28rem]"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 z-0 h-40 bg-[linear-gradient(180deg,rgba(255,255,255,0.66),rgba(255,255,255,0.18)_48%,rgba(255,255,255,0)_100%)]"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-[4%] bottom-[10.5rem] z-0 h-[18rem] rounded-[999px] bg-[radial-gradient(ellipse_at_center,rgba(244,238,228,0.72)_0%,rgba(244,238,228,0.42)_36%,rgba(244,238,228,0.12)_62%,rgba(244,238,228,0)_100%)] blur-3xl sm:inset-x-[8%] sm:bottom-[11rem] md:h-[19rem] lg:bottom-[12rem] lg:h-[20rem]"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-[-8%] bottom-[5.25rem] z-0 h-[18rem] bg-[radial-gradient(ellipse_at_center,rgba(234,226,214,0.22)_0%,rgba(234,226,214,0.12)_42%,rgba(234,226,214,0.03)_68%,rgba(234,226,214,0)_100%)] blur-2xl"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute right-[8%] bottom-[14rem] z-0 h-[12rem] w-[20rem] rounded-[999px] bg-[radial-gradient(ellipse_at_center,rgba(112,134,154,0.14)_0%,rgba(112,134,154,0.06)_44%,rgba(112,134,154,0)_78%)] blur-3xl md:h-[14rem] md:w-[24rem]"
           />
 
-          <div className="relative z-40 flex h-full flex-col px-5 pb-10 pt-24 sm:px-8 sm:pt-28 md:px-10 lg:px-14 lg:pt-32 xl:px-20">
-            <div className="flex flex-1 items-center">
-              <div
-                data-hero-copy
-                className="grid w-full items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.74fr)] lg:gap-18 xl:gap-24"
-              >
-                <div className="max-w-[760px]">
-                  {/* <p className="mb-5 text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/58 sm:text-[0.74rem]">
-                    Premium digital systems for service businesses
-                  </p> */}
+          <div className="relative z-10 mx-auto flex min-h-svh max-w-[1440px] flex-col px-5 pb-24 pt-28 sm:px-8 sm:pb-24 sm:pt-32 md:px-10 lg:px-14 lg:pb-28 lg:pt-36 xl:px-20">
+            <div className="mx-auto flex w-full max-w-[1080px] flex-1 flex-col items-center text-center">
+              <div data-hero-copy className="max-w-[980px]">
+                <p className="text-[0.72rem] font-semibold uppercase tracking-[0.34em] text-[#3f5668] sm:text-[0.76rem]">
+                  For service businesses that need more enquiries
+                </p>
 
-                  <h1 className="max-w-[760px] text-[3.25rem] font-medium leading-[0.88] tracking-[-0.068em] text-white sm:text-[4.8rem] md:text-[6.15rem] lg:text-[6.75rem] xl:text-[7.4rem]">
-                    Be trusted before they enquire.
-                  </h1>
+                <HeroHeadline />
 
-                  <p className="mt-6 max-w-[34rem] text-[0.98rem] leading-7 text-white/76 sm:text-[1.02rem] sm:leading-8 md:mt-7 md:text-[1.12rem] md:leading-8">
-                    OCIA Studios builds premium websites, lead flows and follow-up
-                    systems that help service businesses look credible, explain
-                    their value clearly and turn visitors into enquiries.
-                  </p>
+                <p className="mx-auto mt-7 max-w-[50rem] text-[1rem] leading-8 text-[#425768] sm:text-[1.06rem] md:text-[1.14rem] md:leading-8">
+                  Ocia Studios helps service businesses turn underperforming websites into
+                  lead-generation systems through redesign, SEO, conversion optimisation,
+                  WhatsApp automation, booking improvements, and CRM follow-up workflows.
+                </p>
+
+                <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                  <Link
+                    href="/#contact"
+                    className="inline-flex min-h-14 items-center justify-center rounded-full border border-[rgba(7,24,39,0.94)] bg-[#071827] px-7 text-sm font-bold tracking-[-0.01em] text-white shadow-[0_20px_40px_rgba(15,31,45,0.2)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#0b2030] hover:text-white hover:shadow-[0_24px_44px_rgba(15,31,45,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#89bee7] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f3eb]"
+                    style={{
+                      background: "#071827",
+                      color: "#ffffff",
+                      opacity: 1,
+                      fontWeight: 700,
+                      border: "1px solid rgba(7,24,39,0.9)",
+                    }}
+                  >
+                    <span style={{ color: "#ffffff", opacity: 1 }}>
+                      Get My Free Website Audit
+                    </span>
+                  </Link>
+
+                  <Link
+                    href="/#services"
+                    className="inline-flex min-h-14 items-center justify-center rounded-full border border-[rgba(7,24,39,0.14)] bg-[rgba(255,255,255,0.94)] px-7 text-sm font-semibold tracking-[-0.01em] text-[#071827] shadow-[0_12px_28px_rgba(15,31,45,0.08)] backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-[rgba(7,24,39,0.18)] hover:bg-white hover:text-[#071827] hover:shadow-[0_18px_34px_rgba(15,31,45,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#89bee7] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f3eb]"
+                    style={{ color: "#071827", opacity: 1 }}
+                  >
+                    <span style={{ color: "#071827", opacity: 1 }}>See How We Can Help</span>
+                  </Link>
                 </div>
 
-                <div className="lg:flex lg:justify-end">
-                  <div className="relative max-w-[520px] pl-0 lg:pl-12">
-                    <div className="pointer-events-none absolute left-0 top-1/2 hidden h-[72%] w-px -translate-y-1/2 bg-[linear-gradient(180deg,rgba(214,229,244,0.02),rgba(214,229,244,0.24),rgba(214,229,244,0.02))] lg:block" />
-
-                    <h2 className="max-w-[26rem] text-[1.8rem] font-medium leading-[1.02] tracking-[-0.05em] text-white sm:text-[2rem] md:text-[2.15rem]">
-                      Not sure what your business needs yet?
-                    </h2>
-
-                    <p className="mt-7 max-w-[28rem] text-[1rem] leading-7 text-white/70 sm:text-[1.04rem] sm:leading-8">
-                      Start with a quick conversation and we&apos;ll help identify
-                      the right next step for your website, enquiries or follow-up.
-                    </p>
-
-                    <div className="mt-9">
-                      <OciaButton href={CALENDLY_URL} arrow>
-                        Book a Discovery Call
-                      </OciaButton>
-                    </div>
-                  </div>
-                </div>
+                <p className="mt-6 text-[0.82rem] uppercase tracking-[0.24em] text-[#617584]">
+                  No guesswork. Clear recommendations. Practical next steps.
+                </p>
               </div>
             </div>
+
+            <HeroShowcaseRibbon />
           </div>
-        </div>
+
+          <div
+            data-hero-divider
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-28 opacity-0 bg-[linear-gradient(180deg,rgba(15,31,45,0)_0%,rgba(9,17,28,0.22)_38%,rgba(6,12,20,0.84)_100%)]"
+          />
         </section>
 
-        <SceneSection
-        data-decision-section
-        tone="night"
-        className="border-t border-white/8"
-      >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_24%_20%,rgba(114,144,178,0.1),transparent_24%),radial-gradient(circle_at_82%_78%,rgba(76,102,132,0.08),transparent_24%)]" />
-        <div
-          data-decision-desktop
-          className="relative z-20 hidden min-h-[260vh] md:block"
-        >
-          <div data-decision-pin className="flex h-svh items-center px-5 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-            <div data-decision-copy className="mx-auto w-full max-w-[1080px] text-center">
-              <p
-                data-reveal-intro
-                data-group="decision"
-                className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
-              >
-                The Decision
-              </p>
-              <h2
-                data-reveal-intro
-                data-group="decision"
-                className="mx-auto mt-6 max-w-4xl text-[2.9rem] font-medium leading-[0.93] tracking-[-0.06em] text-white sm:text-[4rem] md:text-[5rem] lg:text-[6rem]"
-              >
-                Before they enquire, they decide.
-              </h2>
-              <p
-                data-reveal-intro
-                data-group="decision"
-                className="mx-auto mt-7 max-w-3xl text-base leading-8 text-white/66 md:text-[1.12rem] md:leading-9"
-              >
-                A visitor does not wait until the contact form to judge your
-                business. Within seconds, they decide whether you look
-                credible, clear and worth trusting.
-              </p>
+        <SceneSection data-problem-section tone="night" className="border-t border-white/8">
+          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-14 xl:px-20">
+            <SectionIntro
+              label="The Problem"
+              title="Your website may be costing you leads every single week."
+              body="Most websites do not fail because of one big problem. They lose leads through small leaks across the journey."
+            />
 
-              <div className="relative mx-auto mt-16 flex min-h-[220px] max-w-3xl items-center justify-center overflow-hidden md:min-h-[260px]">
-                {decisionQuestions.map((question, index) => (
+            <div className="mt-14 grid gap-5 lg:grid-cols-3">
+              {problemCards.map((card) => (
+                <article
+                  key={card.title}
+                  data-reveal-card
+                  className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.78),rgba(5,10,18,0.58))] p-7 shadow-[0_20px_70px_rgba(0,0,0,0.24)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-white/16"
+                >
+                  <div className="mb-5 h-px w-16 bg-[linear-gradient(90deg,rgba(220,232,244,0.88),rgba(220,232,244,0.06))]" />
+                  <h3 className="text-[1.38rem] font-medium tracking-[-0.04em] text-white">
+                    {card.title}
+                  </h3>
+                  <p className="mt-4 text-[0.98rem] leading-7 text-white/66">{card.body}</p>
+                </article>
+              ))}
+            </div>
+
+            <p
+              data-reveal-card
+              className="mt-10 max-w-3xl text-[0.98rem] leading-7 text-white/58"
+            >
+              Most websites do not fail because of one big problem. They lose leads
+              through small leaks across the journey.
+            </p>
+          </div>
+        </SceneSection>
+
+        <SceneSection id="solutions" data-value-section tone="night">
+          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+            <div className="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-end">
+              <SectionIntro
+                label="The Value"
+                title="We fix the parts of your online funnel that stop people from contacting you."
+                body="At Ocia Studios, we do more than make websites look better. We improve the parts of your business that directly affect trust, lead flow, conversion, response speed, and follow-up."
+              />
+
+              <div className="flex flex-wrap gap-3 lg:justify-end">
+                {valueChips.map((chip) => (
                   <div
-                    key={question}
-                    className="absolute inset-0 flex flex-col items-center justify-center gap-5"
+                    key={chip}
+                    data-reveal-chip
+                    className="rounded-full border border-[rgba(214,229,244,0.14)] bg-[rgba(255,255,255,0.04)] px-4 py-3 text-sm text-white/78 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md"
                   >
-                    <p
-                      data-decision-progress={String(index)}
-                      className="invisible text-[0.72rem] uppercase tracking-[0.38em] text-white/44 opacity-0"
-                    >
-                      0{index + 1} / 04
-                    </p>
-                    <p
-                      data-decision-question={String(index)}
-                      className="invisible max-w-3xl text-[1.55rem] font-medium tracking-[-0.04em] text-white/88 opacity-0 sm:text-[2rem] md:text-[2.5rem] lg:text-[3rem]"
-                    >
-                      {question}
-                    </p>
+                    {chip}
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </SceneSection>
 
-              <div className="mx-auto mt-2 h-px max-w-xl overflow-hidden rounded-full bg-white/8">
-                <div
-                  data-decision-line
-                  className="h-full w-full rounded-full bg-[linear-gradient(90deg,rgba(202,220,238,0.92),rgba(112,142,172,0.62))]"
+        <SceneSection
+          id="pricing"
+          data-audit-section
+          tone="mist"
+          className="border-y border-white/8"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_28%,rgba(150,182,216,0.12),transparent_20%),radial-gradient(circle_at_82%_18%,rgba(109,143,178,0.08),transparent_22%)]" />
+          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-14 xl:px-20">
+            <div className="grid gap-8 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+              <div
+                data-reveal-card
+                className="rounded-[2.25rem] border border-[rgba(220,230,240,0.12)] bg-[linear-gradient(180deg,rgba(9,17,29,0.86),rgba(5,10,18,0.72))] p-7 shadow-[0_24px_90px_rgba(0,0,0,0.32)] backdrop-blur-xl sm:p-8"
+              >
+                <SectionIntro
+                  label="Free Audit"
+                  title="Start with a free website opportunity audit."
+                  body="If your website is underperforming, we'll help you identify where leads, trust, visibility, and conversions are being lost."
                 />
-              </div>
 
-              <div className="mx-auto mt-8 max-w-3xl">
-                <p
-                  data-decision-final
-                  className="invisible text-[1.25rem] font-medium tracking-[-0.03em] text-white opacity-0 sm:text-[1.5rem] md:text-[1.9rem]"
-                >
-                  If the answer is unclear, the lead is already slipping away.
+                <div className="mt-8 grid gap-3">
+                  {auditChecklist.map((item) => (
+                    <div
+                      key={item}
+                      data-reveal-chip
+                      className="flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3"
+                    >
+                      <span className="h-2 w-2 rounded-full bg-[rgba(220,232,244,0.86)] shadow-[0_0_16px_rgba(182,210,242,0.34)]" />
+                      <span className="text-sm leading-6 text-white/76">{item}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="mt-8 text-[0.98rem] leading-7 text-white/62">
+                  You will walk away with a clearer picture of what is holding your website
+                  back and what to fix first.
                 </p>
 
-                <div data-decision-cta className="invisible mt-10 flex justify-center opacity-0">
-                  <OciaButton href={CALENDLY_URL} arrow>
-                    Get a Website Review
+                <div className="mt-8">
+                  <OciaButton href="/#contact" arrow>
+                    Claim My Free Audit
                   </OciaButton>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
 
-        <div
-          data-decision-mobile
-          className="relative z-20 px-5 py-24 sm:px-8 sm:py-28 md:hidden"
-        >
-          <div className="mx-auto max-w-[760px] text-center">
-            <p
-              data-reveal-intro
-              data-group="decision-mobile"
-              className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
-            >
-              The Decision
-            </p>
-            <h2
-              data-reveal-intro
-              data-group="decision-mobile"
-              className="mx-auto mt-6 max-w-4xl text-[2.9rem] font-medium leading-[0.93] tracking-[-0.06em] text-white sm:text-[4rem] md:text-[5rem] lg:text-[6rem]"
-            >
-              Before they enquire, they decide.
-            </h2>
-              <p
-                data-reveal-intro
-                data-group="decision-mobile"
-                className="mx-auto mt-7 max-w-3xl text-base leading-8 text-white/66 md:text-[1.12rem] md:leading-9"
+              <div
+                id="contact"
+                data-reveal-form
+                className="rounded-[2.25rem] border border-[rgba(220,230,240,0.14)] bg-[linear-gradient(180deg,rgba(11,20,33,0.9),rgba(6,12,20,0.78))] p-7 shadow-[0_24px_90px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:p-8"
               >
-              A visitor does not wait until the contact form to judge your
-              business. Within seconds, they decide whether you look
-              credible, clear and worth trusting.
-            </p>
-          </div>
-        </div>
-        </SceneSection>
-
-      <SceneSection
-        id="solutions"
-        data-system-section
-        tone="night"
-        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
-      >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(182,208,232,0.16),transparent_18%),radial-gradient(circle_at_78%_20%,rgba(118,150,184,0.1),transparent_22%),radial-gradient(circle_at_50%_84%,rgba(94,126,156,0.12),transparent_26%)]" />
-        <div className="pointer-events-none absolute inset-x-0 top-[26%] h-[44%] bg-[radial-gradient(ellipse_at_center,rgba(216,229,240,0.16),rgba(216,229,240,0)_72%)] blur-3xl" />
-        <div className="relative z-20 mx-auto max-w-[1280px]">
-            <p
-              data-reveal-intro
-              data-group="system"
-              className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/42 sm:text-[0.72rem]"
-            >
-            Digital Path
-            </p>
-          <div className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)] lg:gap-20">
-            <div>
-              <h2
-                data-reveal-intro
-                data-group="system"
-                className="max-w-4xl text-[2.8rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.7rem] md:text-[4.75rem]"
-              >
-                Every enquiry starts before the form.
-              </h2>
-            </div>
-              <p
-                data-reveal-intro
-                data-group="system"
-                className="max-w-2xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9"
-              >
-              Before someone books a call, they have already judged your
-              credibility, clarity, and value. We design that journey
-              intentionally.
-            </p>
-          </div>
-
-          <div className="relative mt-18 rounded-[2.25rem] border border-white/10 bg-[rgba(5,12,20,0.62)] px-6 py-8 shadow-[0_24px_80px_rgba(4,10,18,0.28),0_0_0_1px_rgba(138,168,196,0.05)] backdrop-blur-[18px] sm:px-8 md:px-10 lg:px-12 lg:py-12">
-            <div className="pointer-events-none absolute inset-0 rounded-[2.25rem] bg-[radial-gradient(circle_at_16%_20%,rgba(168,194,220,0.08),transparent_20%),radial-gradient(circle_at_80%_18%,rgba(120,150,184,0.1),transparent_18%),radial-gradient(circle_at_52%_84%,rgba(120,150,184,0.08),transparent_26%)]" />
-            <div className="pointer-events-none absolute inset-x-[8%] top-[22%] hidden h-20 rounded-full bg-[radial-gradient(circle,rgba(184,204,223,0.08),transparent_64%)] blur-3xl lg:block" />
-            <div className="pointer-events-none absolute inset-0 opacity-18 [background-image:linear-gradient(115deg,transparent_0%,rgba(132,160,188,0.06)_46%,transparent_52%),radial-gradient(rgba(162,188,212,0.14)_0.6px,transparent_0.6px)] [background-size:100%_100%,34px_34px]" />
-
-            <div className="relative space-y-6 lg:hidden">
-              <div className="pointer-events-none absolute bottom-6 left-5 top-6 w-px bg-[linear-gradient(180deg,rgba(88,111,138,0.08)_0%,rgba(118,147,176,0.44)_18%,rgba(127,160,191,0.72)_50%,rgba(118,147,176,0.44)_82%,rgba(88,111,138,0.08)_100%)] shadow-[0_0_24px_rgba(128,156,184,0.14)]" />
-              {systemPillars.map((pillar) => (
-                <article
-                  key={pillar.number}
-                  data-system-card
-                  className="group relative ml-8 rounded-[1.7rem] border border-white/10 bg-[rgba(8,18,28,0.62)] px-6 py-6 shadow-[0_18px_42px_rgba(4,10,18,0.22)] backdrop-blur-[18px] transition duration-300 hover:-translate-y-1 hover:border-[rgba(182,208,232,0.24)] hover:shadow-[0_26px_54px_rgba(8,18,30,0.28)]"
-                >
-                  <span className="pointer-events-none absolute -left-[1.88rem] top-8 h-4 w-4 rounded-full border border-[rgba(160,190,218,0.4)] bg-[rgba(201,218,232,0.18)] shadow-[0_0_0_5px_rgba(160,190,218,0.12),0_0_18px_rgba(160,190,218,0.16)]" />
-                  <span className="text-[0.66rem] uppercase tracking-[0.34em] text-white/36">
-                    {pillar.number}
-                  </span>
-                  <h3 className="mt-5 text-[1.35rem] font-medium tracking-[-0.04em] text-white">
-                    {pillar.name}
+                <div className="rounded-[1.7rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))] p-6">
+                  <p className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/42">
+                    Request your audit
+                  </p>
+                  <h3 className="mt-4 text-[2rem] font-medium tracking-[-0.05em] text-white">
+                    Request Your Free Website Audit
                   </h3>
-                  <p className="mt-4 text-sm leading-7 text-white/58">
-                    {pillar.body}
+                  <p className="mt-4 max-w-2xl text-[0.98rem] leading-7 text-white/62">
+                    Tell us what your business needs more of and we&apos;ll review the
+                    website with that goal in mind.
                   </p>
-                </article>
-              ))}
-            </div>
 
-            <div className="relative hidden lg:block">
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 1200 340"
-                className="pointer-events-none absolute inset-x-0 top-10 h-[340px] w-full"
-                preserveAspectRatio="none"
-              >
-                <defs>
-                  <linearGradient id="signalLine" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="rgba(147,176,203,0.08)" />
-                    <stop offset="25%" stopColor="rgba(131,160,190,0.34)" />
-                    <stop offset="50%" stopColor="rgba(168,198,226,0.52)" />
-                    <stop offset="75%" stopColor="rgba(131,160,190,0.34)" />
-                    <stop offset="100%" stopColor="rgba(147,176,203,0.08)" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M 30 195 C 170 95, 280 255, 430 185 S 700 85, 845 175 S 1035 255, 1170 145"
-                  fill="none"
-                  stroke="url(#signalLine)"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M 30 195 C 170 95, 280 255, 430 185 S 700 85, 845 175 S 1035 255, 1170 145"
-                  fill="none"
-                  stroke="rgba(201,220,238,0.18)"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  strokeDasharray="2 16"
-                />
-              </svg>
-
-              <div className="pointer-events-none absolute inset-x-0 top-10 h-[340px]">
-                {[
-                  { left: "6%", top: "49%" },
-                  { left: "27%", top: "26%" },
-                  { left: "48%", top: "47%" },
-                  { left: "69%", top: "21%" },
-                  { left: "90%", top: "42%" },
-                ].map((node, index) => (
-                  <div
-                    key={`desktop-node-${index}`}
-                    className="absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[rgba(160,190,218,0.32)] bg-[rgba(201,218,232,0.18)] shadow-[0_0_0_6px_rgba(160,190,218,0.12),0_0_18px_rgba(144,173,201,0.18)]"
-                    style={{ left: node.left, top: node.top }}
-                  >
-                    <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(220,235,248,0.88)]" />
-                  </div>
-                ))}
-                <div className="absolute left-[15%] top-[18%] h-1.5 w-1.5 rounded-full bg-[rgba(220,235,248,0.54)] shadow-[0_0_12px_rgba(139,166,194,0.18)]" />
-                <div className="absolute left-[35%] top-[66%] h-1 w-1 rounded-full bg-[rgba(220,235,248,0.62)] shadow-[0_0_12px_rgba(151,177,200,0.18)]" />
-                <div className="absolute left-[58%] top-[12%] h-1.5 w-1.5 rounded-full bg-[rgba(220,235,248,0.52)] shadow-[0_0_12px_rgba(137,164,191,0.18)]" />
-                <div className="absolute left-[77%] top-[65%] h-1 w-1 rounded-full bg-[rgba(220,235,248,0.6)] shadow-[0_0_12px_rgba(151,177,200,0.18)]" />
-              </div>
-
-            <div className="relative hidden gap-5 lg:grid lg:grid-cols-5 lg:items-start lg:pt-6">
-              {systemPillars.map((pillar) => (
-                <article
-                  key={pillar.number}
-                  data-system-card
-                  className={`group relative rounded-[1.85rem] border border-white/10 bg-[rgba(8,18,28,0.62)] px-6 py-6 shadow-[0_18px_42px_rgba(4,10,18,0.22)] backdrop-blur-[18px] transition duration-300 hover:-translate-y-1 hover:border-[rgba(182,208,232,0.24)] hover:shadow-[0_28px_58px_rgba(8,18,30,0.28)] ${pillar.desktopOffset ?? ""}`}
-                >
-                  <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(173,201,226,0.18),transparent)]" />
-                  <span className="text-[0.66rem] uppercase tracking-[0.34em] text-white/36">
-                    {pillar.number}
-                  </span>
-                  <h3 className="mt-5 text-[1.4rem] font-medium tracking-[-0.04em] text-white">
-                    {pillar.name}
-                  </h3>
-                  <p className="mt-4 text-sm leading-7 text-white/58">
-                    {pillar.body}
-                  </p>
-                </article>
-              ))}
-            </div>
-            </div>
-          </div>
-
-          <div className="mt-14">
-            <Link
-              href="#services"
-              data-system-card
-              className="inline-flex items-center gap-3 text-sm font-medium text-white/84 transition hover:text-white"
-            >
-              <span>Explore what we build</span>
-              <span
-                aria-hidden="true"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/14 bg-white/[0.05] text-white/72 shadow-[0_10px_20px_rgba(10,20,34,0.16)] transition hover:border-white/22 hover:bg-white/[0.09] hover:text-white"
-              >
-                →
-              </span>
-            </Link>
-          </div>
-        </div>
-        </SceneSection>
-
-        <SceneSection
-        id="services"
-        data-services-preview-section
-        tone="night"
-        className="border-t border-white/8 px-5 py-30 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
-      >
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(233,239,245,0.24),transparent)]" />
-        <div className="relative z-20 mx-auto max-w-[1320px]">
-          <p
-            data-reveal-intro
-            data-group="services"
-            className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
-          >
-            Services
-          </p>
-          <div className="mt-6 grid gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-24">
-            <div>
-              <h2
-                data-reveal-intro
-                data-group="services"
-                className="max-w-4xl text-[2.8rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.7rem] md:text-[4.75rem]"
-              >
-                Services built around the full customer journey.
-              </h2>
-            </div>
-            <p
-              data-reveal-intro
-              data-group="services"
-              className="max-w-2xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9"
-            >
-              Choose a focused service or combine them into a complete growth
-              system.
-            </p>
-          </div>
-
-          <div className="mt-16 grid gap-5 md:grid-cols-2">
-            {servicesPreview.map((group) => (
-              <article
-                key={group.category}
-                data-service-group
-                className="group relative rounded-[1.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.018))] p-7 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:rotate-[-0.3deg] hover:border-[rgba(197,216,234,0.28)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.065),rgba(255,255,255,0.03))] hover:shadow-[0_22px_60px_rgba(10,20,34,0.18)] md:p-8"
-              >
-                <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(233,239,245,0.36),transparent)] opacity-0 transition duration-300 group-hover:opacity-100" />
-                <h3 className="text-[1.35rem] font-medium tracking-[-0.04em] text-white md:text-[1.6rem]">
-                  {group.category}
-                </h3>
-                <p className="mt-4 max-w-xl text-sm leading-7 text-white/64 md:text-[1rem]">
-                  {group.outcome}
-                </p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {group.services.map((service) => (
-                    <span
-                      key={service}
-                      className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white/56 transition duration-300 group-hover:border-white/16 group-hover:bg-white/[0.05] group-hover:text-white/72"
-                    >
-                      {service}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-7">
-                  <Link
-                    href="/services"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-white/80 transition group-hover:text-white hover:text-white"
-                  >
-                    <span>Explore Services</span>
-                    <span aria-hidden="true" className="text-white/42 transition duration-300 group-hover:translate-x-0.5 group-hover:text-white/72">
-                      →
-                    </span>
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-10">
-            <OciaButton href="/services" arrow variant="secondary">
-              Explore All Services
-            </OciaButton>
-            <div className="mt-4">
-              <OciaButton href={CALENDLY_URL} arrow variant="tertiary">
-                Talk to Us
-              </OciaButton>
-            </div>
-          </div>
-        </div>
-        </SceneSection>
-
-        <SceneSection
-        data-audit-section
-        tone="night"
-        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-36 xl:px-20"
-      >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_20%,rgba(112,142,172,0.12),transparent_24%),radial-gradient(circle_at_20%_76%,rgba(74,98,128,0.1),transparent_28%)]" />
-        <div className="relative z-20 mx-auto grid max-w-[1280px] gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-20">
-          <div>
-            <p
-              data-reveal-intro
-              data-group="audit"
-              className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
-          >
-              Discovery
-            </p>
-            <h2
-              data-reveal-intro
-              data-group="audit"
-              className="mt-6 max-w-4xl text-[2.8rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.7rem] md:text-[4.6rem]"
-            >
-              Start with clarity before you commit.
-            </h2>
-            <p
-              data-reveal-intro
-              data-group="audit"
-              className="mt-6 max-w-2xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9"
-            >
-              In a discovery call, we look at your current website, offer,
-              enquiry flow and follow-up process. Then we recommend the most
-              practical next step — whether that is a website review, redesign,
-              automation workflow or complete growth system.
-            </p>
-
-            <div className="mt-10 space-y-4">
-              {auditGaps.map((gap) => (
-                <article
-                  key={gap.title}
-                  data-audit-card
-                  className="rounded-[1.7rem] border border-white/12 bg-[rgba(8,18,28,0.48)] p-6 backdrop-blur-[18px]"
-                >
-                  <h3 className="text-[1.2rem] font-medium tracking-[-0.035em] text-white">
-                    {gap.title}
-                  </h3>
-                  <p className="mt-4 text-sm leading-7 text-white/58 md:text-[0.98rem]">
-                    {gap.body}
-                  </p>
-                </article>
-              ))}
-            </div>
-
-            <div data-audit-card className="mt-10">
-              <OciaButton href={CALENDLY_URL} arrow>
-                Get a Recommendation
-              </OciaButton>
-            </div>
-            <div data-audit-card className="mt-4">
-              <OciaButton href={CALENDLY_URL} variant="secondary">
-                Request a Website Review
-              </OciaButton>
-            </div>
-          </div>
-
-          <article
-            data-audit-visual
-            className="rounded-[2rem] border border-white/12 bg-[rgba(8,18,28,0.48)] p-6 shadow-[0_18px_70px_rgba(4,10,18,0.22)] backdrop-blur-[18px] md:p-8"
-          >
-            <div className="flex items-center justify-between">
-              <p className="text-[0.66rem] uppercase tracking-[0.34em] text-white/34">
-                Discovery Review
-              </p>
-              <span className="rounded-full border border-white/10 px-3 py-1 text-[0.62rem] uppercase tracking-[0.26em] text-white/48">
-                Preview
-              </span>
-            </div>
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              {[
-                ["Audit score", "78 / 100"],
-                ["Opportunity profile", "High intent"],
-                ["Recommended services", "Website, CRO, CRM"],
-                ["Follow-up status", "Automation ready"],
-              ].map(([label, value]) => (
-                <div
-                  key={label}
-                  className="rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-5"
-                >
-                  <p className="text-[0.62rem] uppercase tracking-[0.28em] text-white/32">
-                    {label}
-                  </p>
-                  <p className="mt-4 text-lg font-medium tracking-[-0.03em] text-white/86">
-                    {value}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 rounded-[1.4rem] border border-white/8 bg-[#0b1118]/88 p-5">
-              <div className="flex items-center justify-between text-sm text-white/58">
-                <span>Priority issue</span>
-                <span className="text-white/78">Weak service clarity</span>
-              </div>
-              <div className="mt-4 h-2 rounded-full bg-white/8">
-                <div className="h-full w-[68%] rounded-full bg-[linear-gradient(90deg,rgba(202,220,238,0.9),rgba(112,142,172,0.58))]" />
-              </div>
-              <p className="mt-4 text-sm leading-7 text-white/56">
-                Clear audit outputs make the next recommendation easier to trust
-                and easier to act on.
-              </p>
-            </div>
-          </article>
-        </div>
-        </SceneSection>
-
-        <SceneSection
-        id="work"
-        data-work-section
-        tone="night"
-        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
-      >
-        <div className="relative z-20 mx-auto max-w-[1280px]">
-          <p
-            data-reveal-intro
-            data-group="work"
-            className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
-          >
-            Work Systems
-          </p>
-          <h2
-            data-reveal-intro
-            data-group="work"
-            className="mt-6 max-w-4xl text-[2.8rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.7rem] md:text-[4.75rem]"
-          >
-            Three ways we turn websites into business systems.
-          </h2>
-          <p
-            data-reveal-intro
-            data-group="work"
-            className="mt-6 max-w-3xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9"
-          >
-            OCIA combines website design, lead capture and follow-up workflows
-            into practical systems that help service businesses look sharper and
-            respond faster.
-          </p>
-
-          <div className="mt-18 space-y-8">
-            {buildPreviews.map((item, index) => (
-              <article
-                key={item.title}
-                data-build-preview
-                className={`grid items-center gap-8 rounded-[2rem] border border-white/12 bg-[rgba(8,18,28,0.48)] p-7 shadow-[0_18px_60px_rgba(4,12,22,0.14)] backdrop-blur-[18px] md:p-10 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] ${
-                  index % 2 === 1 ? "lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1" : ""
-                }`}
-              >
-                <div className="rounded-[1.7rem] border border-white/8 bg-[#0a1017]/88 p-5 md:p-6">
-                  {item.visualType === "website" ? (
-                    <div className="space-y-4">
-                      <div className="rounded-[1.2rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-4">
-                        <div className="flex items-center gap-2 border-b border-white/8 pb-3">
-                          <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
-                          <span className="h-2.5 w-2.5 rounded-full bg-white/14" />
-                          <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
-                        </div>
-                        <div className="mt-4 overflow-hidden rounded-[1rem] border border-white/8 bg-[linear-gradient(180deg,rgba(13,18,28,0.96),rgba(9,13,20,0.96))]">
-                          <div className="h-32 bg-[radial-gradient(circle_at_70%_18%,rgba(225,234,244,0.18),transparent_22%),linear-gradient(135deg,rgba(20,27,40,0.92),rgba(10,14,22,0.92))]" />
-                          <div className="border-t border-white/8 px-5 py-4">
-                            <div className="h-3 w-40 rounded-full bg-white/12" />
-                            <div className="mt-3 h-2 w-full rounded-full bg-white/6" />
-                            <div className="mt-2 h-2 w-[72%] rounded-full bg-white/6" />
-                          </div>
-                        </div>
-                        <div className="mt-4 grid grid-cols-2 gap-3">
-                          {["Hero clarity", "Trust sections", "Mobile CTA", "Enquiry flow"].map((label) => (
-                            <div key={label} className="rounded-[0.95rem] border border-white/8 bg-white/[0.04] px-4 py-3 text-[0.72rem] uppercase tracking-[0.22em] text-white/52">
-                              {label}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                  <form onSubmit={handleAuditSubmit} className="mt-8 grid gap-4 sm:grid-cols-2">
+                    <label className="grid gap-2 text-sm text-white/72">
+                      <span>Name</span>
+                      <input
+                        required
+                        type="text"
+                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-[rgba(207,222,238,0.34)]"
+                        placeholder="Your name"
+                      />
+                    </label>
+                    <label className="grid gap-2 text-sm text-white/72">
+                      <span>Business Name</span>
+                      <input
+                        required
+                        type="text"
+                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-[rgba(207,222,238,0.34)]"
+                        placeholder="Business name"
+                      />
+                    </label>
+                    <label className="grid gap-2 text-sm text-white/72">
+                      <span>Website URL</span>
+                      <input
+                        required
+                        type="url"
+                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-[rgba(207,222,238,0.34)]"
+                        placeholder="https://"
+                      />
+                    </label>
+                    <label className="grid gap-2 text-sm text-white/72">
+                      <span>Email</span>
+                      <input
+                        required
+                        type="email"
+                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-[rgba(207,222,238,0.34)]"
+                        placeholder="you@business.com"
+                      />
+                    </label>
+                    <label className="grid gap-2 text-sm text-white/72">
+                      <span>Phone or WhatsApp</span>
+                      <input
+                        required
+                        type="text"
+                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-[rgba(207,222,238,0.34)]"
+                        placeholder="+65 ..."
+                      />
+                    </label>
+                    <label className="grid gap-2 text-sm text-white/72">
+                      <span>What do you want more of?</span>
+                      <select
+                        required
+                        defaultValue=""
+                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition focus:border-[rgba(207,222,238,0.34)]"
+                      >
+                        <option value="" disabled className="text-[#08111b]">
+                          Select one
+                        </option>
+                        <option className="text-[#08111b]">More enquiries</option>
+                        <option className="text-[#08111b]">More bookings</option>
+                        <option className="text-[#08111b]">Better website conversion</option>
+                        <option className="text-[#08111b]">Better SEO visibility</option>
+                        <option className="text-[#08111b]">Better lead follow-up</option>
+                      </select>
+                    </label>
+                    <div className="sm:col-span-2">
+                      <button
+                        type="submit"
+                        className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[rgba(255,255,255,0.34)] bg-[linear-gradient(180deg,#ffffff_0%,#d7e0ea_100%)] px-6 text-sm font-semibold tracking-[-0.01em] text-[#061018] shadow-[0_12px_40px_rgba(180,210,255,0.12)] transition duration-300 hover:-translate-y-0.5 hover:border-[rgba(255,255,255,0.44)] hover:bg-[linear-gradient(180deg,#ffffff_0%,#e5edf6_100%)] hover:shadow-[0_18px_46px_rgba(180,210,255,0.2)]"
+                      >
+                        <span>Get My Free Website Audit</span>
+                        <span
+                          aria-hidden="true"
+                          className="text-base text-[#061018]/78 transition-transform duration-300 group-hover:translate-x-0.5"
+                        >
+                          →
+                        </span>
+                      </button>
                     </div>
-                  ) : item.visualType === "pipeline" ? (
-                    <div className="rounded-[1.25rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.025))] p-4">
-                      <div className="grid grid-cols-4 gap-3">
-                        {["New enquiry", "Qualified", "Follow-up", "Replied"].map((stage, stageIndex) => (
-                          <div key={stage} className="rounded-[1rem] border border-white/8 bg-[#0d131c]/88 p-3">
-                            <div className="flex items-center justify-between">
-                              <span className="text-[0.62rem] uppercase tracking-[0.22em] text-white/34">
-                                0{stageIndex + 1}
-                              </span>
-                              <span className="h-2.5 w-2.5 rounded-full bg-[rgba(214,228,242,0.6)]" />
-                            </div>
-                            <p className="mt-8 text-sm font-medium tracking-[-0.02em] text-white/76">
-                              {stage}
-                            </p>
-                            <div className="mt-4 space-y-2">
-                              <div className="h-2 rounded-full bg-white/8" />
-                              <div className="h-2 w-[74%] rounded-full bg-white/8" />
-                            </div>
-                          </div>
+                  </form>
+
+                  <p className="mt-5 text-sm leading-6 text-white/54">
+                    {auditSubmitted
+                      ? "Thanks, we've received your request. We'll review your website and get back to you with the next steps."
+                      : "Prefer to talk first? You can also book directly via Calendly."}
+                    {!auditSubmitted ? (
+                      <>
+                        {" "}
+                        <a
+                          href={CALENDLY_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white/78 underline decoration-white/18 underline-offset-4 transition hover:text-white"
+                        >
+                          Book a discovery call
+                        </a>
+                        .
+                      </>
+                    ) : null}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </SceneSection>
+
+        <SceneSection
+          id="services"
+          data-services-section
+          data-work-section
+          tone="night"
+        >
+          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+            <div className="grid gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
+              <SectionIntro
+                label="Services"
+                title="Grouped around the real points where enquiries are won or lost."
+                body="We group the work into four capability pillars so you can see how the website, visibility, conversion, response and follow-up pieces connect."
+              />
+
+              <div className="grid gap-5">
+                {servicePillars.map((pillar, index) => (
+                  <article
+                    key={pillar.title}
+                    data-reveal-card
+                    className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.78),rgba(5,10,18,0.58))] p-7 shadow-[0_20px_70px_rgba(0,0,0,0.24)] backdrop-blur-xl transition duration-300 hover:border-white/16"
+                  >
+                    <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="max-w-xl">
+                        <p className="text-[0.7rem] font-medium uppercase tracking-[0.38em] text-white/38">
+                          0{index + 1}
+                        </p>
+                        <h3 className="mt-3 text-[1.5rem] font-medium tracking-[-0.04em] text-white">
+                          {pillar.title}
+                        </h3>
+                        <p className="mt-4 text-[0.98rem] leading-7 text-white/66">
+                          {pillar.text}
+                        </p>
+                      </div>
+                      <div className="grid gap-2 lg:max-w-[18rem] lg:justify-items-end">
+                        {pillar.includes.map((item) => (
+                          <span
+                            key={item}
+                            data-reveal-chip
+                            className="rounded-full border border-white/8 bg-white/[0.035] px-3 py-2 text-xs uppercase tracking-[0.22em] text-white/68"
+                          >
+                            {item}
+                          </span>
                         ))}
                       </div>
                     </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="rounded-[1rem] border border-white/8 bg-white/[0.04] p-4">
-                        <div className="flex items-center justify-between text-[0.66rem] uppercase tracking-[0.24em] text-white/34">
-                          <span>Automation</span>
-                          <span>AI support</span>
-                        </div>
-                        <div className="mt-5 space-y-4">
-                          {[
-                            ["Website enquiry", "WhatsApp routing"],
-                            ["AI chatbot", "Booking flow"],
-                            ["Follow-up workflow", "Reply tracking"],
-                          ].map(([from, to]) => (
-                            <div key={from} className="rounded-[0.95rem] border border-white/8 bg-[#0d131c]/76 px-4 py-3">
-                              <div className="flex items-center justify-between gap-4 text-sm text-white/62">
-                                <span>{from}</span>
-                                <span className="text-white/34">→</span>
-                                <span>{to}</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <span className="text-[0.66rem] uppercase tracking-[0.34em] text-white/32">
-                    0{index + 1}
-                  </span>
-                  <h3 className="mt-6 text-[2rem] font-medium tracking-[-0.045em] text-white md:text-[2.6rem]">
-                    {item.title}
-                  </h3>
-                  <p className="mt-5 max-w-2xl text-sm leading-7 text-white/60 md:text-[1rem] md:leading-8">
-                    {item.description}
-                  </p>
-                  <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                    {item.includes.map((label) => (
-                      <div key={label} className="rounded-[1rem] border border-white/8 bg-white/[0.03] px-4 py-4 text-sm text-white/58">
-                        {label}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-8">
-                    <OciaButton href={CALENDLY_URL} arrow variant="secondary">
-                      {item.cta}
-                    </OciaButton>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-
-        </div>
-        </SceneSection>
-
-        <SceneSection
-        id="process"
-        data-process-section
-        tone="night"
-        className="border-t border-white/8 px-5 py-30 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
-      >
-        <div className="relative z-20 mx-auto max-w-[1280px]">
-          <p
-            data-reveal-intro
-            data-group="process"
-            className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
-          >
-            Process
-          </p>
-          <h2
-            data-reveal-intro
-            data-group="process"
-            className="mt-6 max-w-4xl text-[2.8rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.7rem] md:text-[4.75rem]"
-          >
-            A clear path from first conversation to launch.
-          </h2>
-          <p
-            data-reveal-intro
-            data-group="process"
-            className="mt-6 max-w-3xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9"
-          >
-            A structured process keeps the project focused, practical and easy
-            to move through.
-          </p>
-
-          <div className="relative mt-18 grid gap-4 lg:grid-cols-5 lg:gap-4">
-            <div className="pointer-events-none absolute left-0 right-0 top-10 hidden h-px bg-gradient-to-r from-white/0 via-white/22 to-white/0 lg:block" />
-            {processSteps.map((step) => (
-              <article
-                key={step.title}
-                data-process-step
-                className="relative rounded-[1.45rem] border border-white/12 bg-[rgba(8,18,28,0.48)] p-5 backdrop-blur-[18px] transition duration-300 hover:-translate-y-1 hover:border-[rgba(197,216,234,0.24)] hover:bg-[rgba(8,18,28,0.56)] lg:min-h-[235px]"
-              >
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/12 bg-[#0c141d] text-[0.66rem] uppercase tracking-[0.2em] text-white/38">
-                  {step.number}
-                </span>
-                <div className="mt-6">
-                  <span className="text-[2.9rem] font-medium leading-none tracking-[-0.06em] text-white/16">
-                    {step.number}
-                  </span>
-                  <h3 className="mt-5 text-[1.25rem] font-medium tracking-[-0.04em] text-white md:text-[1.5rem]">
-                    {step.title}
-                  </h3>
-                  <p className="mt-4 text-sm leading-7 text-white/58 md:text-[0.98rem] md:leading-8">
-                    {step.body}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-10">
-            <OciaButton href={CALENDLY_URL} arrow variant="secondary">
-              Talk Through Your Project
-            </OciaButton>
-          </div>
-        </div>
-        </SceneSection>
-
-      <SceneSection
-        id="pricing"
-        data-growth-section
-        tone="night"
-        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
-      >
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-[rgba(10,18,28,0.3)] via-[rgba(10,18,28,0.1)] to-transparent" />
-          <div className="absolute left-[8%] top-[12%] h-64 w-64 rounded-full bg-[rgba(108,134,164,0.1)] blur-3xl" />
-          <div className="absolute right-[10%] bottom-[16%] h-80 w-80 rounded-full bg-[rgba(158,188,218,0.08)] blur-3xl" />
-        </div>
-
-        <div className="relative z-20 mx-auto max-w-[1320px]">
-          <div className="max-w-3xl">
-            <p
-              data-reveal-intro
-              data-group="growth"
-              className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/42 sm:text-[0.72rem]"
-            >
-              Growth Systems
-            </p>
-            <h2
-              data-reveal-intro
-              data-group="growth"
-              className="mt-6 max-w-3xl text-[2.8rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.7rem] md:text-[4.75rem]"
-            >
-              Choose the right starting point for your business.
-            </h2>
-            <p
-              data-reveal-intro
-              data-group="growth"
-              className="mt-6 max-w-2xl text-base leading-8 text-white/68 md:text-[1.08rem] md:leading-9"
-            >
-              Start small with a credible website, or build a complete system
-              for enquiries, automation and follow-up.
-            </p>
-            <div
-              data-reveal-intro
-              data-group="growth"
-              className="mt-8 flex flex-wrap gap-3 text-[0.68rem] uppercase tracking-[0.28em] text-white/54"
-            >
-              <span className="rounded-full border border-white/12 bg-white/[0.04] px-4 py-2">Fixed scope</span>
-              <span className="rounded-full border border-white/12 bg-white/[0.04] px-4 py-2">Strategy included</span>
-              <span className="rounded-full border border-white/12 bg-white/[0.04] px-4 py-2">Built for trust</span>
-              <span className="rounded-full border border-white/12 bg-white/[0.04] px-4 py-2">Launch support</span>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
+        </SceneSection>
 
-          <div className="mt-18 grid gap-6 lg:grid-cols-3">
-            {growthSystems.map((pkg) => (
-              <article
-                key={pkg.title}
-                data-growth-card
-                className={`group relative flex h-full flex-col overflow-hidden rounded-[2rem] border p-6 md:p-8 ${
-                  pkg.featured
-                    ? "border-[rgba(184,206,228,0.28)] bg-[rgba(9,18,28,0.72)] shadow-[0_24px_80px_rgba(4,10,18,0.32),0_0_0_1px_rgba(184,206,228,0.08)] backdrop-blur-[18px] lg:-translate-y-3"
-                    : "border-white/10 bg-[rgba(5,12,20,0.62)] shadow-[0_24px_80px_rgba(4,10,18,0.24)] backdrop-blur-[18px]"
-                } transition-transform duration-300 hover:-translate-y-1 hover:border-[rgba(158,180,198,0.32)]`}
-              >
-                {pkg.featured ? (
-                  <span className="mb-6 inline-flex w-fit rounded-full border border-[rgba(184,206,228,0.26)] bg-[rgba(184,206,228,0.08)] px-3 py-1 text-[0.64rem] font-semibold uppercase tracking-[0.28em] text-[rgba(218,232,244,0.9)]">
-                    Most Popular
-                  </span>
-                ) : null}
-                <h3 className="text-[1.55rem] font-medium tracking-[-0.045em] text-white md:text-[1.9rem]">
-                  {pkg.title}
-                </h3>
-                <p className="mt-5 text-3xl font-semibold tracking-[-0.05em] text-white md:text-[2.75rem]">
-                  {pkg.price}
-                </p>
-                <p className="mt-4 text-[0.64rem] uppercase tracking-[0.32em] text-white/34">
-                  For
-                </p>
-                <p className="mt-2 text-sm leading-7 text-white/56">
-                  {pkg.forLabel}
-                </p>
-                <p className="mt-5 text-sm leading-7 text-white/64 md:text-[1rem] md:leading-8">
-                  {pkg.description}
-                </p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  <span className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-[0.64rem] uppercase tracking-[0.28em] text-white/54">
-                    {pkg.timeline}
-                  </span>
-                  <span className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-[0.64rem] uppercase tracking-[0.28em] text-white/54">
-                    Strategy-led
-                  </span>
-                </div>
-                <div className="mt-7 grid gap-3 border-t border-white/8 pt-6 sm:grid-cols-2">
-                  {pkg.includes.map((item) => (
+        <SceneSection data-funnel-section tone="night" className="border-y border-white/8">
+          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+            <SectionIntro
+              label="Why This Works"
+              title="We fix the conversion leaks most businesses miss."
+              body="We identify those leaks, prioritise the biggest ones, and help fix them in a way that improves business results."
+              align="center"
+            />
+
+            <div className="mt-14 overflow-hidden rounded-[2.25rem] border border-white/10 bg-[linear-gradient(180deg,rgba(8,15,26,0.84),rgba(5,10,18,0.64))] p-6 shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-8">
+              <div className="hidden items-center gap-3 lg:flex">
+                {funnelSteps.map((step, index) => (
+                  <div key={step.label} className="flex flex-1 items-center gap-3">
+                    <div data-reveal-card className="min-w-0 flex-1 rounded-[1.75rem] border border-white/10 bg-white/[0.035] p-5">
+                      <p className="text-[0.68rem] uppercase tracking-[0.34em] text-white/38">
+                        {step.label}
+                      </p>
+                      <p className="mt-4 text-[1.02rem] leading-7 text-white/74">{step.body}</p>
+                    </div>
+                    {index < funnelSteps.length - 1 ? (
+                      <div className="w-16 overflow-hidden">
+                        <div
+                          data-reveal-line
+                          className="h-px w-full bg-[linear-gradient(90deg,rgba(213,229,244,0.76),rgba(100,132,164,0.26))]"
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid gap-4 lg:hidden">
+                {funnelSteps.map((step, index) => (
+                  <div key={step.label} className="grid gap-3">
                     <div
-                      key={item}
-                      className="flex items-start gap-3 text-sm leading-6 text-white/58"
+                      data-reveal-card
+                      className="rounded-[1.6rem] border border-white/10 bg-white/[0.035] p-5"
                     >
-                      <span
-                        className={`mt-1.5 h-2 w-2 rounded-full ${
-                          pkg.featured ? "bg-[rgba(214,228,242,0.88)]" : "bg-white/28"
-                        }`}
-                      />
-                      <span>{item}</span>
+                      <p className="text-[0.68rem] uppercase tracking-[0.34em] text-white/38">
+                        {step.label}
+                      </p>
+                      <p className="mt-3 text-[1rem] leading-7 text-white/74">{step.body}</p>
                     </div>
-                  ))}
-                </div>
-                <div className="mt-8">
-                  <OciaButton
-                    href={CALENDLY_URL}
-                    variant="primary"
-                    arrow
-                    className="w-full"
-                  >
-                    {pkg.cta}
-                  </OciaButton>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-12 rounded-[1.7rem] border border-white/12 bg-[linear-gradient(180deg,rgba(8,18,28,0.66),rgba(8,18,28,0.52))] px-6 py-6 shadow-[0_18px_44px_rgba(3,10,18,0.2)] backdrop-blur-[16px] md:flex md:items-center md:justify-between md:gap-6">
-            <p className="text-sm leading-7 text-white/62 md:text-[0.98rem]">
-              Not sure where to start?
-            </p>
-            <div className="mt-4 md:mt-0">
-              <OciaButton href={CALENDLY_URL} arrow variant="secondary">
-                Get a Recommendation
-              </OciaButton>
+                    {index < funnelSteps.length - 1 ? (
+                      <div
+                        data-reveal-line
+                        className="mx-5 h-8 w-px bg-[linear-gradient(180deg,rgba(213,229,244,0.76),rgba(100,132,164,0.16))]"
+                      />
+                    ) : null}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
         </SceneSection>
 
-      <SceneSection
-        data-proof-section
-        tone="night"
-        className="border-t border-white/8 px-5 py-30 sm:px-8 md:px-10 lg:px-14 lg:py-44 xl:px-20"
-      >
-        <div className="relative z-20 mx-auto max-w-[1280px]">
-          <p
-            data-reveal-intro
-            data-group="proof"
-            className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
-          >
-            Why Ocia
-          </p>
-          <h2
-            data-reveal-intro
-            data-group="proof"
-            className="mt-6 max-w-4xl text-[2.8rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.7rem] md:text-[4.75rem]"
-          >
-            Not just a nicer website. A clearer path to enquiry.
-          </h2>
-          <p
-            data-reveal-intro
-            data-group="proof"
-            className="mt-6 max-w-3xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9"
-          >
-            Most websites stop at looking good. OCIA focuses on what happens
-            before and after the visitor lands: what they understand, what they
-            trust, what they click and how the business follows up.
-          </p>
+        <SceneSection id="process" data-process-section tone="night">
+          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+            <div className="grid gap-12 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
+              <div className="lg:sticky lg:top-28 lg:self-start">
+                <SectionIntro
+                  label="Process"
+                  title="How we work"
+                  body="Start with the audit. Then fix what matters most."
+                />
+              </div>
 
-          <div className="mt-18 grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-20">
-            <div data-proof-card className="lg:pt-2">
-              <p className="text-[2.2rem] font-medium leading-[1.02] tracking-[-0.06em] text-white sm:text-[3rem] md:text-[3.7rem]">
-                Trust → Clarity → Enquiry → Follow-up
-              </p>
+              <div className="grid gap-4">
+                {processSteps.map((step, index) => (
+                  <article
+                    key={step.step}
+                    data-reveal-card
+                    className="rounded-[1.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.78),rgba(5,10,18,0.58))] p-6 shadow-[0_18px_60px_rgba(0,0,0,0.22)] backdrop-blur-xl"
+                  >
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <p className="text-[0.7rem] font-medium uppercase tracking-[0.38em] text-white/38">
+                          Step 0{index + 1}
+                        </p>
+                        <h3 className="mt-3 text-[1.36rem] font-medium tracking-[-0.04em] text-white">
+                          {step.step}
+                        </h3>
+                      </div>
+                      <p className="max-w-2xl text-[0.98rem] leading-7 text-white/66">
+                        {step.body}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
-            <div className="space-y-2 border-t border-white/8 lg:border-t-0">
-              {proofBlocks.map((item, index) => (
+          </div>
+        </SceneSection>
+
+        <SceneSection id="work" data-outcomes-section tone="night" className="border-y border-white/8">
+          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+            <SectionIntro
+              label="Outcomes"
+              title="The goal is not a prettier website. The goal is better business performance."
+              body="The work is designed to create a stronger first impression, cleaner conversion flow, and a more reliable way to turn website traffic into real opportunities."
+            />
+
+            <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {outcomeCards.map((item) => (
                 <article
-                  key={item.title}
-                  data-proof-card
-                  className="grid gap-5 border-b border-white/8 py-6 transition duration-300 hover:border-white/16 md:grid-cols-[90px_minmax(0,1fr)] md:gap-8"
+                  key={item}
+                  data-reveal-card
+                  className="rounded-[1.7rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.74),rgba(5,10,18,0.5))] p-5 backdrop-blur-xl"
                 >
-                  <span className="text-[0.72rem] uppercase tracking-[0.36em] text-white/28">
-                    0{index + 1}
-                  </span>
-                  <div>
-                    <h3 className="text-[1.25rem] font-medium tracking-[-0.04em] text-white md:text-[1.45rem]">
-                      {item.title}
-                    </h3>
-                    <p className="mt-3 max-w-3xl text-sm leading-7 text-white/58 md:text-[0.98rem] md:leading-8">
-                      {item.body}
-                    </p>
-                  </div>
+                  <div className="h-1.5 w-10 rounded-full bg-[linear-gradient(90deg,rgba(223,234,245,0.92),rgba(117,150,184,0.22))]" />
+                  <p className="mt-5 text-[0.98rem] leading-7 text-white/72">{item}</p>
                 </article>
               ))}
             </div>
           </div>
-
-          <div className="mt-10">
-            <OciaButton href={CALENDLY_URL} arrow variant="secondary">
-              See What We Can Improve
-            </OciaButton>
-          </div>
-        </div>
-      </SceneSection>
-
-      <SceneSection
-        data-faq-section
-        tone="night"
-        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
-      >
-        <div className="relative z-20 mx-auto max-w-[1120px]">
-          <p
-            data-reveal-intro
-            data-group="faq"
-            className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/40 sm:text-[0.72rem]"
-          >
-            FAQ
-          </p>
-          <h2
-            data-reveal-intro
-            data-group="faq"
-            className="mt-6 max-w-4xl text-[2.8rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.7rem] md:text-[4.75rem]"
-          >
-            Questions before we build.
-          </h2>
-
-          <div className="mt-14 space-y-4">
-            {faqs.map((faq, index) => {
-              const isOpen = openFaq === index;
-
-              return (
-                <article
-                  key={faq.question}
-                  data-faq-item
-                  className={`rounded-[1.6rem] border px-6 py-5 transition duration-300 md:px-7 ${
-                    isOpen
-                      ? "border-white/16 bg-[rgba(8,18,28,0.58)] shadow-[0_10px_30px_rgba(18,32,50,0.18)] backdrop-blur-[18px]"
-                      : "border-white/10 bg-[rgba(8,18,28,0.46)] backdrop-blur-[18px] hover:border-white/18 hover:bg-[rgba(8,18,28,0.56)]"
-                  }`}
-                >
-                  <button
-                    type="button"
-                    aria-expanded={isOpen}
-                    aria-controls={`faq-panel-${index}`}
-                    onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                    className="flex w-full items-center justify-between gap-4 text-left"
-                  >
-                    <span className="text-base font-medium tracking-[-0.02em] text-white md:text-[1.1rem]">
-                      {faq.question}
-                    </span>
-                    <span
-                      className={`text-white/44 transition-transform duration-300 ${isOpen ? "rotate-45" : "rotate-0"}`}
-                    >
-                      +
-                    </span>
-                  </button>
-                  <div
-                    id={`faq-panel-${index}`}
-                    className={`grid overflow-hidden transition-[grid-template-rows,opacity] duration-300 ${
-                      isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                    }`}
-                  >
-                    <div className="overflow-hidden">
-                      <p className="pt-5 text-sm leading-7 text-white/60 md:text-[1rem] md:leading-8">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-
-          <div data-faq-item className="mt-10 flex justify-start">
-            <OciaButton href={CALENDLY_URL} arrow variant="secondary">
-              Talk Through Your Project
-            </OciaButton>
-          </div>
-        </div>
-      </SceneSection>
-
-      <SceneSection
-        id="final-cta"
-        data-final-section
-        tone="night"
-        className="border-t border-white/8 px-5 py-28 sm:px-8 md:px-10 lg:px-14 lg:py-40 xl:px-20"
-      >
-        <div className="pointer-events-none absolute inset-x-0 -top-12 h-24 bg-[linear-gradient(180deg,rgba(120,152,184,0.05),rgba(120,152,184,0))] blur-3xl" />
-        <div className="pointer-events-none absolute left-1/2 top-14 h-64 w-[34rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(164,190,214,0.1),rgba(164,190,214,0.03)_42%,transparent_74%)] blur-3xl" />
-        <div className="pointer-events-none absolute inset-x-[16%] bottom-0 h-36 bg-[radial-gradient(ellipse_at_center,rgba(214,228,240,0.08),rgba(214,228,240,0)_70%)] blur-3xl" />
-        <div className="relative z-20 mx-auto max-w-[920px] text-center">
-          <p
-            data-reveal-intro
-            data-group="final"
-            className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/42 sm:text-[0.72rem]"
-          >
-            Start
-          </p>
-          <h2
-            data-final-cta
-            className="mt-6 text-[2.9rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.9rem] md:text-[5rem]"
-          >
-            Let&apos;s find the system your business needs next.
-          </h2>
-          <p
-            data-final-cta
-            className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/66 md:text-[1.08rem] md:leading-9"
-          >
-            Tell us where your business is now. We&apos;ll help identify whether
-            your next step should be a website review, redesign, automation
-            workflow or complete growth system.
-          </p>
-          <div
-            data-final-cta
-            className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row"
-          >
-            <OciaButton href={CALENDLY_URL} arrow>
-              Start the Conversation
-            </OciaButton>
-            <OciaButton href="/#pricing" variant="secondary">
-              View Growth Systems
-            </OciaButton>
-          </div>
-        </div>
         </SceneSection>
 
-        <footer className="border-t border-white/8 bg-[linear-gradient(180deg,rgba(5,10,17,0.68),rgba(6,12,20,0.88))] px-5 py-10 text-white/56 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-        <div className="mx-auto grid max-w-[1320px] gap-10 md:grid-cols-[minmax(0,1fr)_auto]">
-          <div>
-            <p className="text-[0.72rem] font-medium uppercase tracking-[0.42em] text-white">
-              OCIA Studios
-            </p>
-            <p className="mt-4 max-w-md text-sm leading-7 text-white/56">
-              Premium digital systems for ambitious businesses.
-            </p>
-          </div>
+        <SceneSection data-industries-section tone="night">
+          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-end">
+              <SectionIntro
+                label="Who It's For"
+                title="Built for service businesses where trust drives enquiries."
+                body="We work especially well with service businesses where the website plays a key role in credibility, contact, and conversion."
+              />
 
-          <div className="grid gap-3 text-sm md:text-right">
-            {footerLinks.map((link) =>
-              link.href.startsWith("/") ? (
-                <Link key={link.label} href={link.href} className="transition hover:text-white">
-                  {link.label}
-                </Link>
-              ) : (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition hover:text-white"
+              <div className="flex flex-wrap gap-3 lg:justify-end">
+                {industries.map((industry) => (
+                  <div
+                    key={industry}
+                    data-reveal-chip
+                    className="rounded-full border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-sm text-white/74 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+                  >
+                    {industry}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </SceneSection>
+
+        <SceneSection data-why-section tone="night" className="border-y border-white/8">
+          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+            <SectionIntro
+              label="Why Ocia Studios"
+              title="Why businesses choose Ocia Studios."
+              body="If you need more than a pretty website, we are the right kind of partner."
+            />
+
+            <div className="mt-14 grid gap-5 lg:grid-cols-3">
+              {whyOciaCards.map((card) => (
+                <article
+                  key={card.title}
+                  data-reveal-card
+                  className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.78),rgba(5,10,18,0.58))] p-7 shadow-[0_20px_70px_rgba(0,0,0,0.24)] backdrop-blur-xl"
                 >
-                  {link.label}
-                </a>
-              ),
-            )}
-            <OciaButton href={CALENDLY_URL} arrow variant="tertiary">
-              Talk to Us
-            </OciaButton>
-          </div>
-        </div>
+                  <h3 className="text-[1.38rem] font-medium tracking-[-0.04em] text-white">
+                    {card.title}
+                  </h3>
+                  <p className="mt-4 text-[0.98rem] leading-7 text-white/66">{card.body}</p>
+                </article>
+              ))}
+            </div>
 
-        <div className="mx-auto mt-8 max-w-[1320px] border-t border-white/8 pt-6 text-xs uppercase tracking-[0.24em] text-white/38">
-          © {currentYear} OCIA Studios
-        </div>
+            <p data-reveal-card className="mt-10 max-w-3xl text-[0.98rem] leading-7 text-white/58">
+              If you need more than a pretty website, we are the right kind of partner.
+            </p>
+          </div>
+        </SceneSection>
+
+        <SceneSection data-improvement-section tone="night">
+          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+            <SectionIntro
+              label="Improvement"
+              title="What improvement usually looks like."
+              body="Most wins come from improving the basics that directly affect trust and conversion."
+            />
+
+            <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {improvementCards.map((item, index) => (
+                <article
+                  key={item}
+                  data-reveal-card
+                  className="rounded-[1.8rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.74),rgba(5,10,18,0.54))] p-6 backdrop-blur-xl"
+                >
+                  <p className="text-[0.7rem] font-medium uppercase tracking-[0.38em] text-white/38">
+                    0{index + 1}
+                  </p>
+                  <p className="mt-4 text-[1rem] leading-7 text-white/72">{item}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </SceneSection>
+
+        <SceneSection data-faq-section tone="night" className="border-y border-white/8">
+          <div className="mx-auto max-w-[1120px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+            <SectionIntro
+              label="FAQ"
+              title="Frequently Asked Questions"
+              body="A few of the questions businesses usually ask before we review the site and recommend the right next step."
+              align="center"
+            />
+
+            <div className="mt-14 grid gap-4">
+              {faqs.map((faq, index) => {
+                const isOpen = openFaq === index;
+
+                return (
+                  <div
+                    key={faq.question}
+                    data-reveal-card
+                    className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.78),rgba(5,10,18,0.56))] backdrop-blur-xl"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaq(isOpen ? -1 : index)}
+                      className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition hover:bg-white/[0.03]"
+                    >
+                      <span className="text-[1rem] font-medium leading-7 text-white/86">
+                        {faq.question}
+                      </span>
+                      <span className="text-white/48">{isOpen ? "−" : "+"}</span>
+                    </button>
+
+                    <div
+                      className={`grid transition-[grid-template-rows] duration-300 ${
+                        isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <p className="px-6 pb-6 text-[0.98rem] leading-7 text-white/64">
+                          {faq.answer}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </SceneSection>
+
+        <SceneSection data-final-section tone="dawn" className="border-b border-white/8">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(172,196,220,0.12),transparent_22%),radial-gradient(circle_at_50%_100%,rgba(160,188,214,0.08),transparent_30%)]" />
+          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-14 xl:px-20">
+            <div
+              data-final-cta
+              data-reveal-card
+              className="rounded-[2.4rem] border border-white/12 bg-[linear-gradient(180deg,rgba(11,20,32,0.9),rgba(6,12,20,0.78))] px-6 py-12 shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:px-8 md:px-12 md:py-14"
+            >
+              <div className="mx-auto max-w-4xl text-center">
+                <p className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/42 sm:text-[0.72rem]">
+                  Final CTA
+                </p>
+                <h2 className="mt-6 text-[2.5rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.4rem] md:text-[4.25rem]">
+                  If your website is underperforming, the fix should be clear.
+                </h2>
+                <p className="mx-auto mt-6 max-w-3xl text-[1rem] leading-8 text-white/68 md:text-[1.08rem]">
+                  Get a free website audit and see what is blocking more enquiries,
+                  better conversion, and stronger lead flow.
+                </p>
+
+                <div className="mt-10 flex flex-wrap justify-center gap-4">
+                  <OciaButton href="/#contact" arrow>
+                    Get My Free Audit
+                  </OciaButton>
+                  <OciaButton href={CALENDLY_URL} variant="secondary" arrow>
+                    Talk to Ocia Studios
+                  </OciaButton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </SceneSection>
+
+        <footer className="relative z-20">
+          <div className="mx-auto max-w-[1320px] px-5 py-12 sm:px-8 md:px-10 lg:px-14 xl:px-20">
+            <div className="grid gap-8 border-t border-white/8 pt-8 lg:grid-cols-[minmax(0,0.9fr)_auto] lg:items-start">
+              <div>
+                <Link
+                  href="/"
+                  className="text-[0.72rem] font-medium uppercase tracking-[0.42em] text-white/92 transition hover:text-white"
+                >
+                  OCIA Studios
+                </Link>
+                <p className="mt-4 max-w-3xl text-[0.95rem] leading-7 text-white/54">
+                  Ocia Studios helps service businesses improve websites, SEO,
+                  conversion, lead generation, automation, booking flow, and follow-up
+                  systems so more visitors become real opportunities.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-x-6 gap-y-3 text-[0.72rem] uppercase tracking-[0.28em] text-white/48">
+                {footerLinks.map((item) => (
+                  <Link key={item.label} href={item.href} className="transition hover:text-white/84">
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <p className="mt-8 text-[0.75rem] uppercase tracking-[0.24em] text-white/34">
+              © {currentYear} Ocia Studios. Built for service businesses that need
+              more enquiries.
+            </p>
+          </div>
         </footer>
       </main>
     </div>

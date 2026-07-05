@@ -18,6 +18,8 @@ const dmSerifDisplay = DM_Serif_Display({
   weight: ["400"],
 });
 
+const sectionTwoContainer = "mx-auto max-w-[1460px] px-6 sm:px-10 md:px-12 lg:px-14 xl:px-16";
+
 const navItems = [
   { label: "Work", href: "/#work" },
   { label: "Services", href: "/services" },
@@ -329,43 +331,104 @@ const auditChecklist = [
   "Recommended next-step services",
 ];
 
-const servicePillars = [
+const serviceSelectorGroups = [
   {
-    title: "Website & Conversion",
-    text: "Redesign your website so it looks credible, feels easier to use, and leads visitors toward action.",
-    includes: [
-      "Website Redesign",
-      "Conversion Optimisation",
-      "CTA Improvements",
-      "Enquiry Flow",
+    group: "Website & Visibility",
+    services: [
+      {
+        number: "01",
+        title: "Website Redesign",
+        preview: "Improve credibility, usability, and visitor action flow.",
+        description:
+          "Redesign your website so it looks more credible, feels easier to use, and leads visitors toward action.",
+        chips: ["Trust", "UX", "Conversion"],
+        outcome: "Clearer website experience that guides visitors toward action.",
+      },
+      {
+        number: "02",
+        title: "SEO",
+        preview: "Help the right people discover your business in search.",
+        description:
+          "Improve your visibility so the right people can actually find your business when they are searching.",
+        chips: ["Visibility", "Search", "Leads"],
+        outcome: "Better visibility for people already searching for your service.",
+      },
+      {
+        number: "03",
+        title: "Branding & Positioning",
+        preview: "Make your offer easier to understand and choose.",
+        description:
+          "Clarify your message so visitors immediately understand why they should choose you.",
+        chips: ["Clarity", "Trust", "Positioning"],
+        outcome: "A clearer message that makes your business easier to choose.",
+      },
     ],
   },
   {
-    title: "Search & Visibility",
-    text: "Improve your visibility so the right people can find your business when they are searching.",
-    includes: ["SEO", "Local Search", "Page Structure", "Content Improvements"],
-  },
-  {
-    title: "Automation & Lead Handling",
-    text: "Respond faster, qualify leads better, and stop enquiries from slipping through the cracks.",
-    includes: [
-      "WhatsApp Automation",
-      "CRM",
-      "Lead Tracking",
-      "Follow-up Workflows",
+    group: "Enquiry & Conversion",
+    services: [
+      {
+        number: "04",
+        title: "WhatsApp / Enquiry Automation",
+        preview: "Speed up replies and reduce missed opportunities.",
+        description:
+          "Respond faster, qualify leads better, and stop enquiries from slipping through the cracks.",
+        chips: ["Response", "Qualification", "Automation"],
+        outcome: "Faster replies and fewer enquiries slipping through.",
+      },
+      {
+        number: "05",
+        title: "AI Chatbot",
+        preview: "Guide visitors even when your team is offline.",
+        description:
+          "Add always-on support that can answer questions and guide visitors toward action.",
+        chips: ["Support", "Guidance", "Automation"],
+        outcome: "Always-on support that guides visitors even when your team is offline.",
+      },
+      {
+        number: "06",
+        title: "Appointment Booking System",
+        preview: "Reduce friction between interest and scheduling.",
+        description:
+          "Make it easier for interested prospects to schedule without friction.",
+        chips: ["Booking", "Scheduling", "Conversion"],
+        outcome: "Less friction between interest and confirmed appointments.",
+      },
     ],
   },
   {
-    title: "Growth Support",
-    text: "Add tools and content that support trust, booking, and conversion.",
-    includes: [
-      "AI Chatbot",
-      "Appointment Booking System",
-      "E-commerce Improvement",
-      "Social Media Content",
+    group: "Lead Management & Growth",
+    services: [
+      {
+        number: "07",
+        title: "CRM / Lead Management",
+        preview: "Keep visibility over every lead and follow-up step.",
+        description:
+          "Track leads, manage follow-up, and create visibility so fewer opportunities go cold.",
+        chips: ["CRM", "Follow-up", "Pipeline"],
+        outcome: "Better tracking and follow-up so warm leads do not go cold.",
+      },
+      {
+        number: "08",
+        title: "E-commerce Improvement",
+        preview: "Improve trust and checkout flow for stronger sales.",
+        description:
+          "Improve product pages, trust, and checkout flow so more visitors complete a purchase.",
+        chips: ["Product", "Trust", "Checkout"],
+        outcome: "Stronger product pages and checkout flow for more completed purchases.",
+      },
+      {
+        number: "09",
+        title: "Social Media Content",
+        preview: "Reinforce authority before visitors ever enquire.",
+        description:
+          "Support trust, authority, and awareness with content that reinforces your offer.",
+        chips: ["Content", "Authority", "Awareness"],
+        outcome: "More trust and awareness before visitors reach your website.",
+      },
     ],
   },
-];
+] as const;
 
 const funnelSteps = [
   {
@@ -1524,7 +1587,7 @@ function ValueScrollWall() {
   return (
     <>
       <div className="bg-[#f6f1e8] lg:hidden">
-        <div className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8 sm:py-28 md:px-10">
+        <div className={`${sectionTwoContainer} py-24 sm:py-28`}>
           <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
             WHAT WE FIX
           </p>
@@ -1538,7 +1601,7 @@ function ValueScrollWall() {
           </p>
         </div>
 
-        <div className="grid gap-5 px-5 pb-24 sm:px-8 md:px-10">
+        <div className={`${sectionTwoContainer} grid gap-5 pb-24`}>
           {valueScrollSteps.map((step, index) => (
             <motion.article
               key={step.number}
@@ -1599,90 +1662,96 @@ function ValueScrollWall() {
             <div className="pointer-events-none absolute inset-0 z-0 bg-[#F6F1E8]" />
             <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.42),transparent_42%),radial-gradient(circle_at_20%_18%,rgba(214,229,240,0.24),transparent_24%),radial-gradient(circle_at_82%_78%,rgba(255,249,240,0.64),transparent_32%)]" />
 
-            <div className="absolute left-[clamp(180px,13vw,280px)] top-1/2 z-20 w-[min(540px,34vw)] -translate-y-1/2">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
-                WHAT WE FIX
-              </p>
-              <h2 className="mt-5 max-w-[12ch] text-[3.15rem] font-medium leading-[0.94] tracking-[-0.06em] text-[#071827] xl:text-[4.05rem]">
-                We fix the parts of your online funnel that stop people from contacting you.
-              </h2>
-              <p className="mt-6 max-w-[34rem] text-[1.03rem] leading-8 text-[#42596b] xl:text-[1.08rem]">
-                At Ocia Studios, we do more than “make websites look better.” We improve the
-                parts of your business that directly affect trust, lead flow, conversion,
-                response speed, and follow-up.
-              </p>
-            </div>
-
-            <div className="pointer-events-none absolute right-[clamp(48px,5vw,90px)] top-1/2 z-0 flex h-[340px] w-[min(1040px,58vw)] -translate-y-1/2 items-center justify-center">
-              <motion.span
-                key={valueScrollSteps[activeStep].blockLabel}
-                initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-                animate={{ opacity: 0.2, y: 0 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="text-center text-[8.25rem] font-medium leading-none tracking-[-0.12em] xl:text-[9.25rem]"
-                style={{ color: valueScrollSteps[activeStep].ghostColor }}
-              >
-                {valueScrollSteps[activeStep].blockLabel}
-              </motion.span>
-            </div>
-
-            <div className="absolute right-[clamp(48px,5vw,90px)] top-1/2 z-10 flex h-[340px] w-[min(1040px,58vw)] -translate-y-1/2 items-center justify-end gap-[16px]">
-                <div className="relative h-[340px] w-[340px] shrink-0 overflow-hidden rounded-[30px] xl:rounded-[32px]">
-                  <motion.div
-                    style={reduceMotion ? undefined : { y: squareTrackY }}
-                    className="will-change-transform"
-                  >
-                    {valueScrollSteps.map((step) => (
-                      <div
-                        key={step.number}
-                        className="flex h-[340px] w-[340px] items-center justify-center rounded-[30px] border border-[rgba(11,28,43,0.08)] text-center text-[2.85rem] font-medium leading-[0.88] tracking-[-0.05em] shadow-[0_24px_56px_rgba(19,31,45,0.08)] xl:rounded-[32px] xl:text-[3.1rem]"
-                        style={{ backgroundColor: step.squareBg, color: step.squareText }}
-                      >
-                        <span className="max-w-[8ch]">{step.blockLabel}</span>
-                      </div>
-                    ))}
-                  </motion.div>
+            <div className={`${sectionTwoContainer} relative h-full`}>
+              <div className="grid h-full items-center gap-10 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,0.58fr)] xl:gap-12">
+                <div className="relative z-20 max-w-[34rem]">
+                  <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+                    WHAT WE FIX
+                  </p>
+                  <h2 className="mt-5 max-w-[12ch] text-[3.15rem] font-medium leading-[0.94] tracking-[-0.06em] text-[#071827] xl:text-[4.05rem]">
+                    We fix the parts of your online funnel that stop people from contacting you.
+                  </h2>
+                  <p className="mt-6 max-w-[34rem] text-[1.03rem] leading-8 text-[#42596b] xl:text-[1.08rem]">
+                    At Ocia Studios, we do more than “make websites look better.” We improve the
+                    parts of your business that directly affect trust, lead flow, conversion,
+                    response speed, and follow-up.
+                  </p>
                 </div>
 
-                <div className="relative h-[340px] w-[640px] overflow-hidden rounded-[30px] border border-[rgba(11,28,43,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(252,249,244,0.97))] px-11 py-11 shadow-[0_28px_72px_rgba(18,31,44,0.11)] xl:rounded-[32px]">
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(224,236,245,0.26),transparent_22%),radial-gradient(circle_at_82%_84%,rgba(247,239,228,0.24),transparent_26%)]" />
-                  <div className="relative h-full">
-                    <motion.div
-                      key={valueScrollSteps[activeStep].number}
-                      initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                      className="absolute inset-0 flex h-full flex-col justify-between"
+                <div className="relative z-10 justify-self-end w-full max-w-[896px] lg:origin-right lg:scale-[0.88] xl:scale-100">
+                  <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
+                    <motion.span
+                      key={valueScrollSteps[activeStep].blockLabel}
+                      initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                      animate={{ opacity: 0.2, y: 0 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      className="text-center text-[7.2rem] font-medium leading-none tracking-[-0.12em] xl:text-[8.35rem]"
+                      style={{ color: valueScrollSteps[activeStep].ghostColor }}
                     >
-                      <div>
-                        <p className="text-[0.64rem] font-semibold uppercase tracking-[0.22em] text-[#6a8090]">
-                          {valueScrollSteps[activeStep].number}
-                        </p>
-                        <h3 className="mt-4 max-w-[15ch] text-[2.7rem] font-medium leading-[0.92] tracking-[-0.05em] text-[#102130] xl:text-[2.95rem]">
-                          {valueScrollSteps[activeStep].title}
-                        </h3>
-                        <p className="mt-5 max-w-[28rem] text-[1.14rem] leading-8 text-[#4e6475] xl:max-w-[30rem] xl:text-[1.18rem]">
-                          {valueScrollSteps[activeStep].text}
-                        </p>
-                      </div>
+                      {valueScrollSteps[activeStep].blockLabel}
+                    </motion.span>
+                  </div>
 
-                      <div className="flex flex-wrap gap-2.5">
-                        {valueScrollSteps[activeStep].chips.map((chip) => (
-                          <span
-                            key={chip}
-                            className="rounded-full border border-[rgba(16,33,48,0.08)] px-3.5 py-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em]"
-                            style={{
-                              backgroundColor: valueScrollSteps[activeStep].chipBg,
-                              color: valueScrollSteps[activeStep].chipText,
-                            }}
+                  <div className="relative z-10 flex h-[340px] items-center justify-end gap-4">
+                    <div className="relative h-[340px] w-[340px] shrink-0 overflow-hidden rounded-[30px] xl:rounded-[32px]">
+                      <motion.div
+                        style={reduceMotion ? undefined : { y: squareTrackY }}
+                        className="will-change-transform"
+                      >
+                        {valueScrollSteps.map((step) => (
+                          <div
+                            key={step.number}
+                            className="flex h-[340px] w-[340px] items-center justify-center rounded-[30px] border border-[rgba(11,28,43,0.08)] text-center text-[2.85rem] font-medium leading-[0.88] tracking-[-0.05em] shadow-[0_24px_56px_rgba(19,31,45,0.08)] xl:rounded-[32px] xl:text-[3.1rem]"
+                            style={{ backgroundColor: step.squareBg, color: step.squareText }}
                           >
-                            {chip}
-                          </span>
+                            <span className="max-w-[8ch]">{step.blockLabel}</span>
+                          </div>
                         ))}
+                      </motion.div>
+                    </div>
+
+                    <div className="relative h-[340px] w-[540px] overflow-hidden rounded-[30px] border border-[rgba(11,28,43,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(252,249,244,0.97))] shadow-[0_28px_72px_rgba(18,31,44,0.11)] xl:rounded-[32px]">
+                      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(224,236,245,0.26),transparent_22%),radial-gradient(circle_at_82%_84%,rgba(247,239,228,0.24),transparent_26%)]" />
+                      <div className="relative h-full">
+                        <motion.div
+                          key={valueScrollSteps[activeStep].number}
+                          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                          className="absolute inset-0 flex h-full flex-col justify-between px-10 py-10"
+                        >
+                          <div>
+                            <p className="text-[0.64rem] font-semibold uppercase tracking-[0.22em] text-[#6a8090]">
+                              {valueScrollSteps[activeStep].number}
+                            </p>
+                            <h3 className="mt-4 max-w-[14ch] text-[2.4rem] font-medium leading-[0.92] tracking-[-0.05em] text-[#102130] xl:text-[2.6rem]">
+                              {valueScrollSteps[activeStep].title}
+                            </h3>
+                            <p className="mt-5 max-w-[26rem] text-[1.06rem] leading-8 text-[#4e6475] xl:text-[1.12rem]">
+                              {valueScrollSteps[activeStep].text}
+                            </p>
+                          </div>
+
+                          <div className="flex flex-wrap gap-2.5">
+                            {valueScrollSteps[activeStep].chips.map((chip) => (
+                              <span
+                                key={chip}
+                                className="rounded-full border border-[rgba(16,33,48,0.08)] px-3.5 py-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em]"
+                                style={{
+                                  backgroundColor: valueScrollSteps[activeStep].chipBg,
+                                  color: valueScrollSteps[activeStep].chipText,
+                                }}
+                              >
+                                {chip}
+                              </span>
+                            ))}
+                          </div>
+                        </motion.div>
                       </div>
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
+              </div>
             </div>
           </div>
         </section>
@@ -1697,6 +1766,7 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number>(0);
   const [headerScrolled, setHeaderScrolled] = useState(false);
   const [activeAuditIssue, setActiveAuditIssue] = useState(0);
+  const [activeServiceTitle, setActiveServiceTitle] = useState("Website Redesign");
 
   useLayoutEffect(() => {
     const page = pageRef.current;
@@ -1857,6 +1927,14 @@ export default function HomePage() {
   }, []);
 
   const currentAuditIssue = websiteLeakIssues[activeAuditIssue];
+  const allServices = serviceSelectorGroups.flatMap((group) =>
+    group.services.map((service) => ({
+      ...service,
+      group: group.group,
+    })),
+  );
+  const activeService =
+    allServices.find((service) => service.title === activeServiceTitle) ?? allServices[0];
   const currentYear = new Date().getFullYear();
 
   return (
@@ -1925,7 +2003,7 @@ export default function HomePage() {
 
         <section
           ref={heroSectionRef}
-          className="relative overflow-x-hidden overflow-y-visible bg-[linear-gradient(180deg,#fbf8f3_0%,#f7f2ea_34%,#f2ebdf_68%,#ece4d8_100%)] text-[#0f1f2d]"
+          className="relative overflow-x-hidden overflow-y-visible bg-[#f6f1e8] text-[#0f1f2d]"
         >
           <div
             data-hero-orb
@@ -1986,7 +2064,7 @@ export default function HomePage() {
             }}
           />
 
-          <div className="relative z-10 mx-auto flex min-h-svh max-w-[1440px] flex-col px-5 pb-24 pt-28 sm:px-8 sm:pb-24 sm:pt-32 md:px-10 lg:px-14 lg:pb-32 lg:pt-36 xl:px-20">
+          <div className={`${sectionTwoContainer} relative z-10 flex min-h-svh flex-col pb-24 pt-28 sm:pb-24 sm:pt-32 lg:pb-32 lg:pt-36`}>
             <div className="mx-auto flex w-full max-w-[1080px] flex-1 flex-col items-center text-center">
               <div data-hero-copy className="max-w-[980px]">
                 <p className="text-[0.72rem] font-semibold uppercase tracking-[0.34em] text-[#3f5668] sm:text-[0.76rem]">
@@ -2038,12 +2116,12 @@ export default function HomePage() {
 
           <div
             data-hero-divider
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-40 opacity-0 bg-[linear-gradient(180deg,rgba(15,31,45,0)_0%,rgba(12,22,34,0.08)_28%,rgba(9,17,28,0.28)_56%,rgba(6,12,20,0.78)_100%)]"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-40 opacity-0 bg-[linear-gradient(180deg,rgba(246,241,232,0)_0%,rgba(246,241,232,0.46)_34%,rgba(246,241,232,0.82)_68%,#f6f1e8_100%)]"
           />
         </section>
 
-        <SceneSection data-problem-section tone="dawn" className="-mt-8 scroll-mt-32 pt-24">
-          <div className="pointer-events-none absolute inset-0 z-[4] bg-[linear-gradient(180deg,rgba(249,245,238,0.98),rgba(247,243,236,0.98))]" />
+        <SceneSection data-problem-section tone="dawn" className="-mt-8 scroll-mt-32 bg-[#f6f1e8] pt-24">
+          <div className="pointer-events-none absolute inset-0 z-[4] bg-[linear-gradient(180deg,rgba(246,241,232,0.98),rgba(246,241,232,0.98))]" />
           <motion.div
             aria-hidden="true"
             initial={{ opacity: 0.52, y: 0 }}
@@ -2062,8 +2140,8 @@ export default function HomePage() {
               backgroundPosition: "0 0, 6px 8px, 12px 5px",
             }}
           />
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-40 bg-[linear-gradient(180deg,rgba(246,240,231,0.98),rgba(246,240,231,0.76)_44%,rgba(246,240,231,0)_100%)]" />
-          <div className="pointer-events-none absolute inset-x-0 top-[-3.5rem] z-[5] h-28 bg-[radial-gradient(ellipse_at_center,rgba(248,243,236,0.98)_0%,rgba(248,243,236,0)_72%)] blur-2xl" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-40 bg-[linear-gradient(180deg,rgba(246,241,232,0.98),rgba(246,241,232,0.76)_44%,rgba(246,241,232,0)_100%)]" />
+          <div className="pointer-events-none absolute inset-x-0 top-[-3.5rem] z-[5] h-28 bg-[radial-gradient(ellipse_at_center,rgba(246,241,232,0.98)_0%,rgba(246,241,232,0)_72%)] blur-2xl" />
 
           <div className="relative z-[6] mx-auto max-w-[1460px] px-6 py-[7.5rem] sm:px-10 md:px-12 lg:px-14 xl:px-16">
             <div className="grid items-start gap-12 xl:grid-cols-[minmax(0,0.38fr)_minmax(0,0.62fr)] xl:gap-[4.5rem] 2xl:gap-[5.25rem]">
@@ -2218,9 +2296,9 @@ export default function HomePage() {
         <section
           id="solutions"
           data-value-section
-          className="relative overflow-visible border-y border-[rgba(11,28,43,0.06)] bg-[#f7f3ec]"
+          className="relative overflow-visible bg-[#f6f1e8]"
         >
-          <div className="pointer-events-none absolute inset-0 bg-[#f7f3ec]" />
+          <div className="pointer-events-none absolute inset-0 bg-[#f6f1e8]" />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(216,230,240,0.18),transparent_24%),radial-gradient(circle_at_84%_82%,rgba(244,235,223,0.62),transparent_32%)]" />
           <div className="relative">
             <ValueScrollWall />
@@ -2422,57 +2500,212 @@ export default function HomePage() {
           </div>
         </section>
 
-        <SceneSection
+        <section
           id="services"
           data-services-section
           data-work-section
-          tone="night"
+          className="relative overflow-hidden bg-[#f6f1e8]"
         >
-          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-            <div className="grid gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
-              <SectionIntro
-                label="Services"
-                title="Grouped around the real points where enquiries are won or lost."
-                body="We group the work into four capability pillars so you can see how the website, visibility, conversion, response and follow-up pieces connect."
-              />
-
-              <div className="grid gap-5">
-                {servicePillars.map((pillar, index) => (
-                  <article
-                    key={pillar.title}
-                    data-reveal-card
-                    className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.78),rgba(5,10,18,0.58))] p-7 shadow-[0_20px_70px_rgba(0,0,0,0.24)] backdrop-blur-xl transition duration-300 hover:border-white/16"
-                  >
-                    <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-                      <div className="max-w-xl">
-                        <p className="text-[0.7rem] font-medium uppercase tracking-[0.38em] text-white/38">
-                          0{index + 1}
-                        </p>
-                        <h3 className="mt-3 text-[1.5rem] font-medium tracking-[-0.04em] text-white">
-                          {pillar.title}
-                        </h3>
-                        <p className="mt-4 text-[0.98rem] leading-7 text-white/66">
-                          {pillar.text}
-                        </p>
-                      </div>
-                      <div className="grid gap-2 lg:max-w-[18rem] lg:justify-items-end">
-                        {pillar.includes.map((item) => (
-                          <span
-                            key={item}
-                            data-reveal-chip
-                            className="rounded-full border border-white/8 bg-white/[0.035] px-3 py-2 text-xs uppercase tracking-[0.22em] text-white/68"
-                          >
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(221,236,245,0.3),transparent_22%),radial-gradient(circle_at_84%_76%,rgba(244,235,223,0.54),transparent_28%)]" />
+          <div className={`relative ${sectionTwoContainer} py-24 sm:py-28`}>
+            <div data-reveal-intro className="max-w-[46rem]">
+              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+                SERVICES
+              </p>
+              <h2 className="mt-5 max-w-[13ch] text-[2.7rem] font-medium leading-[0.94] tracking-[-0.055em] text-[#071827] sm:text-[3.55rem] md:text-[4.15rem]">
+                Services designed to help you get more enquiries, bookings, and qualified leads
+              </h2>
+              <p className="mt-6 max-w-[39rem] text-[1rem] leading-8 text-[#42596b] md:text-[1.08rem]">
+                We recommend the right service based on the actual gaps in your funnel, not based on what sounds trendy.
+              </p>
+              <p className="mt-7 text-[0.92rem] leading-7 text-[#607585]">
+                Choose a service area to see how it improves your enquiry flow.
+              </p>
             </div>
+
+            <motion.div
+              data-reveal-card
+              initial={reduceMotion ? false : { opacity: 0, y: 30 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.18 }}
+              transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-14 overflow-hidden rounded-[2.4rem] border border-[#e6ddd0] bg-[linear-gradient(180deg,#fffdf8_0%,#fbf7ef_100%)] p-6 shadow-[0_28px_90px_rgba(19,31,45,0.08)] sm:p-8 xl:p-10"
+            >
+              <div className="grid gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] xl:items-start">
+                <motion.div
+                  data-reveal-card
+                  layout
+                  className="order-2 xl:order-1"
+                >
+                  <div className="relative overflow-hidden rounded-[2.15rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,246,239,0.96))] p-6 shadow-[0_22px_60px_rgba(19,31,45,0.07)] sm:p-7">
+                    <div className="pointer-events-none absolute right-5 top-4 text-[6.2rem] font-medium leading-none tracking-[-0.12em] text-[#071827]/[0.05] sm:text-[7.4rem]">
+                      {activeService.number}
+                    </div>
+                    <div className="pointer-events-none absolute -right-10 top-12 h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(221,236,245,0.9)_0%,rgba(221,236,245,0.3)_48%,rgba(221,236,245,0)_76%)] blur-2xl" />
+
+                    <motion.div
+                      key={activeService.title}
+                      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                      animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                      transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+                      className="relative"
+                    >
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="rounded-full border border-[rgba(37,68,90,0.1)] bg-[rgba(234,243,248,0.9)] px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-[#32516a]">
+                          {activeService.group}
+                        </span>
+                        <span className="rounded-full border border-[rgba(7,24,39,0.08)] bg-[rgba(246,241,232,0.92)] px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-[#6b8192]">
+                          Recommended after audit
+                        </span>
+                      </div>
+
+                      <h3 className="mt-6 max-w-[14ch] text-[2.2rem] font-medium leading-[0.95] tracking-[-0.05em] text-[#071827] sm:text-[2.65rem]">
+                        {activeService.title}
+                      </h3>
+                      <p className="mt-5 max-w-[32rem] text-[1rem] leading-8 text-[#4d6475] sm:text-[1.04rem]">
+                        {activeService.description}
+                      </p>
+
+                      <div className="mt-7">
+                        <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[#698091]">
+                          Best for
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2.5">
+                          {activeService.chips.map((chip) => (
+                            <span
+                              key={chip}
+                              className="rounded-full border border-[rgba(37,68,90,0.12)] bg-[rgba(234,243,248,0.84)] px-3.5 py-2 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-[#25445a]"
+                            >
+                              {chip}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mt-7 rounded-[1.4rem] border border-[rgba(7,24,39,0.08)] bg-white/82 px-5 py-4">
+                        <p className="text-[0.64rem] font-semibold uppercase tracking-[0.2em] text-[#698091]">
+                          Outcome
+                        </p>
+                        <p className="mt-3 text-[0.98rem] leading-7 text-[#173044]">
+                          {activeService.outcome}
+                        </p>
+                      </div>
+
+                      <div className="mt-7 flex items-center gap-3 text-[0.86rem] font-semibold text-[#25445a]">
+                        <span>Start with an audit</span>
+                        <span className="text-[#6f8aa0]">↗</span>
+                      </div>
+                    </motion.div>
+                  </div>
+                </motion.div>
+
+                <div className="order-1 grid gap-4 xl:order-2">
+                  {serviceSelectorGroups.map((group, groupIndex) => (
+                    <motion.section
+                      key={group.group}
+                      data-reveal-card
+                      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{
+                        duration: 0.48,
+                        delay: reduceMotion ? 0 : groupIndex * 0.06,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="rounded-[1.8rem] border border-[rgba(7,24,39,0.08)] bg-white/74 p-4 shadow-[0_16px_40px_rgba(19,31,45,0.04)] sm:p-5"
+                    >
+                      <div className="flex items-center justify-between gap-4">
+                        <h3 className="text-[1.08rem] font-medium tracking-[-0.03em] text-[#071827]">
+                          {group.group}
+                        </h3>
+                        <span className="rounded-full bg-[rgba(234,243,248,0.88)] px-2.5 py-1 text-[0.56rem] font-semibold uppercase tracking-[0.18em] text-[#5c7688]">
+                          {group.services.length} Services
+                        </span>
+                      </div>
+
+                      <div className="mt-4 grid gap-3">
+                        {group.services.map((service, serviceIndex) => {
+                          const isActive = activeService.title === service.title;
+
+                          return (
+                            <motion.button
+                              key={service.title}
+                              type="button"
+                              data-reveal-chip
+                              initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+                              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                              viewport={{ once: true, amount: 0.2 }}
+                              transition={{
+                                duration: 0.38,
+                                delay: reduceMotion ? 0 : groupIndex * 0.06 + serviceIndex * 0.04,
+                                ease: [0.22, 1, 0.36, 1],
+                              }}
+                              onClick={() => setActiveServiceTitle(service.title)}
+                              className={`group/service flex w-full items-start gap-4 rounded-[1.35rem] border px-4 py-4 text-left transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#89bee7] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7ef] ${
+                                isActive
+                                  ? "border-[rgba(37,68,90,0.2)] bg-[rgba(221,236,245,0.72)] text-[#071827] shadow-[0_14px_28px_rgba(19,31,45,0.07)]"
+                                  : "border-[rgba(7,24,39,0.08)] bg-[rgba(255,255,255,0.9)] text-[#071827] hover:border-[rgba(37,68,90,0.14)] hover:bg-[rgba(234,243,248,0.48)]"
+                              }`}
+                            >
+                              <span
+                                className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full transition duration-300 ${
+                                  isActive ? "bg-[#071827]" : "bg-[#cbdceb] group-hover/service:bg-[#7d99ad]"
+                                }`}
+                              />
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-start justify-between gap-3">
+                                  <div>
+                                    <p className="text-[1rem] font-medium leading-6 tracking-[-0.03em]">
+                                      {service.title}
+                                    </p>
+                                    <p className="mt-2 text-[0.9rem] leading-6 text-[#536979]">
+                                      {service.preview}
+                                    </p>
+                                  </div>
+                                  <span
+                                    className={`pt-0.5 text-base transition duration-300 ${
+                                      isActive
+                                        ? "translate-x-0.5 text-[#25445a]"
+                                        : "text-[#7c95a7] group-hover/service:translate-x-0.5"
+                                    }`}
+                                  >
+                                    ↗
+                                  </span>
+                                </div>
+                              </div>
+                            </motion.button>
+                          );
+                        })}
+                      </div>
+                    </motion.section>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-8 rounded-[1.85rem] border border-[rgba(7,24,39,0.08)] bg-[rgba(234,243,248,0.52)] px-6 py-6 shadow-[0_16px_40px_rgba(19,31,45,0.04)] sm:px-7">
+                <p className="text-[1rem] leading-8 text-[#25445a]">
+                  Not sure where your biggest gap is? Start with the free audit and we will show you what to fix first.
+                </p>
+                <div className="mt-5">
+                  <motion.a
+                    href={CALENDLY_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={
+                      reduceMotion
+                        ? undefined
+                        : { y: -3, boxShadow: "0 24px 48px rgba(7,24,39,0.2)" }
+                    }
+                    transition={{ duration: 0.24, ease: "easeOut" }}
+                    className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#071827] px-7 text-sm font-semibold tracking-[0.01em] text-[#f8f4ec] shadow-[0_18px_44px_rgba(7,24,39,0.16)]"
+                  >
+                    Claim My Free Audit
+                  </motion.a>
+                </div>
+              </div>
+            </motion.div>
           </div>
-        </SceneSection>
+        </section>
 
         <SceneSection data-funnel-section tone="night" className="border-y border-white/8">
           <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">

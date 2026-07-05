@@ -141,20 +141,155 @@ const heroShowcaseCards = [
   },
 ];
 
-const problemCards = [
+const websiteAuditIssues = [
   {
-    title: "Visitors do not trust fast enough",
-    body: "Unclear messaging, weak proof, and poor design make people hesitate before they enquire.",
+    id: "unclear-messaging",
+    tab: "Unclear messaging",
+    title: "Visitors do not instantly understand what you do",
+    description:
+      "If people cannot quickly understand your offer, who you help, and why it matters, they leave before they enquire.",
+    annotationLabel: "Unclear offer",
+    annotationText: "The value is too vague for visitors to act with confidence.",
+    suggestedFix: "Clarify the offer, audience, and outcome in the first screen before asking visitors to act.",
+    affects: ["Clarity", "Trust", "Conversion"],
+    focus: "hero",
+    markerClass: "left-[36%] top-[22%]",
+    connectorClass: "left-[38%] top-[23.2%] w-[23%]",
   },
   {
-    title: "Enquiries are harder than they should be",
-    body: "Weak CTAs, messy forms, and poor booking flows stop interested visitors from taking action.",
+    id: "weak-trust",
+    tab: "Weak trust",
+    title: "Your website does not build enough trust",
+    description:
+      "Weak visuals, missing proof, outdated testimonials, or unclear credibility signals make visitors hesitate.",
+    annotationLabel: "Weak proof",
+    annotationText: "Trust signals are missing, outdated, or too low-impact.",
+    suggestedFix: "Add stronger testimonials, recognisable proof, and clearer credibility signals near the decision points.",
+    affects: ["Trust", "Credibility", "Enquiries"],
+    focus: "proof",
+    markerClass: "left-[76%] top-[32%]",
+    connectorClass: "left-[78%] top-[33.1%] w-[8%]",
   },
   {
-    title: "Leads slip through the cracks",
-    body: "Slow replies, inconsistent WhatsApp handling, and no CRM follow-up turn warm leads cold.",
+    id: "weak-cta",
+    tab: "Weak CTA",
+    title: "Your CTA is weak or easy to miss",
+    description:
+      "If the next step is not obvious, visitors may browse without ever contacting you.",
+    annotationLabel: "Hidden CTA",
+    annotationText: "The main call-to-action blends in or appears too late.",
+    suggestedFix: "Strengthen CTA contrast and repeat the next step in the places where visitor intent peaks.",
+    affects: ["CTA", "Conversion", "Action"],
+    focus: "cta",
+    markerClass: "left-[28%] top-[40%]",
+    connectorClass: "left-[30%] top-[41.1%] w-[31%]",
   },
-];
+  {
+    id: "booking-friction",
+    tab: "Booking friction",
+    title: "Your forms or booking flow create friction",
+    description:
+      "Too many steps, unclear fields, or a slow booking process can stop interested visitors from converting.",
+    annotationLabel: "Booking friction",
+    annotationText: "Extra steps create hesitation before the enquiry is completed.",
+    suggestedFix: "Reduce steps, simplify fields, and make the path from interest to booked call feel immediate.",
+    affects: ["Booking", "Forms", "Conversion"],
+    focus: "booking",
+    markerClass: "left-[18%] top-[79%]",
+    connectorClass: "left-[20%] top-[80.1%] w-[41%]",
+  },
+  {
+    id: "enquiry-flow",
+    tab: "Enquiry flow",
+    title: "Your WhatsApp or enquiry process is inconsistent",
+    description:
+      "When the enquiry path feels unclear or inconsistent, warm leads can lose momentum.",
+    annotationLabel: "Broken enquiry path",
+    annotationText: "Visitors are unsure what happens after they reach out.",
+    suggestedFix: "Show the next step clearly and make the handoff from visitor to conversation feel guided and immediate.",
+    affects: ["WhatsApp", "Enquiry", "Response"],
+    focus: "whatsapp",
+    markerClass: "left-[50%] top-[83%]",
+    connectorClass: "left-[52%] top-[84.1%] w-[9%]",
+  },
+  {
+    id: "seo-visibility",
+    tab: "SEO visibility",
+    title: "Your SEO is too weak to bring in the right traffic",
+    description:
+      "Even a good website underperforms if the right people cannot find it when they are searching.",
+    annotationLabel: "Low visibility",
+    annotationText: "Your site is not showing up clearly for high-intent searches.",
+    suggestedFix: "Tighten page targeting, local relevance, and structure so the right people can actually find you.",
+    affects: ["Visibility", "Search", "Lead quality"],
+    focus: "seo",
+    markerClass: "left-[48%] top-[67%]",
+    connectorClass: "left-[50%] top-[68.1%] w-[11%]",
+  },
+  {
+    id: "no-follow-up",
+    tab: "No follow-up",
+    title: "Your leads are not being followed up properly",
+    description:
+      "Leads that are not followed up quickly and consistently often go cold.",
+    annotationLabel: "Follow-up gap",
+    annotationText: "Warm enquiries are not being nurtured after the first contact.",
+    suggestedFix: "Create a response sequence so every warm lead gets a timely next step instead of fading out.",
+    affects: ["Follow-up", "Response speed", "Revenue"],
+    focus: "followup",
+    markerClass: "left-[82%] top-[74%]",
+    connectorClass: "left-[84%] top-[75.1%] w-[2%]",
+  },
+  {
+    id: "no-tracking",
+    tab: "No tracking",
+    title: "Your team has no clean system for tracking opportunities",
+    description:
+      "Without a clear lead system, enquiries become scattered across forms, WhatsApp, inboxes, and memory.",
+    annotationLabel: "No lead visibility",
+    annotationText: "Opportunities are hard to track, prioritise, and close.",
+    suggestedFix: "Centralise enquiries into one clean pipeline so nothing depends on memory or scattered inboxes.",
+    affects: ["CRM", "Tracking", "Pipeline"],
+    focus: "crm",
+    markerClass: "left-[82%] top-[86%]",
+    connectorClass: "left-[84%] top-[87.1%] w-[2%]",
+  },
+] as const;
+
+const websiteProblemCards = [
+  {
+    id: "clarity-conversion",
+    kicker: "01",
+    title: "Clarity and conversion break first",
+    description:
+      "If visitors do not understand the offer fast enough, they hesitate, skim, and leave before taking the next step.",
+    issueIndex: 0,
+  },
+  {
+    id: "trust-proof",
+    kicker: "02",
+    title: "Trust feels too light to act on",
+    description:
+      "Proof, testimonials, and credibility signals often exist, but not with enough weight near the moments that matter.",
+    issueIndex: 1,
+  },
+  {
+    id: "enquiry-friction",
+    kicker: "03",
+    title: "The enquiry path creates friction",
+    description:
+      "Weak CTAs, messy booking steps, or unclear handoff moments quietly reduce how many warm visitors actually reach out.",
+    issueIndex: 3,
+  },
+  {
+    id: "visibility-tracking",
+    kicker: "04",
+    title: "Visibility and follow-up stay fragmented",
+    description:
+      "Even good websites underperform when the right traffic is weak and leads are not tracked cleanly after first contact.",
+    issueIndex: 7,
+  },
+] as const;
 
 const valueChips = [
   "Improve trust",
@@ -496,7 +631,7 @@ function HeroHeadline() {
               delay: 0.62,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="ml-3 inline-flex translate-y-[-0.08em] items-center rounded-full px-3 py-[0.35rem] text-[0.76rem] font-bold tracking-[-0.01em] text-[#071827] shadow-[0_8px_24px_rgba(63,139,198,0.12)] sm:ml-4 sm:px-4 sm:py-2 sm:text-[0.82rem] md:text-[0.88rem]"
+            className="ml-2 inline-flex translate-y-[-0.02em] items-center rounded-full px-3 py-[0.3rem] text-[0.74rem] font-bold tracking-[-0.01em] text-[#071827] shadow-[0_8px_24px_rgba(63,139,198,0.12)] sm:ml-4 sm:translate-y-[-0.08em] sm:px-4 sm:py-2 sm:text-[0.82rem] md:text-[0.88rem]"
             style={{
               background: "rgba(205, 229, 247, 0.75)",
               border: "1px solid rgba(7, 24, 39, 0.12)",
@@ -881,6 +1016,334 @@ function ShowcaseCardVisual({ type }: { type: string }) {
   );
 }
 
+function AuditWebsiteMockup({
+  issue,
+  issueIndex,
+}: {
+  issue: (typeof websiteAuditIssues)[number];
+  issueIndex: number;
+}) {
+  const isFocus = (focus: (typeof websiteAuditIssues)[number]["focus"]) => issue.focus === focus;
+
+  return (
+    <motion.div
+      initial={{ y: 12 }}
+      whileInView={{ y: -6 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+      className="relative aspect-[16/9] overflow-hidden rounded-[2.2rem] bg-[linear-gradient(180deg,#112232,#0b1622)] p-3 shadow-[0_24px_70px_rgba(9,18,28,0.2)] ring-1 ring-[rgba(255,255,255,0.06)]"
+    >
+      <div className="pointer-events-none absolute inset-x-12 top-0 h-20 rounded-b-[2rem] bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0)_74%)]" />
+      <motion.div
+        key={issue.id}
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+        className="flex h-full flex-col rounded-[1.8rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,#fcfaf6,#f4eee5)] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.84)]"
+      >
+        <div className="mb-4 flex items-center justify-between rounded-[1rem] border border-[rgba(7,24,39,0.08)] bg-white/72 px-4 py-3">
+          <div className="flex items-center gap-3">
+            <div className="flex gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#c9d8e3]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#e5cfac]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#9ec5e3]" />
+            </div>
+            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#5a7082]">
+              Website lead leak audit
+            </p>
+          </div>
+          <p className="text-[0.62rem] font-medium uppercase tracking-[0.2em] text-[#6b8294]">
+            BrightSpace Interiors
+          </p>
+        </div>
+
+        <div className="relative flex-1 overflow-hidden rounded-[1.45rem] border border-[rgba(7,24,39,0.06)] bg-[linear-gradient(180deg,rgba(255,255,255,0.72),rgba(247,242,234,0.94))] p-3">
+          <div className="grid h-full gap-3 lg:grid-cols-[minmax(0,1.72fr)_minmax(15rem,0.88fr)]">
+            <div className="relative rounded-[1.35rem] border border-[rgba(7,24,39,0.06)] bg-[#fbf8f1] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.86)]">
+              <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_18%_0%,rgba(181,216,241,0.28),transparent_44%)]" />
+              <div className="relative rounded-[1rem] border border-[rgba(7,24,39,0.06)] bg-white/86 px-4 py-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <div className="h-2.5 w-2.5 rounded-full bg-[#d9e4ec]" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-[#ead5b7]" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-[#b7d3e8]" />
+                  </div>
+                  <div className="flex flex-wrap justify-end gap-2">
+                    {["Home", "Services", "Projects", "Contact"].map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full bg-[#102130]/6 px-3 py-1 text-[0.56rem] uppercase tracking-[0.16em] text-[#102130]/56"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative mt-3 h-[calc(100%-4.25rem)] min-h-[20rem] rounded-[1.1rem] bg-[linear-gradient(180deg,#e6eff6,#f8fbff)] p-3 shadow-[0_18px_36px_rgba(188,206,220,0.22)] md:p-4">
+                <div className="grid h-full gap-3 lg:grid-cols-[minmax(0,1.14fr)_minmax(13rem,0.82fr)] lg:grid-rows-[auto_auto_1fr]">
+                  <div
+                    className={`rounded-[1rem] border p-4 transition-all duration-300 lg:col-span-1 ${
+                      isFocus("hero")
+                        ? "border-[rgba(126,167,198,0.28)] bg-white/96 shadow-[0_18px_40px_rgba(126,167,198,0.22)]"
+                        : "border-transparent bg-white/88"
+                    }`}
+                  >
+                    <div className="h-3 w-24 rounded-full bg-[#102130]/14" />
+                    <div className="mt-4 space-y-2.5">
+                      <div className={`h-9 w-[88%] rounded-[0.85rem] ${isFocus("hero") ? "bg-[#102130]/13" : "bg-[#102130]/9"}`} />
+                      <div className={`h-9 w-[72%] rounded-[0.85rem] ${isFocus("hero") ? "bg-[#102130]/11" : "bg-[#102130]/7"}`} />
+                      <div className="h-3 w-[80%] rounded-full bg-[#102130]/10" />
+                      <div className="h-3 w-[62%] rounded-full bg-[#102130]/7" />
+                    </div>
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      <div
+                        className={`h-10 w-32 rounded-full transition-all duration-300 ${
+                          isFocus("cta")
+                            ? "bg-[#d6e7f4] ring-1 ring-[rgba(16,33,48,0.18)] shadow-[0_10px_24px_rgba(123,163,194,0.24)]"
+                            : "bg-[#102130]"
+                        }`}
+                      />
+                      <div className="h-10 w-28 rounded-full bg-[#102130]/8" />
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3 lg:row-span-2">
+                    <div className="rounded-[1rem] bg-white/84 p-3">
+                      <div className="h-full min-h-[8.5rem] rounded-[0.9rem] bg-[linear-gradient(135deg,#dfe9f1,#fdfefe)] p-3">
+                        <div className="flex h-full items-end justify-between gap-3">
+                          <div className="space-y-2">
+                            <div className="h-2 w-16 rounded-full bg-[#102130]/12" />
+                            <div className="h-2 w-12 rounded-full bg-[#102130]/8" />
+                          </div>
+                          <div className="h-16 w-16 rounded-[1rem] bg-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.84)]" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`rounded-[1rem] border p-4 transition-all duration-300 ${
+                        isFocus("proof")
+                          ? "border-[rgba(201,220,235,0.22)] bg-[#102130] text-white shadow-[0_14px_30px_rgba(16,33,48,0.24)]"
+                          : "border-transparent bg-white/82 text-[#102130]"
+                      }`}
+                    >
+                      <div className={`text-[0.56rem] uppercase tracking-[0.16em] ${isFocus("proof") ? "text-white/44" : "text-[#5c7385]"}`}>
+                        Trust row
+                      </div>
+                      <div className="mt-3 grid grid-cols-4 gap-2">
+                        {Array.from({ length: 4 }).map((_, index) => (
+                          <div
+                            key={index}
+                            className={`h-8 rounded-[0.75rem] ${
+                              isFocus("proof") ? "bg-white/14" : "bg-[#102130]/7"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <div className={`mt-3 rounded-[0.9rem] px-3 py-3 ${isFocus("proof") ? "bg-white/8" : "bg-[#102130]/6"}`}>
+                        <div className={`h-2 w-20 rounded-full ${isFocus("proof") ? "bg-white/18" : "bg-[#102130]/12"}`} />
+                        <div className={`mt-3 h-2 w-5/6 rounded-full ${isFocus("proof") ? "bg-white/10" : "bg-[#102130]/8"}`} />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-3 lg:col-span-2">
+                    {["Interior styling", "Renovation planning", "Space audits"].map((service, index) => (
+                      <div
+                        key={service}
+                        className="rounded-[0.95rem] border border-[rgba(7,24,39,0.06)] bg-white/82 p-3"
+                      >
+                        <div className="h-8 w-8 rounded-[0.8rem] bg-[#d9e7f2]" />
+                        <div className="mt-3 h-2 w-20 rounded-full bg-[#102130]/12" />
+                        <div className="mt-2 h-2 rounded-full bg-[#102130]/7" />
+                        <div className={`mt-2 h-2 rounded-full ${index === 1 ? "w-4/5" : "w-3/4"} bg-[#102130]/7`} />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="grid gap-3 lg:col-span-2 lg:grid-cols-[0.94fr_0.9fr_1.16fr]">
+                    <div
+                      className={`rounded-[1rem] border p-4 transition-all duration-300 ${
+                        isFocus("booking")
+                          ? "border-[rgba(186,152,120,0.22)] bg-[linear-gradient(180deg,#fffaf4,#f2e8dc)] shadow-[0_14px_30px_rgba(146,112,81,0.12)]"
+                          : "border-transparent bg-white/82"
+                      }`}
+                    >
+                      <div className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">
+                        Booking widget
+                      </div>
+                      <div className="mt-3 grid grid-cols-2 gap-2">
+                        <div className="h-9 rounded-[0.75rem] bg-[#102130]/8" />
+                        <div className="h-9 rounded-[0.75rem] bg-[#102130]/8" />
+                        <div className="h-9 rounded-[0.75rem] bg-[#102130]/8" />
+                        <div className="h-9 rounded-[0.75rem] bg-[#102130]/10" />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-3">
+                      <div
+                        className={`rounded-[1rem] border p-3 transition-all duration-300 ${
+                          isFocus("seo")
+                            ? "border-[rgba(126,167,198,0.22)] bg-[linear-gradient(180deg,#ebf3fa,#ffffff)] shadow-[0_14px_30px_rgba(124,152,175,0.14)]"
+                            : "border-transparent bg-white/82"
+                        }`}
+                      >
+                        <div className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">
+                          Local search
+                        </div>
+                        <div className="mt-2 rounded-[0.75rem] bg-[#102130]/6 px-3 py-2 text-[0.62rem] text-[#40576a]">
+                          interior design consultation singapore
+                        </div>
+                        <div className="mt-3 flex items-end gap-2">
+                          <div className="text-[1.5rem] font-semibold tracking-[-0.05em] text-[#102130]">
+                            {isFocus("seo") ? "#9" : "#24"}
+                          </div>
+                          <div className="text-[0.64rem] uppercase tracking-[0.16em] text-[#688092]">
+                            search rank
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        className={`rounded-[1rem] border p-3 transition-all duration-300 ${
+                          isFocus("whatsapp")
+                            ? "border-[rgba(102,152,122,0.22)] bg-[linear-gradient(180deg,#eff8f2,#dff1e6)] shadow-[0_14px_30px_rgba(87,126,107,0.12)]"
+                            : "border-transparent bg-white/82"
+                        }`}
+                      >
+                        <div className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">
+                          Enquiry handoff
+                        </div>
+                        <div className="mt-2 grid gap-1.5">
+                          <div className="ml-auto w-[78%] rounded-[0.75rem] rounded-br-sm bg-[#d7efe1] px-2.5 py-2 text-[0.58rem] text-[#204033]">
+                            Do you have availability this week?
+                          </div>
+                          <div className="w-[84%] rounded-[0.75rem] rounded-bl-sm bg-white px-2.5 py-2 text-[0.58rem] text-[#4b6172]">
+                            Yes. We&apos;ll send the next step shortly.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`rounded-[1rem] border p-4 transition-all duration-300 ${
+                        isFocus("crm") || isFocus("followup")
+                          ? "border-[rgba(201,220,235,0.16)] bg-[#102130] text-white shadow-[0_16px_32px_rgba(16,33,48,0.24)]"
+                          : "border-transparent bg-white/84 text-[#102130]"
+                      }`}
+                    >
+                      <div
+                        className={`flex items-center justify-between text-[0.56rem] uppercase tracking-[0.16em] ${
+                          isFocus("crm") || isFocus("followup") ? "text-white/44" : "text-[#526777]"
+                        }`}
+                      >
+                        <span>Lead tracker</span>
+                        <span>{isFocus("followup") ? "Delayed response" : "4 new opportunities"}</span>
+                      </div>
+                      <div className="mt-3 grid grid-cols-3 gap-2">
+                        {["New", "Follow-up", "Won"].map((item, index) => (
+                          <div
+                            key={item}
+                            className={`rounded-[0.85rem] px-2 py-2.5 text-center text-[0.58rem] uppercase tracking-[0.14em] ${
+                              isFocus("crm") || isFocus("followup")
+                                ? index === 1 && isFocus("followup")
+                                  ? "bg-white/16 text-white"
+                                  : "bg-white/8 text-white/64"
+                                : "bg-[#102130]/6 text-[#526777]"
+                            }`}
+                          >
+                            {item}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-3 grid gap-3 md:grid-cols-[0.92fr_1.08fr]">
+                        <div className="grid gap-2">
+                          {Array.from({ length: 3 }).map((_, index) => (
+                            <div
+                              key={index}
+                              className={`h-8 rounded-[0.75rem] ${
+                                isFocus("followup") && index === 1
+                                  ? "bg-[#d6e8f3]"
+                                  : isFocus("crm") || isFocus("followup")
+                                    ? "bg-white/8"
+                                    : "bg-[#102130]/7"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <div className={`rounded-[0.95rem] px-3 py-3 ${isFocus("crm") || isFocus("followup") ? "bg-white/8" : "bg-[#102130]/6"}`}>
+                          <div className={`h-2 w-20 rounded-full ${isFocus("crm") || isFocus("followup") ? "bg-white/18" : "bg-[#102130]/12"}`} />
+                          <div className={`mt-3 h-2 w-5/6 rounded-full ${isFocus("crm") || isFocus("followup") ? "bg-white/10" : "bg-[#102130]/8"}`} />
+                          <div className={`mt-2 h-2 w-2/3 rounded-full ${isFocus("crm") || isFocus("followup") ? "bg-white/10" : "bg-[#102130]/8"}`} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pointer-events-none absolute inset-0 hidden lg:block">
+                    <div className={`absolute ${issue.connectorClass} h-px bg-[linear-gradient(90deg,rgba(16,33,48,0.44),rgba(16,33,48,0.08))]`} />
+                    <span className={`absolute ${issue.markerClass} h-3.5 w-3.5 rounded-full bg-[#102130] shadow-[0_0_0_7px_rgba(221,236,247,0.6)]`} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-[1.25rem] border border-[rgba(7,24,39,0.06)] bg-[linear-gradient(180deg,rgba(252,250,246,0.96),rgba(244,238,228,0.98))] p-4 text-[#102130] shadow-[0_18px_42px_rgba(16,33,48,0.08)]">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#6d8191]">
+                    Active issue
+                  </p>
+                  <p className="mt-2 text-sm font-medium uppercase tracking-[0.14em] text-[#102130]/56">
+                    0{issueIndex + 1} • {issue.tab}
+                  </p>
+                </div>
+                <span className="rounded-full bg-[rgba(181,216,241,0.28)] px-3 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-[#33506a]">
+                  Diagnosis
+                </span>
+              </div>
+
+              <h3 className="mt-5 max-w-[20rem] text-[1.52rem] font-medium leading-[1.02] tracking-[-0.045em] text-[#071827]">
+                {issue.title}
+              </h3>
+              <p className="mt-4 text-[0.96rem] leading-7 text-[#536979]">
+                {issue.annotationText}
+              </p>
+
+              <div className="mt-6">
+                <p className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#6d8191]">
+                  What this affects
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {issue.affects.map((chip) => (
+                    <span
+                      key={chip}
+                      className="rounded-full border border-[rgba(7,24,39,0.08)] bg-[rgba(181,216,241,0.2)] px-3 py-2 text-[0.66rem] font-semibold uppercase tracking-[0.14em] text-[#33506a]"
+                    >
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-[1rem] border border-[rgba(7,24,39,0.08)] bg-white/82 px-4 py-4">
+                <p className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#6d8191]">
+                  Suggested fix
+                </p>
+                <p className="mt-2 text-[0.9rem] leading-7 text-[#4e6475]">
+                  {issue.suggestedFix}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 function HeroShowcaseRibbon() {
   const reduceMotion = useReducedMotion();
   const reelBandRef = useRef<HTMLDivElement | null>(null);
@@ -960,7 +1423,7 @@ function HeroShowcaseRibbon() {
             onMouseLeave={() => {
               targetSpeedRef.current = 1;
             }}
-            className="relative h-[38rem] overflow-x-hidden overflow-y-visible pt-4 pb-[5.5rem]"
+            className="relative h-[39rem] overflow-x-hidden overflow-y-visible pt-4 pb-[6.25rem]"
           >
             <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-28 bg-[linear-gradient(90deg,#fbf7f1_0%,rgba(251,247,241,0.92)_35%,rgba(251,247,241,0))]" />
             <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-28 bg-[linear-gradient(270deg,#ede7db_0%,rgba(237,231,219,0.92)_35%,rgba(237,231,219,0))]" />
@@ -979,7 +1442,7 @@ function HeroShowcaseRibbon() {
                     <article
                       key={`${loop}-${card.title}`}
                       data-hero-card
-                      className="group relative h-[29rem] w-[23.5rem] shrink-0 overflow-hidden rounded-[2rem] border border-black/8 bg-[rgba(255,255,255,0.9)] p-5 text-left shadow-[0_26px_80px_rgba(22,34,48,0.14)] backdrop-blur-md transition duration-300 [transform:translateY(var(--card-shift))_rotate(var(--card-rotate))] group-hover:[transform:translateY(calc(var(--card-shift)-4px))_rotate(var(--card-rotate))] hover:shadow-[0_30px_88px_rgba(22,34,48,0.18)]"
+                      className="group relative h-[27.9rem] w-[22.6rem] shrink-0 overflow-hidden rounded-[2rem] border border-black/8 bg-[rgba(255,255,255,0.9)] p-5 text-left shadow-[0_26px_80px_rgba(22,34,48,0.14)] backdrop-blur-md transition duration-300 [transform:translateY(var(--card-shift))_rotate(var(--card-rotate))] group-hover:[transform:translateY(calc(var(--card-shift)-4px))_rotate(var(--card-rotate))] hover:shadow-[0_30px_88px_rgba(22,34,48,0.18)]"
                       style={{
                         ["--card-shift" as string]: `${cardOffsets[index % cardOffsets.length]}px`,
                         ["--card-rotate" as string]: `${cardRotations[index % cardRotations.length]}deg`,
@@ -1059,6 +1522,7 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number>(0);
   const [headerScrolled, setHeaderScrolled] = useState(false);
   const [auditSubmitted, setAuditSubmitted] = useState(false);
+  const [activeAuditIssue, setActiveAuditIssue] = useState(0);
 
   useLayoutEffect(() => {
     const page = pageRef.current;
@@ -1242,6 +1706,7 @@ export default function HomePage() {
     event.currentTarget.reset();
   };
 
+  const currentAuditIssue = websiteAuditIssues[activeAuditIssue];
   const currentYear = new Date().getFullYear();
 
   return (
@@ -1318,44 +1783,60 @@ export default function HomePage() {
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 opacity-[0.03]"
+            className="pointer-events-none absolute left-[3%] top-[22%] z-[1] h-[24rem] w-[34rem] rounded-[42%_58%_61%_39%_/_48%_42%_58%_52%] opacity-[0.38] blur-[62px] sm:left-[5%] sm:w-[36rem] md:h-[25rem] md:w-[40rem] lg:h-[26rem] lg:w-[44rem]"
             style={{
-              backgroundImage:
-                "radial-gradient(circle at 20% 20%, rgba(7,24,39,0.1) 0.45px, transparent 0.68px), radial-gradient(circle at 80% 30%, rgba(7,24,39,0.08) 0.4px, transparent 0.64px), radial-gradient(circle at 50% 70%, rgba(7,24,39,0.06) 0.36px, transparent 0.6px)",
-              backgroundSize: "20px 20px, 24px 24px, 28px 28px",
-              backgroundPosition: "0 0, 8px 10px, 12px 5px",
+              background:
+                "radial-gradient(circle at 34% 34%, rgba(250, 244, 234, 0.94) 0%, rgba(245, 236, 222, 0.78) 34%, rgba(236, 224, 206, 0.36) 58%, rgba(236, 224, 206, 0) 78%)",
+              transform: "rotate(-8deg)",
             }}
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute left-[-10%] top-[12%] z-0 h-[22rem] w-[34rem] rounded-[999px] bg-[radial-gradient(ellipse_at_center,rgba(248,244,238,0.9)_0%,rgba(248,244,238,0.5)_38%,rgba(248,244,238,0.08)_64%,rgba(248,244,238,0)_100%)] opacity-80 blur-3xl sm:left-[-4%] sm:w-[38rem] md:w-[42rem] lg:h-[24rem] lg:w-[46rem]"
+            className="pointer-events-none absolute right-[5%] top-[25%] z-[1] h-[26rem] w-[34rem] rounded-[56%_44%_46%_54%_/_42%_58%_44%_56%] opacity-[0.4] blur-[68px] sm:right-[7%] sm:w-[36rem] md:h-[27rem] md:w-[40rem] lg:h-[28rem] lg:w-[44rem]"
+            style={{
+              background:
+                "radial-gradient(circle at 40% 42%, rgba(202, 217, 229, 0.88) 0%, rgba(190, 206, 220, 0.64) 34%, rgba(170, 190, 208, 0.28) 58%, rgba(170, 190, 208, 0) 78%)",
+              transform: "rotate(7deg)",
+            }}
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute right-[-10%] top-[16%] z-0 h-[20rem] w-[28rem] rounded-[999px] bg-[radial-gradient(ellipse_at_center,rgba(202,216,228,0.42)_0%,rgba(202,216,228,0.18)_42%,rgba(202,216,228,0.04)_66%,rgba(202,216,228,0)_100%)] opacity-90 blur-3xl sm:right-[-4%] sm:w-[32rem] md:h-[22rem] md:w-[36rem] lg:top-[18%] lg:h-[24rem] lg:w-[40rem]"
+            className="pointer-events-none absolute left-1/2 bottom-[10.75rem] z-[4] h-[16rem] w-[72rem] max-w-[94vw] -translate-x-1/2 rounded-[46%_54%_52%_48%_/_58%_42%_60%_40%] opacity-[0.34] blur-[86px] sm:bottom-[11rem] md:h-[17rem] lg:bottom-[11.5rem] lg:h-[18rem]"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(244, 238, 228, 0.92) 0%, rgba(236, 228, 217, 0.64) 36%, rgba(211, 221, 230, 0.24) 62%, rgba(244, 238, 228, 0) 82%)",
+            }}
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-[6%] z-0 h-[11rem] w-[22rem] -translate-x-1/2 rounded-[999px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.44)_0%,rgba(255,255,255,0.18)_40%,rgba(255,255,255,0)_74%)] opacity-75 blur-3xl md:h-[13rem] md:w-[28rem]"
+            className="pointer-events-none absolute left-1/2 top-[5%] z-[1] h-[11rem] w-[23rem] -translate-x-1/2 rounded-[999px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.34)_0%,rgba(255,255,255,0.12)_42%,rgba(255,255,255,0)_80%)] opacity-75 blur-[90px] md:h-[13rem] md:w-[28rem]"
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 z-0 h-40 bg-[linear-gradient(180deg,rgba(255,255,255,0.66),rgba(255,255,255,0.18)_48%,rgba(255,255,255,0)_100%)]"
+            className="pointer-events-none absolute inset-x-0 top-0 z-0 h-44 bg-[linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.18)_42%,rgba(255,255,255,0)_100%)]"
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-[4%] bottom-[10.5rem] z-0 h-[18rem] rounded-[999px] bg-[radial-gradient(ellipse_at_center,rgba(244,238,228,0.72)_0%,rgba(244,238,228,0.42)_36%,rgba(244,238,228,0.12)_62%,rgba(244,238,228,0)_100%)] blur-3xl sm:inset-x-[8%] sm:bottom-[11rem] md:h-[19rem] lg:bottom-[12rem] lg:h-[20rem]"
+            className="pointer-events-none absolute inset-0 z-[2] opacity-[0.045]"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 18% 22%, rgba(92, 104, 118, 0.34) 0.4px, transparent 0.8px), radial-gradient(circle at 78% 28%, rgba(88, 98, 112, 0.28) 0.35px, transparent 0.78px), radial-gradient(circle at 48% 74%, rgba(110, 120, 132, 0.22) 0.3px, transparent 0.72px)",
+              backgroundSize: "18px 18px, 20px 20px, 24px 24px",
+              backgroundPosition: "0 0, 7px 11px, 12px 5px",
+            }}
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-[-8%] bottom-[5.25rem] z-0 h-[18rem] bg-[radial-gradient(ellipse_at_center,rgba(234,226,214,0.22)_0%,rgba(234,226,214,0.12)_42%,rgba(234,226,214,0.03)_68%,rgba(234,226,214,0)_100%)] blur-2xl"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute right-[8%] bottom-[14rem] z-0 h-[12rem] w-[20rem] rounded-[999px] bg-[radial-gradient(ellipse_at_center,rgba(112,134,154,0.14)_0%,rgba(112,134,154,0.06)_44%,rgba(112,134,154,0)_78%)] blur-3xl md:h-[14rem] md:w-[24rem]"
+            className="pointer-events-none absolute inset-0 z-[3] opacity-[0.032]"
+            style={{
+              backgroundImage:
+                "repeating-radial-gradient(circle at 0 0, rgba(80, 88, 98, 0.18) 0, rgba(80, 88, 98, 0.18) 0.55px, transparent 0.9px, transparent 4px)",
+              backgroundSize: "10px 10px",
+              mixBlendMode: "multiply",
+            }}
           />
 
-          <div className="relative z-10 mx-auto flex min-h-svh max-w-[1440px] flex-col px-5 pb-24 pt-28 sm:px-8 sm:pb-24 sm:pt-32 md:px-10 lg:px-14 lg:pb-28 lg:pt-36 xl:px-20">
+          <div className="relative z-10 mx-auto flex min-h-svh max-w-[1440px] flex-col px-5 pb-24 pt-28 sm:px-8 sm:pb-24 sm:pt-32 md:px-10 lg:px-14 lg:pb-32 lg:pt-36 xl:px-20">
             <div className="mx-auto flex w-full max-w-[1080px] flex-1 flex-col items-center text-center">
               <div data-hero-copy className="max-w-[980px]">
                 <p className="text-[0.72rem] font-semibold uppercase tracking-[0.34em] text-[#3f5668] sm:text-[0.76rem]">
@@ -1407,41 +1888,129 @@ export default function HomePage() {
 
           <div
             data-hero-divider
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-28 opacity-0 bg-[linear-gradient(180deg,rgba(15,31,45,0)_0%,rgba(9,17,28,0.22)_38%,rgba(6,12,20,0.84)_100%)]"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-40 opacity-0 bg-[linear-gradient(180deg,rgba(15,31,45,0)_0%,rgba(12,22,34,0.08)_28%,rgba(9,17,28,0.28)_56%,rgba(6,12,20,0.78)_100%)]"
           />
         </section>
 
-        <SceneSection data-problem-section tone="night" className="border-t border-white/8">
-          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-14 xl:px-20">
-            <SectionIntro
-              label="The Problem"
-              title="Your website may be costing you leads every single week."
-              body="Most websites do not fail because of one big problem. They lose leads through small leaks across the journey."
-            />
+        <SceneSection data-problem-section tone="dawn" className="-mt-8 scroll-mt-32 pt-24">
+          <div className="pointer-events-none absolute inset-0 z-[4] bg-[linear-gradient(180deg,rgba(249,245,238,0.98),rgba(247,243,236,0.98))]" />
+          <motion.div
+            aria-hidden="true"
+            initial={{ opacity: 0.52, y: 0 }}
+            whileInView={{ opacity: 0.75, y: -16 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            className="pointer-events-none absolute inset-0 z-[4] bg-[radial-gradient(circle_at_12%_20%,rgba(255,252,247,0.96),transparent_24%),radial-gradient(circle_at_84%_22%,rgba(196,212,225,0.24),transparent_22%),radial-gradient(circle_at_52%_78%,rgba(241,234,224,0.82),transparent_28%)]"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-[4] opacity-[0.03]"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 18% 24%, rgba(7,24,39,0.14) 0.45px, transparent 0.7px), radial-gradient(circle at 74% 32%, rgba(7,24,39,0.1) 0.4px, transparent 0.66px), radial-gradient(circle at 42% 72%, rgba(7,24,39,0.08) 0.36px, transparent 0.64px)",
+              backgroundSize: "18px 18px, 22px 22px, 24px 24px",
+              backgroundPosition: "0 0, 6px 8px, 12px 5px",
+            }}
+          />
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-40 bg-[linear-gradient(180deg,rgba(246,240,231,0.98),rgba(246,240,231,0.76)_44%,rgba(246,240,231,0)_100%)]" />
+          <div className="pointer-events-none absolute inset-x-0 top-[-3.5rem] z-[5] h-28 bg-[radial-gradient(ellipse_at_center,rgba(248,243,236,0.98)_0%,rgba(248,243,236,0)_72%)] blur-2xl" />
 
-            <div className="mt-14 grid gap-5 lg:grid-cols-3">
-              {problemCards.map((card) => (
-                <article
-                  key={card.title}
-                  data-reveal-card
-                  className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.78),rgba(5,10,18,0.58))] p-7 shadow-[0_20px_70px_rgba(0,0,0,0.24)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-white/16"
-                >
-                  <div className="mb-5 h-px w-16 bg-[linear-gradient(90deg,rgba(220,232,244,0.88),rgba(220,232,244,0.06))]" />
-                  <h3 className="text-[1.38rem] font-medium tracking-[-0.04em] text-white">
-                    {card.title}
-                  </h3>
-                  <p className="mt-4 text-[0.98rem] leading-7 text-white/66">{card.body}</p>
-                </article>
-              ))}
+          <div className="relative z-[6] mx-auto max-w-[1560px] px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-14 lg:py-32 xl:px-16 2xl:px-20">
+            <div className="grid gap-12 xl:grid-cols-[minmax(0,0.34fr)_minmax(0,0.66fr)] xl:items-start xl:gap-24">
+              <div data-reveal-intro className="max-w-[36rem] pt-6">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082] sm:text-[0.72rem]">
+                  THE LEAKS YOU DON&apos;T SEE
+                </p>
+                <h2 className="mt-5 max-w-[12ch] text-[2.7rem] font-medium leading-[0.94] tracking-[-0.055em] text-[#071827] sm:text-[3.6rem] md:text-[4.2rem]">
+                  Your website may be costing you leads every single week.
+                </h2>
+                <p className="mt-6 max-w-[36rem] text-[1rem] leading-8 text-[#42596b] md:text-[1.08rem]">
+                  Most service businesses do not realise how many opportunities they are
+                  quietly losing online.
+                </p>
+                <p className="mt-9 max-w-[36rem] text-[1rem] leading-8 text-[#233c50] md:text-[1.04rem]">
+                  The result is simple: people show interest, but fewer of them actually
+                  become enquiries, bookings, or customers.
+                </p>
+                <p className="mt-9 text-[0.78rem] font-semibold uppercase tracking-[0.24em] text-[#6d8090]">
+                  Explore the most common places where service websites lose leads.
+                </p>
+              </div>
+
+              <motion.div
+                data-reveal-card
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="relative rounded-[2.75rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(249,244,237,0.98))] p-4 shadow-[0_28px_80px_rgba(32,46,61,0.09)] backdrop-blur-xl sm:p-5"
+              >
+                <div className="rounded-[2.15rem] border border-[rgba(7,24,39,0.07)] bg-[linear-gradient(180deg,#fdfbf7,#f4eee5)] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+                  <div className="flex flex-col gap-3 border-b border-[rgba(7,24,39,0.08)] px-1 pb-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <span className="rounded-full border border-[rgba(7,24,39,0.08)] bg-white/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#5a7082]">
+                        Website lead leak audit
+                      </span>
+                      <p className="mt-3 text-sm leading-7 text-[#536878]">
+                        Click a leak to see how it quietly affects what visitors do next.
+                      </p>
+                    </div>
+                    <span className="text-[0.62rem] font-medium uppercase tracking-[0.2em] text-[#6b8294]">
+                      BrightSpace Interiors
+                    </span>
+                  </div>
+
+                  <div className="mt-5">
+                    <AuditWebsiteMockup issue={currentAuditIssue} issueIndex={activeAuditIssue} />
+                  </div>
+                </div>
+              </motion.div>
             </div>
 
-            <p
-              data-reveal-card
-              className="mt-10 max-w-3xl text-[0.98rem] leading-7 text-white/58"
-            >
-              Most websites do not fail because of one big problem. They lose leads
-              through small leaks across the journey.
-            </p>
+            <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {websiteProblemCards.map((card) => {
+                const mappedIssue = websiteAuditIssues[card.issueIndex];
+                const isActive = activeAuditIssue === card.issueIndex;
+
+                return (
+                  <button
+                    key={card.id}
+                    type="button"
+                    data-reveal-card
+                    onClick={() => setActiveAuditIssue(card.issueIndex)}
+                    className={`cursor-pointer rounded-[1.5rem] border p-5 text-left transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#89bee7] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f3eb] ${
+                      isActive
+                        ? "border-[#102130] bg-[#102130] text-white shadow-[0_18px_40px_rgba(16,33,48,0.14)]"
+                        : "border-[rgba(7,24,39,0.08)] bg-[rgba(255,252,247,0.78)] text-[#102130] shadow-[0_16px_40px_rgba(20,34,49,0.05)] hover:-translate-y-0.5 hover:border-[rgba(7,24,39,0.16)] hover:bg-white"
+                    }`}
+                  >
+                    <div className={`text-[0.62rem] font-semibold uppercase tracking-[0.2em] ${isActive ? "text-white/56" : "text-[#6d8191]"}`}>
+                      {card.kicker}
+                    </div>
+                    <h3 className="mt-4 text-[1.12rem] font-medium leading-6 tracking-[-0.03em]">
+                      {card.title}
+                    </h3>
+                    <p className={`mt-3 text-[0.92rem] leading-7 ${isActive ? "text-white/76" : "text-[#526777]"}`}>
+                      {card.description}
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {mappedIssue.affects.map((chip) => (
+                        <span
+                          key={chip}
+                          className={`rounded-full border px-3 py-1.5 text-[0.62rem] font-semibold uppercase tracking-[0.14em] ${
+                            isActive
+                              ? "border-white/12 bg-white/8 text-white/76"
+                              : "border-[rgba(7,24,39,0.08)] bg-[rgba(181,216,241,0.18)] text-[#325069]"
+                          }`}
+                        >
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </SceneSection>
 

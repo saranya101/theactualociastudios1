@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { DM_Serif_Display } from "next/font/google";
 import Link from "next/link";
-import { FormEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import ConstellationWhale from "./components/ConstellationWhale";
 import OciaButton from "./components/OciaButton";
 import SceneSection from "./components/SceneSection";
@@ -326,7 +326,7 @@ const auditChecklist = [
   "SEO basics review",
   "Booking and contact flow review",
   "Quick-win opportunities",
-  "Recommended next steps",
+  "Recommended next-step services",
 ];
 
 const servicePillars = [
@@ -1693,9 +1693,9 @@ function ValueScrollWall() {
 export default function HomePage() {
   const pageRef = useRef<HTMLDivElement | null>(null);
   const heroSectionRef = useRef<HTMLElement | null>(null);
+  const reduceMotion = useReducedMotion();
   const [openFaq, setOpenFaq] = useState<number>(0);
   const [headerScrolled, setHeaderScrolled] = useState(false);
-  const [auditSubmitted, setAuditSubmitted] = useState(false);
   const [activeAuditIssue, setActiveAuditIssue] = useState(0);
 
   useLayoutEffect(() => {
@@ -1855,12 +1855,6 @@ export default function HomePage() {
       ctx.revert();
     };
   }, []);
-
-  const handleAuditSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setAuditSubmitted(true);
-    event.currentTarget.reset();
-  };
 
   const currentAuditIssue = websiteLeakIssues[activeAuditIssue];
   const currentYear = new Date().getFullYear();
@@ -2233,170 +2227,200 @@ export default function HomePage() {
           </div>
         </section>
 
-        <SceneSection
+        <section
           id="pricing"
           data-audit-section
-          tone="mist"
-          className="border-y border-white/8"
+          className="relative overflow-hidden border-y border-[rgba(7,24,39,0.07)] bg-[#f6f1e8]"
         >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_28%,rgba(150,182,216,0.12),transparent_20%),radial-gradient(circle_at_82%_18%,rgba(109,143,178,0.08),transparent_22%)]" />
-          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-14 xl:px-20">
-            <div className="grid gap-8 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-              <div
-                data-reveal-card
-                className="rounded-[2.25rem] border border-[rgba(220,230,240,0.12)] bg-[linear-gradient(180deg,rgba(9,17,29,0.86),rgba(5,10,18,0.72))] p-7 shadow-[0_24px_90px_rgba(0,0,0,0.32)] backdrop-blur-xl sm:p-8"
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_22%,rgba(214,228,238,0.42),transparent_24%),radial-gradient(circle_at_82%_74%,rgba(241,232,220,0.72),transparent_28%)]" />
+          <div className="relative mx-auto max-w-[1480px] px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-14 xl:px-20">
+            <div className="grid items-center gap-10 xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] xl:gap-12">
+              <motion.div
+                id="contact"
+                data-reveal-intro
+                initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.35 }}
+                transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+                className="max-w-[38rem]"
               >
-                <SectionIntro
-                  label="Free Audit"
-                  title="Start with a free website opportunity audit."
-                  body="If your website is underperforming, we'll help you identify where leads, trust, visibility, and conversions are being lost."
-                />
-
-                <div className="mt-8 grid gap-3">
-                  {auditChecklist.map((item) => (
-                    <div
-                      key={item}
-                      data-reveal-chip
-                      className="flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3"
-                    >
-                      <span className="h-2 w-2 rounded-full bg-[rgba(220,232,244,0.86)] shadow-[0_0_16px_rgba(182,210,242,0.34)]" />
-                      <span className="text-sm leading-6 text-white/76">{item}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <p className="mt-8 text-[0.98rem] leading-7 text-white/62">
-                  You will walk away with a clearer picture of what is holding your website
-                  back and what to fix first.
+                <p className="text-[0.72rem] font-semibold uppercase tracking-[0.32em] text-[#6d8191]">
+                  FREE WEBSITE AUDIT
+                </p>
+                <h2
+                  className="mt-6 max-w-[12ch] text-[2.7rem] font-medium leading-[0.94] tracking-[-0.055em] text-[#071827] sm:text-[3.5rem] lg:text-[4.1rem]"
+                >
+                  Start with a free website opportunity audit
+                </h2>
+                <p className="mt-6 max-w-[30rem] text-[1.1rem] leading-8 text-[#1c3447]">
+                  If you are not sure what is underperforming, we will show you.
+                </p>
+                <p className="mt-5 max-w-[33rem] text-[1rem] leading-8 text-[#536979]">
+                  We review your website and identify the biggest gaps affecting leads,
+                  trust, visibility, and conversion.
                 </p>
 
-                <div className="mt-8">
-                  <OciaButton href="/#contact" arrow>
+                <div className="mt-8 rounded-[1.9rem] border border-[rgba(7,24,39,0.08)] bg-[rgba(234,242,247,0.58)] px-6 py-5 shadow-[0_16px_48px_rgba(16,33,48,0.06)]">
+                  <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[#5f7789]">
+                    Outcome
+                  </p>
+                  <p className="mt-3 text-[1rem] leading-8 text-[#25445a]">
+                    You will walk away with a clearer picture of what is holding your
+                    website back and what to fix first.
+                  </p>
+                </div>
+
+                <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                  <motion.a
+                    href={CALENDLY_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={
+                      reduceMotion
+                        ? undefined
+                        : { y: -3, boxShadow: "0 24px 48px rgba(7,24,39,0.22)" }
+                    }
+                    transition={{ duration: 0.24, ease: "easeOut" }}
+                    className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#071827] px-7 text-sm font-semibold tracking-[0.01em] text-[#f8f4ec] shadow-[0_18px_44px_rgba(7,24,39,0.16)] transition duration-300 hover:brightness-105"
+                  >
                     Claim My Free Audit
-                  </OciaButton>
+                  </motion.a>
                 </div>
-              </div>
 
-              <div
-                id="contact"
-                data-reveal-form
-                className="rounded-[2.25rem] border border-[rgba(220,230,240,0.14)] bg-[linear-gradient(180deg,rgba(11,20,33,0.9),rgba(6,12,20,0.78))] p-7 shadow-[0_24px_90px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:p-8"
+                <p className="mt-4 text-sm leading-7 text-[#6a7f8e]">
+                  No pressure. Just a clear review of what can be improved.
+                </p>
+              </motion.div>
+
+              <motion.div
+                data-reveal-card
+                initial={reduceMotion ? false : { opacity: 0, y: 34 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                whileHover={
+                  reduceMotion
+                    ? undefined
+                    : {
+                        y: -4,
+                        boxShadow: "0 34px 96px rgba(16,33,48,0.12)",
+                      }
+                }
+                viewport={{ once: true, amount: 0.28 }}
+                transition={{ duration: 0.78, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="relative rounded-[2rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,#fffdf8_0%,#fbf7ef_100%)] p-5 shadow-[0_28px_90px_rgba(16,33,48,0.08)] sm:p-7"
               >
-                <div className="rounded-[1.7rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))] p-6">
-                  <p className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/42">
-                    Request your audit
-                  </p>
-                  <h3 className="mt-4 text-[2rem] font-medium tracking-[-0.05em] text-white">
-                    Request Your Free Website Audit
-                  </h3>
-                  <p className="mt-4 max-w-2xl text-[0.98rem] leading-7 text-white/62">
-                    Tell us what your business needs more of and we&apos;ll review the
-                    website with that goal in mind.
-                  </p>
-
-                  <form onSubmit={handleAuditSubmit} className="mt-8 grid gap-4 sm:grid-cols-2">
-                    <label className="grid gap-2 text-sm text-white/72">
-                      <span>Name</span>
-                      <input
-                        required
-                        type="text"
-                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-[rgba(207,222,238,0.34)]"
-                        placeholder="Your name"
-                      />
-                    </label>
-                    <label className="grid gap-2 text-sm text-white/72">
-                      <span>Business Name</span>
-                      <input
-                        required
-                        type="text"
-                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-[rgba(207,222,238,0.34)]"
-                        placeholder="Business name"
-                      />
-                    </label>
-                    <label className="grid gap-2 text-sm text-white/72">
-                      <span>Website URL</span>
-                      <input
-                        required
-                        type="url"
-                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-[rgba(207,222,238,0.34)]"
-                        placeholder="https://"
-                      />
-                    </label>
-                    <label className="grid gap-2 text-sm text-white/72">
-                      <span>Email</span>
-                      <input
-                        required
-                        type="email"
-                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-[rgba(207,222,238,0.34)]"
-                        placeholder="you@business.com"
-                      />
-                    </label>
-                    <label className="grid gap-2 text-sm text-white/72">
-                      <span>Phone or WhatsApp</span>
-                      <input
-                        required
-                        type="text"
-                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-[rgba(207,222,238,0.34)]"
-                        placeholder="+65 ..."
-                      />
-                    </label>
-                    <label className="grid gap-2 text-sm text-white/72">
-                      <span>What do you want more of?</span>
-                      <select
-                        required
-                        defaultValue=""
-                        className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-white outline-none transition focus:border-[rgba(207,222,238,0.34)]"
-                      >
-                        <option value="" disabled className="text-[#08111b]">
-                          Select one
-                        </option>
-                        <option className="text-[#08111b]">More enquiries</option>
-                        <option className="text-[#08111b]">More bookings</option>
-                        <option className="text-[#08111b]">Better website conversion</option>
-                        <option className="text-[#08111b]">Better SEO visibility</option>
-                        <option className="text-[#08111b]">Better lead follow-up</option>
-                      </select>
-                    </label>
-                    <div className="sm:col-span-2">
-                      <button
-                        type="submit"
-                        className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[rgba(255,255,255,0.34)] bg-[linear-gradient(180deg,#ffffff_0%,#d7e0ea_100%)] px-6 text-sm font-semibold tracking-[-0.01em] text-[#061018] shadow-[0_12px_40px_rgba(180,210,255,0.12)] transition duration-300 hover:-translate-y-0.5 hover:border-[rgba(255,255,255,0.44)] hover:bg-[linear-gradient(180deg,#ffffff_0%,#e5edf6_100%)] hover:shadow-[0_18px_46px_rgba(180,210,255,0.2)]"
-                      >
-                        <span>Get My Free Website Audit</span>
-                        <span
-                          aria-hidden="true"
-                          className="text-base text-[#061018]/78 transition-transform duration-300 group-hover:translate-x-0.5"
-                        >
-                          →
-                        </span>
-                      </button>
-                    </div>
-                  </form>
-
-                  <p className="mt-5 text-sm leading-6 text-white/54">
-                    {auditSubmitted
-                      ? "Thanks, we've received your request. We'll review your website and get back to you with the next steps."
-                      : "Prefer to talk first? You can also book directly via Calendly."}
-                    {!auditSubmitted ? (
-                      <>
-                        {" "}
-                        <a
-                          href={CALENDLY_URL}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-white/78 underline decoration-white/18 underline-offset-4 transition hover:text-white"
-                        >
-                          Book a discovery call
-                        </a>
-                        .
-                      </>
-                    ) : null}
-                  </p>
+                <div className="pointer-events-none absolute inset-x-8 top-7 h-20 overflow-hidden rounded-[1.35rem] opacity-80">
+                  <motion.div
+                    aria-hidden="true"
+                    initial={reduceMotion ? false : { x: "-45%", opacity: 0.2 }}
+                    whileInView={reduceMotion ? undefined : { x: "140%", opacity: [0.14, 0.32, 0.14] }}
+                    viewport={{ once: false, amount: 0.2 }}
+                    transition={{
+                      duration: 4.8,
+                      delay: 0.3,
+                      ease: "easeInOut",
+                      repeat: reduceMotion ? 0 : Number.POSITIVE_INFINITY,
+                      repeatDelay: 1.8,
+                    }}
+                    className="h-full w-[34%] skew-x-[-18deg] bg-[linear-gradient(90deg,rgba(255,255,255,0),rgba(220,235,244,0.6),rgba(255,255,255,0))] blur-[10px]"
+                  />
                 </div>
-              </div>
+
+                <div className="relative rounded-[1.7rem] border border-[rgba(7,24,39,0.08)] bg-white/72 p-6 sm:p-8">
+                  <div className="flex flex-col gap-4 border-b border-[rgba(7,24,39,0.08)] pb-6 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <span className="rounded-full border border-[rgba(37,68,90,0.12)] bg-[rgba(234,243,248,0.88)] px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-[#32516a]">
+                          FREE REVIEW
+                        </span>
+                        <span className="rounded-full border border-[rgba(7,24,39,0.08)] bg-[rgba(246,241,232,0.92)] px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-[#5a6f7f]">
+                          QUICK WINS FIRST
+                        </span>
+                      </div>
+                      <h3 className="mt-5 text-[2rem] font-medium tracking-[-0.05em] text-[#071827] sm:text-[2.35rem]">
+                        Website Opportunity Audit
+                      </h3>
+                    </div>
+
+                    <div className="grid max-w-[12rem] gap-2 text-left sm:text-right">
+                      <div className="rounded-[1.15rem] border border-[rgba(7,24,39,0.07)] bg-[rgba(221,236,245,0.62)] px-4 py-3">
+                        <p className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-[#5d7688]">
+                          Audit Steps
+                        </p>
+                        <p className="mt-2 text-sm font-medium text-[#071827]">
+                          01 Review
+                        </p>
+                        <p className="text-sm font-medium text-[#071827]">02 Prioritise</p>
+                        <p className="text-sm font-medium text-[#071827]">03 Recommend</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex flex-wrap gap-2.5">
+                    {["Trust", "Leads", "SEO", "Conversion"].map((chip) => (
+                      <span
+                        key={chip}
+                        data-reveal-chip
+                        className="rounded-full border border-[rgba(7,24,39,0.08)] bg-[rgba(231,238,244,0.86)] px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-[#25445a]"
+                      >
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-7 rounded-[1.5rem] border border-[rgba(7,24,39,0.08)] bg-[rgba(255,255,255,0.76)]">
+                    {auditChecklist.map((item, index) => (
+                      <motion.div
+                        key={item}
+                        initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.65 }}
+                        transition={{
+                          duration: 0.46,
+                          delay: reduceMotion ? 0 : 0.08 + index * 0.06,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                      >
+                        <div
+                          data-reveal-line
+                          className="flex items-center gap-4 px-5 py-4 sm:px-6"
+                        >
+                          <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full border border-[rgba(37,68,90,0.12)] bg-[rgba(234,243,248,0.94)] text-[#25445a]">
+                            <svg
+                              viewBox="0 0 20 20"
+                              fill="none"
+                              className="h-4 w-4"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M4.5 10.2 8.1 13.8 15.5 6.4"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[0.96rem] leading-7 text-[#173044]">{item}</p>
+                          </div>
+                        </div>
+                        {index < auditChecklist.length - 1 ? (
+                          <div className="mx-5 h-px bg-[rgba(7,24,39,0.08)] sm:mx-6" />
+                        ) : null}
+                      </motion.div>
+                    ))}
+
+                    <div className="mx-5 mt-1 border-t border-[rgba(7,24,39,0.08)] px-0 py-4 sm:mx-6">
+                      <p className="text-[0.78rem] font-medium uppercase tracking-[0.18em] text-[#647988]">
+                        Clear gaps. Practical next steps. No guesswork.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
-        </SceneSection>
+        </section>
 
         <SceneSection
           id="services"

@@ -251,7 +251,11 @@ const valueScrollSteps = [
     title: "Improve trust",
     text: "Make visitors feel confident before they decide to reach out.",
     chips: ["Improve trust"],
-    squareTone: "sky",
+    squareBg: "#DDECF5",
+    squareText: "#071827",
+    chipBg: "#EEF6FA",
+    chipText: "#25445A",
+    ghostColor: "rgba(7,24,39,0.1)",
   },
   {
     number: "02",
@@ -259,7 +263,11 @@ const valueScrollSteps = [
     title: "Increase enquiries",
     text: "Guide more people toward calls, forms, WhatsApp, or bookings.",
     chips: ["Increase enquiries"],
-    squareTone: "sky",
+    squareBg: "#071827",
+    squareText: "#F8F4EC",
+    chipBg: "#E7EEF4",
+    chipText: "#071827",
+    ghostColor: "rgba(7,24,39,0.14)",
   },
   {
     number: "03",
@@ -267,7 +275,11 @@ const valueScrollSteps = [
     title: "Reduce friction",
     text: "Remove the small moments that make visitors hesitate or leave.",
     chips: ["Reduce friction"],
-    squareTone: "ivory",
+    squareBg: "#E9E2D6",
+    squareText: "#071827",
+    chipBg: "#F5EFE6",
+    chipText: "#5A4938",
+    ghostColor: "rgba(7,24,39,0.1)",
   },
   {
     number: "04",
@@ -275,7 +287,11 @@ const valueScrollSteps = [
     title: "Capture more leads",
     text: "Make sure interested visitors are recorded instead of getting lost.",
     chips: ["Capture more leads"],
-    squareTone: "navy",
+    squareBg: "#C9DDEB",
+    squareText: "#071827",
+    chipBg: "#EAF3F8",
+    chipText: "#18384F",
+    ghostColor: "rgba(7,24,39,0.12)",
   },
   {
     number: "05",
@@ -283,7 +299,11 @@ const valueScrollSteps = [
     title: "Respond faster",
     text: "Create a clearer enquiry flow so people are not left waiting.",
     chips: ["Respond faster"],
-    squareTone: "ivory",
+    squareBg: "#F1E7D5",
+    squareText: "#071827",
+    chipBg: "#FFF7EA",
+    chipText: "#6A4A1F",
+    ghostColor: "rgba(7,24,39,0.09)",
   },
   {
     number: "06",
@@ -291,7 +311,11 @@ const valueScrollSteps = [
     title: "Follow up better",
     text: "Keep warm leads moving instead of letting them go cold.",
     chips: ["Follow up better"],
-    squareTone: "navy",
+    squareBg: "#0E2435",
+    squareText: "#F8F4EC",
+    chipBg: "#EAF0F4",
+    chipText: "#071827",
+    ghostColor: "rgba(7,24,39,0.14)",
   },
 ] as const;
 
@@ -1476,12 +1500,6 @@ function ValueScrollWall() {
     ["0px", "-340px", "-680px", "-1020px", "-1360px", "-1700px"],
   );
   const [activeStep, setActiveStep] = useState(0);
-  const squareClasses = {
-    sky: "border-[rgba(162,193,219,0.34)] bg-[linear-gradient(180deg,#dcecf8,#d7e8f5)] text-[#102130]",
-    navy: "border-[rgba(16,33,48,0.14)] bg-[linear-gradient(180deg,#102130,#0d1b29)] text-[#f8f5ee]",
-    ivory:
-      "border-[rgba(11,28,43,0.08)] bg-[linear-gradient(180deg,rgba(255,252,247,0.98),rgba(244,238,229,0.96))] text-[#102130]",
-  } as const;
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (value) => {
@@ -1539,7 +1557,8 @@ function ValueScrollWall() {
               </div>
               <div className="relative grid gap-4">
                 <div
-                  className={`flex min-h-[10rem] items-center justify-center rounded-[1.65rem] border text-center text-[1.2rem] font-medium tracking-[-0.03em] ${squareClasses[step.squareTone]}`}
+                  className="flex min-h-[10rem] items-center justify-center rounded-[1.65rem] border border-[rgba(11,28,43,0.08)] text-center text-[1.2rem] font-medium tracking-[-0.03em]"
+                  style={{ backgroundColor: step.squareBg, color: step.squareText }}
                 >
                   {step.blockLabel}
                 </div>
@@ -1557,7 +1576,8 @@ function ValueScrollWall() {
                     {step.chips.map((chip) => (
                       <span
                         key={chip}
-                        className="rounded-full border border-[rgba(16,33,48,0.08)] bg-[rgba(232,240,247,0.72)] px-3 py-2 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-[#385268]"
+                        className="rounded-full border border-[rgba(16,33,48,0.08)] px-3 py-2 text-[0.66rem] font-semibold uppercase tracking-[0.16em]"
+                        style={{ backgroundColor: step.chipBg, color: step.chipText }}
                       >
                         {chip}
                       </span>
@@ -1579,7 +1599,7 @@ function ValueScrollWall() {
             <div className="pointer-events-none absolute inset-0 z-0 bg-[#F6F1E8]" />
             <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.42),transparent_42%),radial-gradient(circle_at_20%_18%,rgba(214,229,240,0.24),transparent_24%),radial-gradient(circle_at_82%_78%,rgba(255,249,240,0.64),transparent_32%)]" />
 
-            <div className="absolute left-[clamp(96px,8vw,160px)] top-1/2 z-20 w-[min(560px,34vw)] -translate-y-1/2">
+            <div className="absolute left-[clamp(180px,13vw,280px)] top-1/2 z-20 w-[min(540px,34vw)] -translate-y-1/2">
               <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
                 WHAT WE FIX
               </p>
@@ -1593,20 +1613,21 @@ function ValueScrollWall() {
               </p>
             </div>
 
-            <div className="pointer-events-none absolute right-[clamp(70px,7vw,140px)] top-1/2 z-0 flex h-[340px] w-[920px] max-w-[54vw] -translate-y-1/2 items-center justify-center">
+            <div className="pointer-events-none absolute right-[clamp(48px,5vw,90px)] top-1/2 z-0 flex h-[340px] w-[min(1040px,58vw)] -translate-y-1/2 items-center justify-center">
               <motion.span
                 key={valueScrollSteps[activeStep].blockLabel}
                 initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 0.2, y: 0 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="text-center text-[9rem] font-medium leading-none tracking-[-0.12em] text-[rgba(255,255,255,0.72)] xl:text-[10rem]"
+                className="text-center text-[8.25rem] font-medium leading-none tracking-[-0.12em] xl:text-[9.25rem]"
+                style={{ color: valueScrollSteps[activeStep].ghostColor }}
               >
                 {valueScrollSteps[activeStep].blockLabel}
               </motion.span>
             </div>
 
-            <div className="absolute right-[clamp(70px,7vw,140px)] top-1/2 z-10 flex h-[360px] w-[min(920px,54vw)] -translate-y-1/2 items-center justify-end gap-10">
-                <div className="relative h-[340px] w-[340px] shrink-0 overflow-hidden rounded-[32px]">
+            <div className="absolute right-[clamp(48px,5vw,90px)] top-1/2 z-10 flex h-[340px] w-[min(1040px,58vw)] -translate-y-1/2 items-center justify-end gap-[16px]">
+                <div className="relative h-[340px] w-[340px] shrink-0 overflow-hidden rounded-[30px] xl:rounded-[32px]">
                   <motion.div
                     style={reduceMotion ? undefined : { y: squareTrackY }}
                     className="will-change-transform"
@@ -1614,7 +1635,8 @@ function ValueScrollWall() {
                     {valueScrollSteps.map((step) => (
                       <div
                         key={step.number}
-                        className={`flex h-[340px] w-[340px] items-center justify-center rounded-[32px] border text-center text-[2.25rem] font-medium leading-[0.9] tracking-[-0.05em] shadow-[0_24px_56px_rgba(19,31,45,0.08)] ${squareClasses[step.squareTone]}`}
+                        className="flex h-[340px] w-[340px] items-center justify-center rounded-[30px] border border-[rgba(11,28,43,0.08)] text-center text-[2.85rem] font-medium leading-[0.88] tracking-[-0.05em] shadow-[0_24px_56px_rgba(19,31,45,0.08)] xl:rounded-[32px] xl:text-[3.1rem]"
+                        style={{ backgroundColor: step.squareBg, color: step.squareText }}
                       >
                         <span className="max-w-[8ch]">{step.blockLabel}</span>
                       </div>
@@ -1622,7 +1644,7 @@ function ValueScrollWall() {
                   </motion.div>
                 </div>
 
-                <div className="relative h-[340px] w-[620px] overflow-hidden rounded-[32px] border border-[rgba(11,28,43,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(252,249,244,0.97))] p-[44px] shadow-[0_28px_72px_rgba(18,31,44,0.11)]">
+                <div className="relative h-[340px] w-[640px] overflow-hidden rounded-[30px] border border-[rgba(11,28,43,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(252,249,244,0.97))] px-11 py-11 shadow-[0_28px_72px_rgba(18,31,44,0.11)] xl:rounded-[32px]">
                   <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(224,236,245,0.26),transparent_22%),radial-gradient(circle_at_82%_84%,rgba(247,239,228,0.24),transparent_26%)]" />
                   <div className="relative h-full">
                     <motion.div
@@ -1636,10 +1658,10 @@ function ValueScrollWall() {
                         <p className="text-[0.64rem] font-semibold uppercase tracking-[0.22em] text-[#6a8090]">
                           {valueScrollSteps[activeStep].number}
                         </p>
-                        <h3 className="mt-4 max-w-[16ch] text-[2.45rem] font-medium leading-[0.95] tracking-[-0.05em] text-[#102130]">
+                        <h3 className="mt-4 max-w-[15ch] text-[2.7rem] font-medium leading-[0.92] tracking-[-0.05em] text-[#102130] xl:text-[2.95rem]">
                           {valueScrollSteps[activeStep].title}
                         </h3>
-                        <p className="mt-5 max-w-[30rem] text-[1rem] leading-8 text-[#4e6475]">
+                        <p className="mt-5 max-w-[28rem] text-[1.14rem] leading-8 text-[#4e6475] xl:max-w-[30rem] xl:text-[1.18rem]">
                           {valueScrollSteps[activeStep].text}
                         </p>
                       </div>
@@ -1648,7 +1670,11 @@ function ValueScrollWall() {
                         {valueScrollSteps[activeStep].chips.map((chip) => (
                           <span
                             key={chip}
-                            className="rounded-full border border-[rgba(16,33,48,0.08)] bg-[rgba(232,240,247,0.82)] px-3.5 py-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#385268]"
+                            className="rounded-full border border-[rgba(16,33,48,0.08)] px-3.5 py-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em]"
+                            style={{
+                              backgroundColor: valueScrollSteps[activeStep].chipBg,
+                              color: valueScrollSteps[activeStep].chipText,
+                            }}
                           >
                             {chip}
                           </span>

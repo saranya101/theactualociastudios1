@@ -2,11 +2,7 @@
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  motion,
-  useReducedMotion,
-} from "framer-motion";
-import Lenis from "lenis";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { DM_Serif_Display } from "next/font/google";
 import Link from "next/link";
 import { FormEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -141,164 +137,163 @@ const heroShowcaseCards = [
   },
 ];
 
-const websiteAuditIssues = [
+const websiteLeakIssues = [
   {
-    id: "unclear-messaging",
-    tab: "Unclear messaging",
-    title: "Visitors do not instantly understand what you do",
-    description:
-      "If people cannot quickly understand your offer, who you help, and why it matters, they leave before they enquire.",
-    annotationLabel: "Unclear offer",
-    annotationText: "The value is too vague for visitors to act with confidence.",
-    suggestedFix: "Clarify the offer, audience, and outcome in the first screen before asking visitors to act.",
-    affects: ["Clarity", "Trust", "Conversion"],
-    focus: "hero",
-    markerClass: "left-[36%] top-[22%]",
-    connectorClass: "left-[38%] top-[23.2%] w-[23%]",
+    id: "messaging",
+    number: "01",
+    tabLabel: "Unclear messaging",
+    cardTitle: "Visitors do not instantly understand what you do",
+    shortBody:
+      "If your offer is unclear, people hesitate before they ever reach the next step.",
+    annotationTitle: "UNCLEAR OFFER",
+    annotationBody:
+      "Visitors do not instantly understand what you do, who you help, or why they should choose you.",
+    affects: ["Clarity", "Positioning", "Conversion"],
+    hotspot: "hero-copy",
   },
   {
-    id: "weak-trust",
-    tab: "Weak trust",
-    title: "Your website does not build enough trust",
-    description:
-      "Weak visuals, missing proof, outdated testimonials, or unclear credibility signals make visitors hesitate.",
-    annotationLabel: "Weak proof",
-    annotationText: "Trust signals are missing, outdated, or too low-impact.",
-    suggestedFix: "Add stronger testimonials, recognisable proof, and clearer credibility signals near the decision points.",
+    id: "trust",
+    number: "02",
+    tabLabel: "Weak trust",
+    cardTitle: "Your website does not build enough trust",
+    shortBody:
+      "Weak proof, poor presentation, and missing credibility signals make people less likely to enquire.",
+    annotationTitle: "WEAK PROOF",
+    annotationBody:
+      "Trust signals are missing, outdated, or too weak near key decision points.",
     affects: ["Trust", "Credibility", "Enquiries"],
-    focus: "proof",
-    markerClass: "left-[76%] top-[32%]",
-    connectorClass: "left-[78%] top-[33.1%] w-[8%]",
+    hotspot: "trust-row",
   },
   {
-    id: "weak-cta",
-    tab: "Weak CTA",
-    title: "Your CTA is weak or easy to miss",
-    description:
-      "If the next step is not obvious, visitors may browse without ever contacting you.",
-    annotationLabel: "Hidden CTA",
-    annotationText: "The main call-to-action blends in or appears too late.",
-    suggestedFix: "Strengthen CTA contrast and repeat the next step in the places where visitor intent peaks.",
-    affects: ["CTA", "Conversion", "Action"],
-    focus: "cta",
-    markerClass: "left-[28%] top-[40%]",
-    connectorClass: "left-[30%] top-[41.1%] w-[31%]",
+    id: "cta",
+    number: "03",
+    tabLabel: "Weak CTA",
+    cardTitle: "Your CTA is weak or easy to miss",
+    shortBody:
+      "If the next step is not obvious, visitors keep browsing instead of taking action.",
+    annotationTitle: "HIDDEN CTA",
+    annotationBody:
+      "Your main call-to-action is buried, visually weak, or appears too late.",
+    affects: ["CTA", "Action", "Conversion"],
+    hotspot: "cta-button",
   },
   {
-    id: "booking-friction",
-    tab: "Booking friction",
-    title: "Your forms or booking flow create friction",
-    description:
-      "Too many steps, unclear fields, or a slow booking process can stop interested visitors from converting.",
-    annotationLabel: "Booking friction",
-    annotationText: "Extra steps create hesitation before the enquiry is completed.",
-    suggestedFix: "Reduce steps, simplify fields, and make the path from interest to booked call feel immediate.",
+    id: "booking",
+    number: "04",
+    tabLabel: "Booking friction",
+    cardTitle: "Your forms or booking flow create friction",
+    shortBody:
+      "Too many steps, unclear forms, or a clunky booking process reduce conversions.",
+    annotationTitle: "BOOKING FRICTION",
+    annotationBody:
+      "Too many steps, unclear inputs, or weak form structure create hesitation.",
     affects: ["Booking", "Forms", "Conversion"],
-    focus: "booking",
-    markerClass: "left-[18%] top-[79%]",
-    connectorClass: "left-[20%] top-[80.1%] w-[41%]",
+    hotspot: "booking-panel",
   },
   {
-    id: "enquiry-flow",
-    tab: "Enquiry flow",
-    title: "Your WhatsApp or enquiry process is inconsistent",
-    description:
-      "When the enquiry path feels unclear or inconsistent, warm leads can lose momentum.",
-    annotationLabel: "Broken enquiry path",
-    annotationText: "Visitors are unsure what happens after they reach out.",
-    suggestedFix: "Show the next step clearly and make the handoff from visitor to conversation feel guided and immediate.",
-    affects: ["WhatsApp", "Enquiry", "Response"],
-    focus: "whatsapp",
-    markerClass: "left-[50%] top-[83%]",
-    connectorClass: "left-[52%] top-[84.1%] w-[9%]",
+    id: "whatsapp",
+    number: "05",
+    tabLabel: "Enquiry flow",
+    cardTitle: "Your WhatsApp or enquiry process is inconsistent",
+    shortBody:
+      "When enquiries are not guided clearly, interested visitors drop off too easily.",
+    annotationTitle: "INCONSISTENT ENQUIRY FLOW",
+    annotationBody:
+      "The path from interest to message, call, or consultation is not clear enough.",
+    affects: ["WhatsApp", "Enquiries", "Response"],
+    hotspot: "whatsapp-panel",
   },
   {
-    id: "seo-visibility",
-    tab: "SEO visibility",
-    title: "Your SEO is too weak to bring in the right traffic",
-    description:
-      "Even a good website underperforms if the right people cannot find it when they are searching.",
-    annotationLabel: "Low visibility",
-    annotationText: "Your site is not showing up clearly for high-intent searches.",
-    suggestedFix: "Tighten page targeting, local relevance, and structure so the right people can actually find you.",
-    affects: ["Visibility", "Search", "Lead quality"],
-    focus: "seo",
-    markerClass: "left-[48%] top-[67%]",
-    connectorClass: "left-[50%] top-[68.1%] w-[11%]",
+    id: "seo",
+    number: "06",
+    tabLabel: "SEO visibility",
+    cardTitle: "Your SEO is too weak to bring in the right traffic",
+    shortBody:
+      "Even a good website underperforms if the right people cannot find it when searching.",
+    annotationTitle: "LOW VISIBILITY",
+    annotationBody:
+      "Your site is not showing up clearly for relevant high-intent searches.",
+    affects: ["Visibility", "Search", "Lead Quality"],
+    hotspot: "seo-panel",
   },
   {
-    id: "no-follow-up",
-    tab: "No follow-up",
-    title: "Your leads are not being followed up properly",
-    description:
-      "Leads that are not followed up quickly and consistently often go cold.",
-    annotationLabel: "Follow-up gap",
-    annotationText: "Warm enquiries are not being nurtured after the first contact.",
-    suggestedFix: "Create a response sequence so every warm lead gets a timely next step instead of fading out.",
-    affects: ["Follow-up", "Response speed", "Revenue"],
-    focus: "followup",
-    markerClass: "left-[82%] top-[74%]",
-    connectorClass: "left-[84%] top-[75.1%] w-[2%]",
+    id: "followup",
+    number: "07",
+    tabLabel: "Follow-up leaks",
+    cardTitle: "Your leads are not being followed up properly",
+    shortBody:
+      "Warm leads go cold when there is no clear follow-up system after first contact.",
+    annotationTitle: "NO FOLLOW-UP",
+    annotationBody:
+      "Without a proper follow-up system, interested prospects quietly disappear.",
+    affects: ["Follow-up", "Pipeline", "Sales"],
+    hotspot: "followup-panel",
   },
   {
-    id: "no-tracking",
-    tab: "No tracking",
-    title: "Your team has no clean system for tracking opportunities",
-    description:
-      "Without a clear lead system, enquiries become scattered across forms, WhatsApp, inboxes, and memory.",
-    annotationLabel: "No lead visibility",
-    annotationText: "Opportunities are hard to track, prioritise, and close.",
-    suggestedFix: "Centralise enquiries into one clean pipeline so nothing depends on memory or scattered inboxes.",
-    affects: ["CRM", "Tracking", "Pipeline"],
-    focus: "crm",
-    markerClass: "left-[82%] top-[86%]",
-    connectorClass: "left-[84%] top-[87.1%] w-[2%]",
+    id: "tracking",
+    number: "08",
+    tabLabel: "No tracking",
+    cardTitle: "Your team has no clean system for tracking opportunities",
+    shortBody:
+      "If leads are not tracked properly, you lose visibility over what is working and what is being lost.",
+    annotationTitle: "NO TRACKING",
+    annotationBody:
+      "Leads are not being tracked, organised, or managed clearly across the pipeline.",
+    affects: ["CRM", "Tracking", "Operations"],
+    hotspot: "crm-panel",
   },
 ] as const;
 
-const websiteProblemCards = [
+const valueScrollSteps = [
   {
-    id: "clarity-conversion",
-    kicker: "01",
-    title: "Clarity and conversion break first",
-    description:
-      "If visitors do not understand the offer fast enough, they hesitate, skim, and leave before taking the next step.",
-    issueIndex: 0,
+    number: "01",
+    blockLabel: "TRUST",
+    title: "Improve trust",
+    text: "Make visitors feel confident before they decide to reach out.",
+    chips: ["Improve trust"],
+    squareTone: "sky",
   },
   {
-    id: "trust-proof",
-    kicker: "02",
-    title: "Trust feels too light to act on",
-    description:
-      "Proof, testimonials, and credibility signals often exist, but not with enough weight near the moments that matter.",
-    issueIndex: 1,
+    number: "02",
+    blockLabel: "ENQUIRIES",
+    title: "Increase enquiries",
+    text: "Guide more people toward calls, forms, WhatsApp, or bookings.",
+    chips: ["Increase enquiries"],
+    squareTone: "sky",
   },
   {
-    id: "enquiry-friction",
-    kicker: "03",
-    title: "The enquiry path creates friction",
-    description:
-      "Weak CTAs, messy booking steps, or unclear handoff moments quietly reduce how many warm visitors actually reach out.",
-    issueIndex: 3,
+    number: "03",
+    blockLabel: "FRICTION",
+    title: "Reduce friction",
+    text: "Remove the small moments that make visitors hesitate or leave.",
+    chips: ["Reduce friction"],
+    squareTone: "ivory",
   },
   {
-    id: "visibility-tracking",
-    kicker: "04",
-    title: "Visibility and follow-up stay fragmented",
-    description:
-      "Even good websites underperform when the right traffic is weak and leads are not tracked cleanly after first contact.",
-    issueIndex: 7,
+    number: "04",
+    blockLabel: "LEADS",
+    title: "Capture more leads",
+    text: "Make sure interested visitors are recorded instead of getting lost.",
+    chips: ["Capture more leads"],
+    squareTone: "navy",
+  },
+  {
+    number: "05",
+    blockLabel: "SPEED",
+    title: "Respond faster",
+    text: "Create a clearer enquiry flow so people are not left waiting.",
+    chips: ["Respond faster"],
+    squareTone: "ivory",
+  },
+  {
+    number: "06",
+    blockLabel: "FOLLOW-UP",
+    title: "Follow up better",
+    text: "Keep warm leads moving instead of letting them go cold.",
+    chips: ["Follow up better"],
+    squareTone: "navy",
   },
 ] as const;
-
-const valueChips = [
-  "Improve trust",
-  "Increase enquiries",
-  "Reduce friction",
-  "Capture more leads",
-  "Respond faster",
-  "Follow up better",
-];
 
 const auditChecklist = [
   "Homepage and messaging review",
@@ -1018,12 +1013,41 @@ function ShowcaseCardVisual({ type }: { type: string }) {
 
 function AuditWebsiteMockup({
   issue,
-  issueIndex,
 }: {
-  issue: (typeof websiteAuditIssues)[number];
-  issueIndex: number;
+  issue: (typeof websiteLeakIssues)[number];
 }) {
-  const isFocus = (focus: (typeof websiteAuditIssues)[number]["focus"]) => issue.focus === focus;
+  const isHotspot = (hotspot: (typeof websiteLeakIssues)[number]["hotspot"]) => issue.hotspot === hotspot;
+  const hotspotPosition = {
+    "hero-copy": { markerClass: "left-[36%] top-[22%]", connectorClass: "left-[38%] top-[23.2%] w-[23%]" },
+    "trust-row": { markerClass: "left-[76%] top-[32%]", connectorClass: "left-[78%] top-[33.1%] w-[8%]" },
+    "cta-button": { markerClass: "left-[28%] top-[40%]", connectorClass: "left-[30%] top-[41.1%] w-[31%]" },
+    "booking-panel": { markerClass: "left-[18%] top-[79%]", connectorClass: "left-[20%] top-[80.1%] w-[41%]" },
+    "whatsapp-panel": { markerClass: "left-[50%] top-[83%]", connectorClass: "left-[52%] top-[84.1%] w-[9%]" },
+    "seo-panel": { markerClass: "left-[48%] top-[67%]", connectorClass: "left-[50%] top-[68.1%] w-[11%]" },
+    "followup-panel": { markerClass: "left-[82%] top-[74%]", connectorClass: "left-[84%] top-[75.1%] w-[2%]" },
+    "crm-panel": { markerClass: "left-[82%] top-[86%]", connectorClass: "left-[84%] top-[87.1%] w-[2%]" },
+  } as const;
+  const annotationBubblePosition = {
+    "hero-copy": "left-[5%] top-[11%] max-w-[13rem]",
+    "trust-row": "left-[58%] top-[17%] max-w-[12rem]",
+    "cta-button": "left-[6%] top-[31%] max-w-[12rem]",
+    "booking-panel": "left-[6%] top-[69%] max-w-[12rem]",
+    "whatsapp-panel": "left-[43%] top-[73%] max-w-[12rem]",
+    "seo-panel": "left-[40%] top-[57%] max-w-[12rem]",
+    "followup-panel": "left-[67%] top-[65%] max-w-[11rem]",
+    "crm-panel": "left-[66%] top-[78%] max-w-[11rem]",
+  } as const;
+  const contentTranslate = {
+    "hero-copy": "0%",
+    "trust-row": "-8%",
+    "cta-button": "-3%",
+    "booking-panel": "-24%",
+    "whatsapp-panel": "-30%",
+    "seo-panel": "-19%",
+    "followup-panel": "-29%",
+    "crm-panel": "-35%",
+  } as const;
+  const activeHotspot = hotspotPosition[issue.hotspot];
 
   return (
     <motion.div
@@ -1048,13 +1072,9 @@ function AuditWebsiteMockup({
               <span className="h-2.5 w-2.5 rounded-full bg-[#e5cfac]" />
               <span className="h-2.5 w-2.5 rounded-full bg-[#9ec5e3]" />
             </div>
-            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#5a7082]">
-              Website lead leak audit
-            </p>
+            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#5a7082]">Website lead leak audit</p>
           </div>
-          <p className="text-[0.62rem] font-medium uppercase tracking-[0.2em] text-[#6b8294]">
-            BrightSpace Interiors
-          </p>
+          <p className="text-[0.62rem] font-medium uppercase tracking-[0.2em] text-[#6b8294]">BrightSpace Interiors</p>
         </div>
 
         <div className="relative flex-1 overflow-hidden rounded-[1.45rem] border border-[rgba(7,24,39,0.06)] bg-[linear-gradient(180deg,rgba(255,255,255,0.72),rgba(247,242,234,0.94))] p-3">
@@ -1070,10 +1090,7 @@ function AuditWebsiteMockup({
                   </div>
                   <div className="flex flex-wrap justify-end gap-2">
                     {["Home", "Services", "Projects", "Contact"].map((item) => (
-                      <span
-                        key={item}
-                        className="rounded-full bg-[#102130]/6 px-3 py-1 text-[0.56rem] uppercase tracking-[0.16em] text-[#102130]/56"
-                      >
+                      <span key={item} className="rounded-full bg-[#102130]/6 px-3 py-1 text-[0.56rem] uppercase tracking-[0.16em] text-[#102130]/56">
                         {item}
                       </span>
                     ))}
@@ -1081,35 +1098,27 @@ function AuditWebsiteMockup({
                 </div>
               </div>
 
-              <div className="relative mt-3 h-[calc(100%-4.25rem)] min-h-[20rem] rounded-[1.1rem] bg-[linear-gradient(180deg,#e6eff6,#f8fbff)] p-3 shadow-[0_18px_36px_rgba(188,206,220,0.22)] md:p-4">
-                <div className="grid h-full gap-3 lg:grid-cols-[minmax(0,1.14fr)_minmax(13rem,0.82fr)] lg:grid-rows-[auto_auto_1fr]">
-                  <div
-                    className={`rounded-[1rem] border p-4 transition-all duration-300 lg:col-span-1 ${
-                      isFocus("hero")
-                        ? "border-[rgba(126,167,198,0.28)] bg-white/96 shadow-[0_18px_40px_rgba(126,167,198,0.22)]"
-                        : "border-transparent bg-white/88"
-                    }`}
-                  >
+              <div className="relative mt-3 h-[calc(100%-4.25rem)] min-h-[20rem] overflow-hidden rounded-[1.1rem] bg-[linear-gradient(180deg,#e6eff6,#f8fbff)] p-3 shadow-[0_18px_36px_rgba(188,206,220,0.22)] md:p-4">
+                <motion.div
+                  animate={{ y: contentTranslate[issue.hotspot] }}
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  className="grid min-h-[132%] gap-3"
+                >
+                  <div className={`rounded-[1rem] border p-4 transition-all duration-300 ${isHotspot("hero-copy") ? "border-[rgba(126,167,198,0.28)] bg-white/96 shadow-[0_18px_40px_rgba(126,167,198,0.22)]" : "border-transparent bg-white/88"}`}>
                     <div className="h-3 w-24 rounded-full bg-[#102130]/14" />
                     <div className="mt-4 space-y-2.5">
-                      <div className={`h-9 w-[88%] rounded-[0.85rem] ${isFocus("hero") ? "bg-[#102130]/13" : "bg-[#102130]/9"}`} />
-                      <div className={`h-9 w-[72%] rounded-[0.85rem] ${isFocus("hero") ? "bg-[#102130]/11" : "bg-[#102130]/7"}`} />
+                      <div className={`h-9 w-[88%] rounded-[0.85rem] ${isHotspot("hero-copy") ? "bg-[#102130]/13" : "bg-[#102130]/9"}`} />
+                      <div className={`h-9 w-[72%] rounded-[0.85rem] ${isHotspot("hero-copy") ? "bg-[#102130]/11" : "bg-[#102130]/7"}`} />
                       <div className="h-3 w-[80%] rounded-full bg-[#102130]/10" />
                       <div className="h-3 w-[62%] rounded-full bg-[#102130]/7" />
                     </div>
                     <div className="mt-5 flex flex-wrap gap-3">
-                      <div
-                        className={`h-10 w-32 rounded-full transition-all duration-300 ${
-                          isFocus("cta")
-                            ? "bg-[#d6e7f4] ring-1 ring-[rgba(16,33,48,0.18)] shadow-[0_10px_24px_rgba(123,163,194,0.24)]"
-                            : "bg-[#102130]"
-                        }`}
-                      />
+                      <div className={`h-10 w-32 rounded-full transition-all duration-300 ${isHotspot("cta-button") ? "bg-[#d6e7f4] ring-1 ring-[rgba(16,33,48,0.18)] shadow-[0_10px_24px_rgba(123,163,194,0.24)]" : "bg-[#102130]"}`} />
                       <div className="h-10 w-28 rounded-full bg-[#102130]/8" />
                     </div>
                   </div>
 
-                  <div className="grid gap-3 lg:row-span-2">
+                  <div className="grid gap-3 lg:grid-cols-[0.9fr_1.1fr]">
                     <div className="rounded-[1rem] bg-white/84 p-3">
                       <div className="h-full min-h-[8.5rem] rounded-[0.9rem] bg-[linear-gradient(135deg,#dfe9f1,#fdfefe)] p-3">
                         <div className="flex h-full items-end justify-between gap-3">
@@ -1121,40 +1130,17 @@ function AuditWebsiteMockup({
                         </div>
                       </div>
                     </div>
-
-                    <div
-                      className={`rounded-[1rem] border p-4 transition-all duration-300 ${
-                        isFocus("proof")
-                          ? "border-[rgba(201,220,235,0.22)] bg-[#102130] text-white shadow-[0_14px_30px_rgba(16,33,48,0.24)]"
-                          : "border-transparent bg-white/82 text-[#102130]"
-                      }`}
-                    >
-                      <div className={`text-[0.56rem] uppercase tracking-[0.16em] ${isFocus("proof") ? "text-white/44" : "text-[#5c7385]"}`}>
-                        Trust row
-                      </div>
+                    <div className={`rounded-[1rem] border p-4 transition-all duration-300 ${isHotspot("trust-row") ? "border-[rgba(201,220,235,0.22)] bg-[#102130] text-white shadow-[0_14px_30px_rgba(16,33,48,0.24)]" : "border-transparent bg-white/82 text-[#102130]"}`}>
+                      <div className={`text-[0.56rem] uppercase tracking-[0.16em] ${isHotspot("trust-row") ? "text-white/44" : "text-[#5c7385]"}`}>Trust row</div>
                       <div className="mt-3 grid grid-cols-4 gap-2">
-                        {Array.from({ length: 4 }).map((_, index) => (
-                          <div
-                            key={index}
-                            className={`h-8 rounded-[0.75rem] ${
-                              isFocus("proof") ? "bg-white/14" : "bg-[#102130]/7"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <div className={`mt-3 rounded-[0.9rem] px-3 py-3 ${isFocus("proof") ? "bg-white/8" : "bg-[#102130]/6"}`}>
-                        <div className={`h-2 w-20 rounded-full ${isFocus("proof") ? "bg-white/18" : "bg-[#102130]/12"}`} />
-                        <div className={`mt-3 h-2 w-5/6 rounded-full ${isFocus("proof") ? "bg-white/10" : "bg-[#102130]/8"}`} />
+                        {Array.from({ length: 4 }).map((_, index) => <div key={index} className={`h-8 rounded-[0.75rem] ${isHotspot("trust-row") ? "bg-white/14" : "bg-[#102130]/7"}`} />)}
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid gap-3 sm:grid-cols-3 lg:col-span-2">
+                  <div className="grid gap-3 sm:grid-cols-3">
                     {["Interior styling", "Renovation planning", "Space audits"].map((service, index) => (
-                      <div
-                        key={service}
-                        className="rounded-[0.95rem] border border-[rgba(7,24,39,0.06)] bg-white/82 p-3"
-                      >
+                      <div key={service} className="rounded-[0.95rem] border border-[rgba(7,24,39,0.06)] bg-white/82 p-3">
                         <div className="h-8 w-8 rounded-[0.8rem] bg-[#d9e7f2]" />
                         <div className="mt-3 h-2 w-20 rounded-full bg-[#102130]/12" />
                         <div className="mt-2 h-2 rounded-full bg-[#102130]/7" />
@@ -1163,17 +1149,9 @@ function AuditWebsiteMockup({
                     ))}
                   </div>
 
-                  <div className="grid gap-3 lg:col-span-2 lg:grid-cols-[0.94fr_0.9fr_1.16fr]">
-                    <div
-                      className={`rounded-[1rem] border p-4 transition-all duration-300 ${
-                        isFocus("booking")
-                          ? "border-[rgba(186,152,120,0.22)] bg-[linear-gradient(180deg,#fffaf4,#f2e8dc)] shadow-[0_14px_30px_rgba(146,112,81,0.12)]"
-                          : "border-transparent bg-white/82"
-                      }`}
-                    >
-                      <div className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">
-                        Booking widget
-                      </div>
+                  <div className="grid gap-3 lg:grid-cols-[0.94fr_0.9fr_1.16fr]">
+                    <div className={`rounded-[1rem] border p-4 transition-all duration-300 ${isHotspot("booking-panel") ? "border-[rgba(186,152,120,0.22)] bg-[linear-gradient(180deg,#fffaf4,#f2e8dc)] shadow-[0_14px_30px_rgba(146,112,81,0.12)]" : "border-transparent bg-white/82"}`}>
+                      <div className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">Booking widget</div>
                       <div className="mt-3 grid grid-cols-2 gap-2">
                         <div className="h-9 rounded-[0.75rem] bg-[#102130]/8" />
                         <div className="h-9 rounded-[0.75rem] bg-[#102130]/8" />
@@ -1181,160 +1159,129 @@ function AuditWebsiteMockup({
                         <div className="h-9 rounded-[0.75rem] bg-[#102130]/10" />
                       </div>
                     </div>
-
                     <div className="grid gap-3">
-                      <div
-                        className={`rounded-[1rem] border p-3 transition-all duration-300 ${
-                          isFocus("seo")
-                            ? "border-[rgba(126,167,198,0.22)] bg-[linear-gradient(180deg,#ebf3fa,#ffffff)] shadow-[0_14px_30px_rgba(124,152,175,0.14)]"
-                            : "border-transparent bg-white/82"
-                        }`}
-                      >
-                        <div className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">
-                          Local search
-                        </div>
-                        <div className="mt-2 rounded-[0.75rem] bg-[#102130]/6 px-3 py-2 text-[0.62rem] text-[#40576a]">
-                          interior design consultation singapore
-                        </div>
+                      <div className={`rounded-[1rem] border p-3 transition-all duration-300 ${isHotspot("seo-panel") ? "border-[rgba(126,167,198,0.22)] bg-[linear-gradient(180deg,#ebf3fa,#ffffff)] shadow-[0_14px_30px_rgba(124,152,175,0.14)]" : "border-transparent bg-white/82"}`}>
+                        <div className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">Local search</div>
+                        <div className="mt-2 rounded-[0.75rem] bg-[#102130]/6 px-3 py-2 text-[0.62rem] text-[#40576a]">interior design consultation singapore</div>
                         <div className="mt-3 flex items-end gap-2">
-                          <div className="text-[1.5rem] font-semibold tracking-[-0.05em] text-[#102130]">
-                            {isFocus("seo") ? "#9" : "#24"}
-                          </div>
-                          <div className="text-[0.64rem] uppercase tracking-[0.16em] text-[#688092]">
-                            search rank
-                          </div>
+                          <div className="text-[1.5rem] font-semibold tracking-[-0.05em] text-[#102130]">{isHotspot("seo-panel") ? "#9" : "#24"}</div>
+                          <div className="text-[0.64rem] uppercase tracking-[0.16em] text-[#688092]">search rank</div>
                         </div>
                       </div>
-
-                      <div
-                        className={`rounded-[1rem] border p-3 transition-all duration-300 ${
-                          isFocus("whatsapp")
-                            ? "border-[rgba(102,152,122,0.22)] bg-[linear-gradient(180deg,#eff8f2,#dff1e6)] shadow-[0_14px_30px_rgba(87,126,107,0.12)]"
-                            : "border-transparent bg-white/82"
-                        }`}
-                      >
-                        <div className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">
-                          Enquiry handoff
-                        </div>
+                      <div className={`rounded-[1rem] border p-3 transition-all duration-300 ${isHotspot("whatsapp-panel") ? "border-[rgba(102,152,122,0.22)] bg-[linear-gradient(180deg,#eff8f2,#dff1e6)] shadow-[0_14px_30px_rgba(87,126,107,0.12)]" : "border-transparent bg-white/82"}`}>
+                        <div className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">Enquiry handoff</div>
                         <div className="mt-2 grid gap-1.5">
-                          <div className="ml-auto w-[78%] rounded-[0.75rem] rounded-br-sm bg-[#d7efe1] px-2.5 py-2 text-[0.58rem] text-[#204033]">
-                            Do you have availability this week?
-                          </div>
-                          <div className="w-[84%] rounded-[0.75rem] rounded-bl-sm bg-white px-2.5 py-2 text-[0.58rem] text-[#4b6172]">
-                            Yes. We&apos;ll send the next step shortly.
-                          </div>
+                          <div className="ml-auto w-[78%] rounded-[0.75rem] rounded-br-sm bg-[#d7efe1] px-2.5 py-2 text-[0.58rem] text-[#204033]">Do you have availability this week?</div>
+                          <div className="w-[84%] rounded-[0.75rem] rounded-bl-sm bg-white px-2.5 py-2 text-[0.58rem] text-[#4b6172]">Yes. We&apos;ll send the next step shortly.</div>
                         </div>
                       </div>
                     </div>
-
-                    <div
-                      className={`rounded-[1rem] border p-4 transition-all duration-300 ${
-                        isFocus("crm") || isFocus("followup")
-                          ? "border-[rgba(201,220,235,0.16)] bg-[#102130] text-white shadow-[0_16px_32px_rgba(16,33,48,0.24)]"
-                          : "border-transparent bg-white/84 text-[#102130]"
-                      }`}
-                    >
-                      <div
-                        className={`flex items-center justify-between text-[0.56rem] uppercase tracking-[0.16em] ${
-                          isFocus("crm") || isFocus("followup") ? "text-white/44" : "text-[#526777]"
-                        }`}
-                      >
-                        <span>Lead tracker</span>
-                        <span>{isFocus("followup") ? "Delayed response" : "4 new opportunities"}</span>
+                    <div className={`rounded-[1rem] border p-4 transition-all duration-300 ${isHotspot("crm-panel") || isHotspot("followup-panel") ? "border-[rgba(201,220,235,0.16)] bg-[#102130] text-white shadow-[0_16px_32px_rgba(16,33,48,0.24)]" : "border-transparent bg-white/84 text-[#102130]"}`}>
+                      <div className={`flex items-center justify-between text-[0.56rem] uppercase tracking-[0.16em] ${isHotspot("crm-panel") || isHotspot("followup-panel") ? "text-white/44" : "text-[#526777]"}`}>
+                        <span>{isHotspot("followup-panel") ? "Follow-up flow" : "Lead tracker"}</span>
+                        <span>{isHotspot("followup-panel") ? "Delayed response" : "4 new opportunities"}</span>
                       </div>
                       <div className="mt-3 grid grid-cols-3 gap-2">
                         {["New", "Follow-up", "Won"].map((item, index) => (
-                          <div
-                            key={item}
-                            className={`rounded-[0.85rem] px-2 py-2.5 text-center text-[0.58rem] uppercase tracking-[0.14em] ${
-                              isFocus("crm") || isFocus("followup")
-                                ? index === 1 && isFocus("followup")
-                                  ? "bg-white/16 text-white"
-                                  : "bg-white/8 text-white/64"
-                                : "bg-[#102130]/6 text-[#526777]"
-                            }`}
-                          >
+                          <div key={item} className={`rounded-[0.85rem] px-2 py-2.5 text-center text-[0.58rem] uppercase tracking-[0.14em] ${isHotspot("crm-panel") || isHotspot("followup-panel") ? index === 1 && isHotspot("followup-panel") ? "bg-white/16 text-white" : "bg-white/8 text-white/64" : "bg-[#102130]/6 text-[#526777]"}`}>
                             {item}
                           </div>
                         ))}
                       </div>
-                      <div className="mt-3 grid gap-3 md:grid-cols-[0.92fr_1.08fr]">
-                        <div className="grid gap-2">
-                          {Array.from({ length: 3 }).map((_, index) => (
-                            <div
-                              key={index}
-                              className={`h-8 rounded-[0.75rem] ${
-                                isFocus("followup") && index === 1
-                                  ? "bg-[#d6e8f3]"
-                                  : isFocus("crm") || isFocus("followup")
-                                    ? "bg-white/8"
-                                    : "bg-[#102130]/7"
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <div className={`rounded-[0.95rem] px-3 py-3 ${isFocus("crm") || isFocus("followup") ? "bg-white/8" : "bg-[#102130]/6"}`}>
-                          <div className={`h-2 w-20 rounded-full ${isFocus("crm") || isFocus("followup") ? "bg-white/18" : "bg-[#102130]/12"}`} />
-                          <div className={`mt-3 h-2 w-5/6 rounded-full ${isFocus("crm") || isFocus("followup") ? "bg-white/10" : "bg-[#102130]/8"}`} />
-                          <div className={`mt-2 h-2 w-2/3 rounded-full ${isFocus("crm") || isFocus("followup") ? "bg-white/10" : "bg-[#102130]/8"}`} />
-                        </div>
-                      </div>
                     </div>
                   </div>
+                </motion.div>
 
-                  <div className="pointer-events-none absolute inset-0 hidden lg:block">
-                    <div className={`absolute ${issue.connectorClass} h-px bg-[linear-gradient(90deg,rgba(16,33,48,0.44),rgba(16,33,48,0.08))]`} />
-                    <span className={`absolute ${issue.markerClass} h-3.5 w-3.5 rounded-full bg-[#102130] shadow-[0_0_0_7px_rgba(221,236,247,0.6)]`} />
-                  </div>
+                <div className="pointer-events-none absolute inset-0 hidden lg:block">
+                  <motion.div
+                    key={`${issue.id}-bubble`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className={`absolute ${annotationBubblePosition[issue.hotspot]} rounded-[1rem] border border-[rgba(7,24,39,0.08)] bg-[rgba(255,252,247,0.96)] px-3 py-3 shadow-[0_18px_36px_rgba(16,33,48,0.1)] backdrop-blur-sm`}
+                  >
+                    <p className="text-[0.54rem] font-semibold uppercase tracking-[0.16em] text-[#6d8191]">{issue.annotationTitle}</p>
+                    <p className="mt-2 text-[0.68rem] leading-5 text-[#4e6475]">{issue.annotationBody}</p>
+                  </motion.div>
+                  <div className={`absolute ${activeHotspot.connectorClass} h-px bg-[linear-gradient(90deg,rgba(16,33,48,0.44),rgba(16,33,48,0.08))]`} />
+                  <span className={`absolute ${activeHotspot.markerClass} h-3.5 w-3.5 rounded-full bg-[#102130] shadow-[0_0_0_7px_rgba(221,236,247,0.6)]`} />
                 </div>
               </div>
             </div>
 
-            <div className="rounded-[1.25rem] border border-[rgba(7,24,39,0.06)] bg-[linear-gradient(180deg,rgba(252,250,246,0.96),rgba(244,238,228,0.98))] p-4 text-[#102130] shadow-[0_18px_42px_rgba(16,33,48,0.08)]">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#6d8191]">
-                    Active issue
-                  </p>
-                  <p className="mt-2 text-sm font-medium uppercase tracking-[0.14em] text-[#102130]/56">
-                    0{issueIndex + 1} • {issue.tab}
-                  </p>
+            <div className="grid gap-3 content-start">
+              <div className="rounded-[1.1rem] border border-[rgba(7,24,39,0.06)] bg-white/84 p-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">Response path</p>
+                  <span className="rounded-full bg-[#102130]/6 px-2.5 py-1 text-[0.56rem] uppercase tracking-[0.14em] text-[#526777]">
+                    Live
+                  </span>
                 </div>
-                <span className="rounded-full bg-[rgba(181,216,241,0.28)] px-3 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-[#33506a]">
-                  Diagnosis
-                </span>
-              </div>
-
-              <h3 className="mt-5 max-w-[20rem] text-[1.52rem] font-medium leading-[1.02] tracking-[-0.045em] text-[#071827]">
-                {issue.title}
-              </h3>
-              <p className="mt-4 text-[0.96rem] leading-7 text-[#536979]">
-                {issue.annotationText}
-              </p>
-
-              <div className="mt-6">
-                <p className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#6d8191]">
-                  What this affects
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {issue.affects.map((chip) => (
-                    <span
-                      key={chip}
-                      className="rounded-full border border-[rgba(7,24,39,0.08)] bg-[rgba(181,216,241,0.2)] px-3 py-2 text-[0.66rem] font-semibold uppercase tracking-[0.14em] text-[#33506a]"
+                <div className="mt-3 space-y-2">
+                  {["Visit", "Enquiry", "Booked", "Follow-up"].map((step, index) => (
+                    <div
+                      key={step}
+                      className={`flex items-center justify-between rounded-[0.8rem] px-3 py-2 ${
+                        isHotspot("followup-panel") && index === 3
+                          ? "bg-[#102130] text-white"
+                          : "bg-[#102130]/6 text-[#526777]"
+                      }`}
                     >
-                      {chip}
-                    </span>
+                      <span className="text-[0.62rem] font-semibold uppercase tracking-[0.14em]">{step}</span>
+                      <span className="h-2.5 w-14 rounded-full bg-current/20" />
+                    </div>
                   ))}
                 </div>
               </div>
 
-              <div className="mt-6 rounded-[1rem] border border-[rgba(7,24,39,0.08)] bg-white/82 px-4 py-4">
-                <p className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#6d8191]">
-                  Suggested fix
-                </p>
-                <p className="mt-2 text-[0.9rem] leading-7 text-[#4e6475]">
-                  {issue.suggestedFix}
-                </p>
+              <div className="rounded-[1.1rem] border border-[rgba(7,24,39,0.06)] bg-white/84 p-4">
+                <div className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">Tracking board</div>
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {["New", "Open", "Won"].map((status, index) => (
+                    <div
+                      key={status}
+                      className={`rounded-[0.8rem] px-2 py-2 text-center text-[0.56rem] font-semibold uppercase tracking-[0.14em] ${
+                        isHotspot("crm-panel") && index === 1
+                          ? "bg-[#d6e7f4] text-[#102130]"
+                          : "bg-[#102130]/6 text-[#526777]"
+                      }`}
+                    >
+                      {status}
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-3 space-y-2">
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className={`h-8 rounded-[0.8rem] ${
+                        isHotspot("crm-panel") && index === 1
+                          ? "bg-[#102130]/14"
+                          : "bg-[#102130]/7"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[1.1rem] border border-[rgba(7,24,39,0.06)] bg-white/84 p-4">
+                <div className="text-[0.56rem] uppercase tracking-[0.16em] text-[#526777]">Ops snapshot</div>
+                <div className="mt-3 grid gap-2">
+                  <div className="rounded-[0.85rem] bg-[#102130]/6 px-3 py-2">
+                    <div className="h-2 w-12 rounded-full bg-[#102130]/16" />
+                    <div className="mt-2 h-2 w-4/5 rounded-full bg-[#102130]/10" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className={`rounded-[0.85rem] p-3 ${isHotspot("seo-panel") ? "bg-[#e7f0f8]" : "bg-[#102130]/6"}`}>
+                      <div className="h-2 w-10 rounded-full bg-[#102130]/12" />
+                      <div className="mt-2 h-5 w-12 rounded-[0.6rem] bg-[#102130]/10" />
+                    </div>
+                    <div className={`rounded-[0.85rem] p-3 ${isHotspot("whatsapp-panel") ? "bg-[#e6f4eb]" : "bg-[#102130]/6"}`}>
+                      <div className="h-2 w-10 rounded-full bg-[#102130]/12" />
+                      <div className="mt-2 h-5 w-14 rounded-[0.6rem] bg-[#102130]/10" />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1516,6 +1463,207 @@ function HeroShowcaseRibbon() {
   );
 }
 
+function ValueScrollWall() {
+  const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+  const squareTrackY = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
+    ["0px", "-340px", "-680px", "-1020px", "-1360px", "-1700px"],
+  );
+  const [activeStep, setActiveStep] = useState(0);
+  const squareClasses = {
+    sky: "border-[rgba(162,193,219,0.34)] bg-[linear-gradient(180deg,#dcecf8,#d7e8f5)] text-[#102130]",
+    navy: "border-[rgba(16,33,48,0.14)] bg-[linear-gradient(180deg,#102130,#0d1b29)] text-[#f8f5ee]",
+    ivory:
+      "border-[rgba(11,28,43,0.08)] bg-[linear-gradient(180deg,rgba(255,252,247,0.98),rgba(244,238,229,0.96))] text-[#102130]",
+  } as const;
+
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on("change", (value) => {
+      if (value < 0.2) {
+        setActiveStep(0);
+      } else if (value < 0.4) {
+        setActiveStep(1);
+      } else if (value < 0.6) {
+        setActiveStep(2);
+      } else if (value < 0.8) {
+        setActiveStep(3);
+      } else if (value < 1) {
+        setActiveStep(4);
+      } else {
+        setActiveStep(5);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [scrollYProgress]);
+
+  return (
+    <>
+      <div className="bg-[#f6f1e8] lg:hidden">
+        <div className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8 sm:py-28 md:px-10">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+            WHAT WE FIX
+          </p>
+          <h2 className="mt-5 max-w-[12ch] text-[2.45rem] font-medium leading-[0.95] tracking-[-0.05em] text-[#071827] sm:text-[3.15rem]">
+            We fix the parts of your online funnel that stop people from contacting you.
+          </h2>
+          <p className="mt-6 max-w-[38rem] text-[1rem] leading-8 text-[#42596b]">
+            At Ocia Studios, we do more than “make websites look better.” We improve the
+            parts of your business that directly affect trust, lead flow, conversion,
+            response speed, and follow-up.
+          </p>
+        </div>
+
+        <div className="grid gap-5 px-5 pb-24 sm:px-8 md:px-10">
+          {valueScrollSteps.map((step, index) => (
+            <motion.article
+              key={step.number}
+              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.22 }}
+              transition={{
+                duration: 0.6,
+                delay: index * 0.05,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="relative overflow-hidden rounded-[2rem] border border-[rgba(11,28,43,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,245,237,0.96))] p-5 shadow-[0_20px_48px_rgba(18,31,44,0.08)] sm:p-6"
+            >
+              <div className="pointer-events-none absolute right-4 top-3 text-[5rem] font-medium leading-none tracking-[-0.12em] text-[#ffffff]">
+                {step.number}
+              </div>
+              <div className="relative grid gap-4">
+                <div
+                  className={`flex min-h-[10rem] items-center justify-center rounded-[1.65rem] border text-center text-[1.2rem] font-medium tracking-[-0.03em] ${squareClasses[step.squareTone]}`}
+                >
+                  {step.blockLabel}
+                </div>
+                <div className="rounded-[1.7rem] bg-white/76 p-5">
+                  <p className="text-[0.64rem] font-semibold uppercase tracking-[0.22em] text-[#6a8090]">
+                    {step.number}
+                  </p>
+                  <h3 className="mt-3 text-[1.55rem] font-medium leading-[1] tracking-[-0.04em] text-[#102130]">
+                    {step.title}
+                  </h3>
+                  <p className="mt-4 text-[0.98rem] leading-7 text-[#4e6475]">
+                    {step.text}
+                  </p>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {step.chips.map((chip) => (
+                      <span
+                        key={chip}
+                        className="rounded-full border border-[rgba(16,33,48,0.08)] bg-[rgba(232,240,247,0.72)] px-3 py-2 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-[#385268]"
+                      >
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+
+      <section
+        id="value-proposition"
+        ref={sectionRef}
+        className="relative hidden h-[600vh] bg-[#F6F1E8] lg:block"
+      >
+          <div className="sticky top-0 h-screen overflow-hidden bg-[#F6F1E8]">
+            <div className="pointer-events-none absolute inset-0 z-0 bg-[#F6F1E8]" />
+            <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.42),transparent_42%),radial-gradient(circle_at_20%_18%,rgba(214,229,240,0.24),transparent_24%),radial-gradient(circle_at_82%_78%,rgba(255,249,240,0.64),transparent_32%)]" />
+
+            <div className="absolute left-[clamp(96px,8vw,160px)] top-1/2 z-20 w-[min(560px,34vw)] -translate-y-1/2">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+                WHAT WE FIX
+              </p>
+              <h2 className="mt-5 max-w-[12ch] text-[3.15rem] font-medium leading-[0.94] tracking-[-0.06em] text-[#071827] xl:text-[4.05rem]">
+                We fix the parts of your online funnel that stop people from contacting you.
+              </h2>
+              <p className="mt-6 max-w-[34rem] text-[1.03rem] leading-8 text-[#42596b] xl:text-[1.08rem]">
+                At Ocia Studios, we do more than “make websites look better.” We improve the
+                parts of your business that directly affect trust, lead flow, conversion,
+                response speed, and follow-up.
+              </p>
+            </div>
+
+            <div className="pointer-events-none absolute right-[clamp(70px,7vw,140px)] top-1/2 z-0 flex h-[340px] w-[920px] max-w-[54vw] -translate-y-1/2 items-center justify-center">
+              <motion.span
+                key={valueScrollSteps[activeStep].blockLabel}
+                initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 0.2, y: 0 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="text-center text-[9rem] font-medium leading-none tracking-[-0.12em] text-[rgba(255,255,255,0.72)] xl:text-[10rem]"
+              >
+                {valueScrollSteps[activeStep].blockLabel}
+              </motion.span>
+            </div>
+
+            <div className="absolute right-[clamp(70px,7vw,140px)] top-1/2 z-10 flex h-[360px] w-[min(920px,54vw)] -translate-y-1/2 items-center justify-end gap-10">
+                <div className="relative h-[340px] w-[340px] shrink-0 overflow-hidden rounded-[32px]">
+                  <motion.div
+                    style={reduceMotion ? undefined : { y: squareTrackY }}
+                    className="will-change-transform"
+                  >
+                    {valueScrollSteps.map((step) => (
+                      <div
+                        key={step.number}
+                        className={`flex h-[340px] w-[340px] items-center justify-center rounded-[32px] border text-center text-[2.25rem] font-medium leading-[0.9] tracking-[-0.05em] shadow-[0_24px_56px_rgba(19,31,45,0.08)] ${squareClasses[step.squareTone]}`}
+                      >
+                        <span className="max-w-[8ch]">{step.blockLabel}</span>
+                      </div>
+                    ))}
+                  </motion.div>
+                </div>
+
+                <div className="relative h-[340px] w-[620px] overflow-hidden rounded-[32px] border border-[rgba(11,28,43,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(252,249,244,0.97))] p-[44px] shadow-[0_28px_72px_rgba(18,31,44,0.11)]">
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(224,236,245,0.26),transparent_22%),radial-gradient(circle_at_82%_84%,rgba(247,239,228,0.24),transparent_26%)]" />
+                  <div className="relative h-full">
+                    <motion.div
+                      key={valueScrollSteps[activeStep].number}
+                      initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                      className="absolute inset-0 flex h-full flex-col justify-between"
+                    >
+                      <div>
+                        <p className="text-[0.64rem] font-semibold uppercase tracking-[0.22em] text-[#6a8090]">
+                          {valueScrollSteps[activeStep].number}
+                        </p>
+                        <h3 className="mt-4 max-w-[16ch] text-[2.45rem] font-medium leading-[0.95] tracking-[-0.05em] text-[#102130]">
+                          {valueScrollSteps[activeStep].title}
+                        </h3>
+                        <p className="mt-5 max-w-[30rem] text-[1rem] leading-8 text-[#4e6475]">
+                          {valueScrollSteps[activeStep].text}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2.5">
+                        {valueScrollSteps[activeStep].chips.map((chip) => (
+                          <span
+                            key={chip}
+                            className="rounded-full border border-[rgba(16,33,48,0.08)] bg-[rgba(232,240,247,0.82)] px-3.5 py-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#385268]"
+                          >
+                            {chip}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </section>
+    </>
+  );
+}
+
 export default function HomePage() {
   const pageRef = useRef<HTMLDivElement | null>(null);
   const heroSectionRef = useRef<HTMLElement | null>(null);
@@ -1527,36 +1675,18 @@ export default function HomePage() {
   useLayoutEffect(() => {
     const page = pageRef.current;
     const heroSection = heroSectionRef.current;
-    let lenis: Lenis | undefined;
-    let rafId = 0;
 
     if (!page || !heroSection) {
       return;
     }
 
     const ctx = gsap.context(() => {
-      lenis = new Lenis({
-        duration: 1.16,
-        smoothWheel: true,
-        wheelMultiplier: 0.92,
-      });
-
-      lenis.on("scroll", ScrollTrigger.update);
-      let lastHeaderState = false;
-      lenis.on("scroll", ({ scroll }: { scroll: number }) => {
-        const nextHeaderState = scroll > 28;
-        if (nextHeaderState !== lastHeaderState) {
-          lastHeaderState = nextHeaderState;
-          setHeaderScrolled(nextHeaderState);
-        }
-      });
-
-      const raf = (time: number) => {
-        lenis?.raf(time);
-        rafId = window.requestAnimationFrame(raf);
+      const handleWindowScroll = () => {
+        setHeaderScrolled(window.scrollY > 28);
       };
 
-      rafId = window.requestAnimationFrame(raf);
+      handleWindowScroll();
+      window.addEventListener("scroll", handleWindowScroll, { passive: true });
 
       gsap.set("[data-hero-copy]", { y: 0, opacity: 1 });
       gsap.set("[data-hero-ribbon]", { y: 0, opacity: 1 });
@@ -1689,13 +1819,13 @@ export default function HomePage() {
           });
         }
       });
+
+      return () => {
+        window.removeEventListener("scroll", handleWindowScroll);
+      };
     }, page);
 
     return () => {
-      if (rafId) {
-        window.cancelAnimationFrame(rafId);
-      }
-      lenis?.destroy();
       ctx.revert();
     };
   }, []);
@@ -1706,14 +1836,14 @@ export default function HomePage() {
     event.currentTarget.reset();
   };
 
-  const currentAuditIssue = websiteAuditIssues[activeAuditIssue];
+  const currentAuditIssue = websiteLeakIssues[activeAuditIssue];
   const currentYear = new Date().getFullYear();
 
   return (
     <div className="ocia-page-atmosphere">
       <div className="ocia-atmosphere-bg" />
 
-      <main ref={pageRef} className="relative z-10 isolate overflow-x-clip bg-transparent text-white">
+      <main ref={pageRef} className="relative z-10 isolate bg-transparent text-white">
         <ConstellationWhale />
 
         <header
@@ -1915,8 +2045,8 @@ export default function HomePage() {
           <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-40 bg-[linear-gradient(180deg,rgba(246,240,231,0.98),rgba(246,240,231,0.76)_44%,rgba(246,240,231,0)_100%)]" />
           <div className="pointer-events-none absolute inset-x-0 top-[-3.5rem] z-[5] h-28 bg-[radial-gradient(ellipse_at_center,rgba(248,243,236,0.98)_0%,rgba(248,243,236,0)_72%)] blur-2xl" />
 
-          <div className="relative z-[6] mx-auto max-w-[1560px] px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-14 lg:py-32 xl:px-16 2xl:px-20">
-            <div className="grid gap-12 xl:grid-cols-[minmax(0,0.34fr)_minmax(0,0.66fr)] xl:items-start xl:gap-24">
+          <div className="relative z-[6] mx-auto max-w-[1460px] px-6 py-[7.5rem] sm:px-10 md:px-12 lg:px-14 xl:px-16">
+            <div className="grid items-start gap-12 xl:grid-cols-[minmax(0,0.38fr)_minmax(0,0.62fr)] xl:gap-[4.5rem] 2xl:gap-[5.25rem]">
               <div data-reveal-intro className="max-w-[36rem] pt-6">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082] sm:text-[0.72rem]">
                   THE LEAKS YOU DON&apos;T SEE
@@ -1961,82 +2091,121 @@ export default function HomePage() {
                   </div>
 
                   <div className="mt-5">
-                    <AuditWebsiteMockup issue={currentAuditIssue} issueIndex={activeAuditIssue} />
+                    <AuditWebsiteMockup issue={currentAuditIssue} />
                   </div>
                 </div>
               </motion.div>
             </div>
 
-            <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {websiteProblemCards.map((card) => {
-                const mappedIssue = websiteAuditIssues[card.issueIndex];
-                const isActive = activeAuditIssue === card.issueIndex;
+            <div className="mt-14 grid gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(18rem,0.72fr)] xl:items-start">
+              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4 xl:gap-6">
+                {websiteLeakIssues.map((issue, index) => {
+                  const isActive = activeAuditIssue === index;
 
-                return (
-                  <button
-                    key={card.id}
-                    type="button"
-                    data-reveal-card
-                    onClick={() => setActiveAuditIssue(card.issueIndex)}
-                    className={`cursor-pointer rounded-[1.5rem] border p-5 text-left transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#89bee7] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f3eb] ${
-                      isActive
-                        ? "border-[#102130] bg-[#102130] text-white shadow-[0_18px_40px_rgba(16,33,48,0.14)]"
-                        : "border-[rgba(7,24,39,0.08)] bg-[rgba(255,252,247,0.78)] text-[#102130] shadow-[0_16px_40px_rgba(20,34,49,0.05)] hover:-translate-y-0.5 hover:border-[rgba(7,24,39,0.16)] hover:bg-white"
-                    }`}
-                  >
-                    <div className={`text-[0.62rem] font-semibold uppercase tracking-[0.2em] ${isActive ? "text-white/56" : "text-[#6d8191]"}`}>
-                      {card.kicker}
-                    </div>
-                    <h3 className="mt-4 text-[1.12rem] font-medium leading-6 tracking-[-0.03em]">
-                      {card.title}
-                    </h3>
-                    <p className={`mt-3 text-[0.92rem] leading-7 ${isActive ? "text-white/76" : "text-[#526777]"}`}>
-                      {card.description}
-                    </p>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {mappedIssue.affects.map((chip) => (
-                        <span
-                          key={chip}
-                          className={`rounded-full border px-3 py-1.5 text-[0.62rem] font-semibold uppercase tracking-[0.14em] ${
-                            isActive
-                              ? "border-white/12 bg-white/8 text-white/76"
-                              : "border-[rgba(7,24,39,0.08)] bg-[rgba(181,216,241,0.18)] text-[#325069]"
-                          }`}
-                        >
-                          {chip}
-                        </span>
-                      ))}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </SceneSection>
-
-        <SceneSection id="solutions" data-value-section tone="night">
-          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-            <div className="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-end">
-              <SectionIntro
-                label="The Value"
-                title="We fix the parts of your online funnel that stop people from contacting you."
-                body="At Ocia Studios, we do more than make websites look better. We improve the parts of your business that directly affect trust, lead flow, conversion, response speed, and follow-up."
-              />
-
-              <div className="flex flex-wrap gap-3 lg:justify-end">
-                {valueChips.map((chip) => (
-                  <div
-                    key={chip}
-                    data-reveal-chip
-                    className="rounded-full border border-[rgba(214,229,244,0.14)] bg-[rgba(255,255,255,0.04)] px-4 py-3 text-sm text-white/78 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md"
-                  >
-                    {chip}
-                  </div>
-                ))}
+                  return (
+                    <button
+                      key={issue.id}
+                      type="button"
+                      data-reveal-card
+                      onClick={() => setActiveAuditIssue(index)}
+                      className={`cursor-pointer rounded-[1.35rem] border p-4 text-left transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#89bee7] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f3eb] ${
+                        isActive
+                          ? "border-[#102130] bg-[#102130] text-white shadow-[0_18px_40px_rgba(16,33,48,0.14)]"
+                          : "border-[rgba(7,24,39,0.08)] bg-[rgba(255,252,247,0.78)] text-[#102130] shadow-[0_16px_40px_rgba(20,34,49,0.05)] hover:-translate-y-0.5 hover:border-[rgba(7,24,39,0.16)] hover:bg-white"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className={`text-[0.6rem] font-semibold uppercase tracking-[0.2em] ${isActive ? "text-white/56" : "text-[#6d8191]"}`}>
+                            {issue.number}
+                          </div>
+                          <div className={`mt-2 text-[0.74rem] font-semibold uppercase tracking-[0.16em] ${isActive ? "text-white/72" : "text-[#5f7485]"}`}>
+                            {issue.tabLabel}
+                          </div>
+                        </div>
+                        <span className={`shrink-0 text-base ${isActive ? "text-white/76" : "text-[#5c7385]"}`}>↗</span>
+                      </div>
+                      <p className={`mt-3 text-[0.92rem] leading-6 ${isActive ? "text-white/76" : "text-[#526777]"}`}>
+                        {issue.shortBody}
+                      </p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {issue.affects.slice(0, 2).map((chip) => (
+                          <span
+                            key={chip}
+                            className={`rounded-full border px-2.5 py-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.14em] ${
+                              isActive
+                                ? "border-white/12 bg-white/8 text-white/76"
+                                : "border-[rgba(7,24,39,0.08)] bg-[rgba(181,216,241,0.18)] text-[#325069]"
+                            }`}
+                          >
+                            {chip}
+                          </span>
+                        ))}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
+
+              <motion.div
+                key={currentAuditIssue.id}
+                data-reveal-card
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="rounded-[1.65rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(248,243,236,0.98))] p-5 shadow-[0_20px_60px_rgba(20,34,49,0.07)]"
+              >
+                <p className="text-[0.6rem] font-semibold uppercase tracking-[0.22em] text-[#6d8191]">
+                  Active Issue
+                </p>
+                <p className="mt-3 text-[0.74rem] font-semibold uppercase tracking-[0.18em] text-[#5b7284]">
+                  {currentAuditIssue.number} • {currentAuditIssue.tabLabel}
+                </p>
+                <h3 className="mt-4 text-[1.3rem] font-medium leading-[1.05] tracking-[-0.04em] text-[#071827]">
+                  {currentAuditIssue.cardTitle}
+                </h3>
+                <p className="mt-4 text-[0.94rem] leading-7 text-[#536979]">
+                  {currentAuditIssue.shortBody}
+                </p>
+                <div className="mt-6 rounded-[1.05rem] border border-[rgba(7,24,39,0.08)] bg-white/80 px-4 py-4">
+                  <p className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#6d8191]">
+                    Annotation
+                  </p>
+                  <p className="mt-2 text-[0.92rem] leading-7 text-[#4e6475]">
+                    {currentAuditIssue.annotationBody}
+                  </p>
+                </div>
+                <div className="mt-6">
+                  <p className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#6d8191]">
+                    What this affects
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {currentAuditIssue.affects.map((chip) => (
+                      <span
+                        key={chip}
+                        className="rounded-full border border-[rgba(7,24,39,0.08)] bg-[rgba(181,216,241,0.2)] px-3 py-2 text-[0.64rem] font-semibold uppercase tracking-[0.14em] text-[#33506a]"
+                      >
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </SceneSection>
+
+        <section
+          id="solutions"
+          data-value-section
+          className="relative overflow-visible border-y border-[rgba(11,28,43,0.06)] bg-[#f7f3ec]"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[#f7f3ec]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(216,230,240,0.18),transparent_24%),radial-gradient(circle_at_84%_82%,rgba(244,235,223,0.62),transparent_32%)]" />
+          <div className="relative">
+            <ValueScrollWall />
+          </div>
+        </section>
 
         <SceneSection
           id="pricing"

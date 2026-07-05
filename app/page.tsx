@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { DM_Serif_Display } from "next/font/google";
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import ConstellationWhale from "./components/ConstellationWhale";
 import OciaButton from "./components/OciaButton";
 import SceneSection from "./components/SceneSection";
@@ -19,13 +19,22 @@ const dmSerifDisplay = DM_Serif_Display({
 });
 
 const sectionTwoContainer = "mx-auto max-w-[1460px] px-6 sm:px-10 md:px-12 lg:px-14 xl:px-16";
+const AUDIT_LINK = CALENDLY_URL;
+const SECTION_LINKS = {
+  work: "#work",
+  services: "#services",
+  process: "#process",
+  pricing: "#pricing",
+  contact: "#contact",
+  audit: AUDIT_LINK,
+} as const;
 
 const navItems = [
-  { label: "Work", href: "/#work" },
-  { label: "Services", href: "/services" },
-  { label: "Process", href: "/#process" },
-  { label: "Pricing", href: "/#pricing" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Work", href: SECTION_LINKS.work },
+  { label: "Services", href: SECTION_LINKS.services },
+  { label: "Process", href: SECTION_LINKS.process },
+  { label: "Pricing", href: SECTION_LINKS.pricing },
+  { label: "Contact", href: SECTION_LINKS.contact },
 ];
 
 const heroShowcaseCards = [
@@ -430,28 +439,57 @@ const serviceSelectorGroups = [
   },
 ] as const;
 
-const funnelSteps = [
+const leakChainSteps = [
   {
-    label: "Traffic",
-    body: "Can the right people find you?",
+    number: "01",
+    title: "Unclear messaging",
+    effect: "Reduces trust",
+    detail:
+      "If visitors do not understand what you do quickly, trust drops before they take action.",
+    shortLabel: "Messaging",
+    tone: "soft",
   },
   {
-    label: "Trust",
-    body: "Do they believe you are credible?",
+    number: "02",
+    title: "Weak design",
+    effect: "Lowers credibility",
+    detail: "A weak visual experience makes the business feel less credible.",
+    shortLabel: "Design",
+    tone: "soft",
   },
   {
-    label: "Action",
-    body: "Is the next step obvious?",
+    number: "03",
+    title: "Bad CTA placement",
+    effect: "Kills response",
+    detail: "If the next step is not obvious, interested visitors do not respond.",
+    shortLabel: "CTA",
+    tone: "accent",
   },
   {
-    label: "Response",
-    body: "Are enquiries handled quickly?",
+    number: "04",
+    title: "Friction-heavy forms",
+    effect: "Reduce enquiries",
+    detail: "Too many steps or unclear forms reduce the number of enquiries.",
+    shortLabel: "Forms",
+    tone: "soft",
   },
   {
-    label: "Follow-up",
-    body: "Are leads tracked until they convert?",
+    number: "05",
+    title: "No booking flow",
+    effect: "Slows decisions",
+    detail: "Without a clear booking path, people delay or leave.",
+    shortLabel: "Booking",
+    tone: "soft",
   },
-];
+  {
+    number: "06",
+    title: "Poor follow-up",
+    effect: "Turns warm leads cold",
+    detail: "Warm leads go cold when there is no follow-up system.",
+    shortLabel: "Follow-up",
+    tone: "soft",
+  },
+] as const;
 
 const processSteps = [
   {
@@ -472,16 +510,68 @@ const processSteps = [
   },
 ];
 
-const outcomeCards = [
-  "A website that builds more trust",
-  "Clearer messaging that improves response",
-  "Better conversion from existing traffic",
-  "More enquiries from the right people",
-  "Less friction in forms and booking",
-  "Faster response to leads",
-  "Better follow-up and less leakage",
-  "A clearer growth plan based on real gaps",
-];
+const outcomeBoardCards = [
+  {
+    number: "01",
+    label: "Trust",
+    title: "Trust & Clarity",
+    transformBefore: "unclear",
+    transformAfter: "trusted",
+    cardAccent:
+      "bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(241,248,252,0.98))]",
+    chipAccent: "bg-[rgba(234,243,248,0.92)] text-[#32516a]",
+    markerAccent: "bg-[rgba(221,236,245,0.92)] text-[#25445a]",
+    items: [
+      "A website that builds more trust",
+      "Clearer messaging that improves response",
+    ],
+  },
+  {
+    number: "02",
+    label: "Leads",
+    title: "Conversion & Enquiries",
+    transformBefore: "passive traffic",
+    transformAfter: "more enquiries",
+    cardAccent:
+      "bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(246,249,252,0.98))]",
+    chipAccent: "bg-[rgba(241,247,251,0.94)] text-[#32516a]",
+    markerAccent: "bg-[rgba(230,239,246,0.92)] text-[#25445a]",
+    items: [
+      "Better conversion from existing traffic",
+      "More enquiries from the right people",
+    ],
+  },
+  {
+    number: "03",
+    label: "Speed",
+    title: "Speed & Follow-up",
+    transformBefore: "slow response",
+    transformAfter: "faster action",
+    cardAccent:
+      "bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(247,243,235,0.98))]",
+    chipAccent: "bg-[rgba(245,239,230,0.94)] text-[#6b573d]",
+    markerAccent: "bg-[rgba(239,230,214,0.92)] text-[#5a4a38]",
+    items: [
+      "Faster response to leads",
+      "Better follow-up and less leakage",
+    ],
+  },
+  {
+    number: "04",
+    label: "Growth",
+    title: "Growth Direction",
+    transformBefore: "guesswork",
+    transformAfter: "clear next steps",
+    cardAccent:
+      "bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(243,247,250,0.98))]",
+    chipAccent: "bg-[rgba(232,239,244,0.94)] text-[#4d6475]",
+    markerAccent: "bg-[rgba(225,234,240,0.92)] text-[#25445a]",
+    items: [
+      "Less friction in forms and booking",
+      "A clearer growth plan based on real gaps",
+    ],
+  },
+] as const;
 
 const industries = [
   "Aesthetic clinics",
@@ -494,75 +584,97 @@ const industries = [
   "Local service businesses",
 ];
 
-const whyOciaCards = [
-  {
-    title: "We look at the full funnel",
-    body: "We do not only judge the website design. We look at visibility, trust, enquiry flow, response speed, and follow-up.",
-  },
-  {
-    title: "We recommend based on evidence",
-    body: "The audit shows what is actually limiting growth before we suggest what to fix.",
-  },
-  {
-    title: "We build practical systems",
-    body: "From SEO and conversion to WhatsApp, booking, CRM, and follow-up, we focus on what helps enquiries become opportunities.",
-  },
-];
-
-const improvementCards = [
-  "Clearer messaging so visitors understand your value faster",
-  "Stronger CTA placement so more visitors take action",
-  "Better trust signals so the business feels more credible",
-  "Improved enquiry flow so fewer leads drop off",
-  "Better booking experience so prospects can move faster",
-  "Cleaner follow-up systems so warm leads do not get lost",
-];
+const whyOciaComparison = {
+  commonApproach: [
+    "Looks better",
+    "More pages",
+    "Launch and leave",
+  ],
+  ociaApproach: [
+    {
+      number: "01",
+      title: "Business outcomes",
+      body: "We focus on business outcomes, not vanity design.",
+      tone: "soft",
+    },
+    {
+      number: "02",
+      title: "Full enquiry funnel",
+      body: "We look at the full enquiry funnel.",
+      tone: "soft",
+    },
+    {
+      number: "03",
+      title: "Conversion diagnosis",
+      body: "We identify what is actually hurting conversions.",
+      tone: "accent",
+    },
+    {
+      number: "04",
+      title: "Evidence-based recommendations",
+      body: "We recommend services based on evidence, not assumptions.",
+      tone: "soft",
+    },
+    {
+      number: "05",
+      title: "Lead-dependent businesses",
+      body: "We understand businesses that depend on leads and bookings.",
+      tone: "soft",
+    },
+    {
+      number: "06",
+      title: "Pipeline movement",
+      body: "We care about results like enquiries, calls, and pipeline movement.",
+      tone: "soft",
+    },
+  ],
+} as const;
 
 const faqs = [
   {
     question: "Do you only do website redesign?",
     answer:
-      "No. Website redesign is one part of the work, but we also improve SEO, conversion flow, WhatsApp handling, booking journeys, CRM setup, automation and follow-up.",
+      "No. We also help with SEO, conversion optimisation, lead generation, WhatsApp automation, booking systems, and CRM follow-up improvements.",
   },
   {
     question: "What if I already have a website?",
     answer:
-      "That is completely fine. Many businesses we help already have a live site. We review what is underperforming and recommend whether to optimise, restructure, or redesign.",
+      "That is fine. In many cases, the best move is improving what you already have instead of rebuilding everything from scratch.",
   },
   {
     question: "How do I know which service I need?",
     answer:
-      "That is exactly why the audit comes first. We use it to identify whether the biggest gap is trust, visibility, conversion, response speed, or follow-up.",
+      "That is why we start with the audit. We identify the biggest growth gaps first, then recommend the most useful next step.",
   },
   {
     question: "Can you help us get more leads, not just improve design?",
     answer:
-      "Yes. The focus is on more qualified enquiries and a stronger system behind them, not visual polish for its own sake.",
+      "Yes. Our focus is on improving trust, visibility, conversion, and lead flow.",
   },
   {
     question: "Do you help with follow-up and CRM too?",
     answer:
-      "Yes. We can improve WhatsApp workflows, contact handling, CRM setup, reminders, lead tracking and practical automation so leads do not get lost.",
+      "Yes. We can help improve how your leads are tracked, managed, and followed up.",
   },
   {
     question: "Do you work with local service businesses?",
     answer:
-      "Yes. OCIA is especially well suited to service businesses where trust, visibility, and a clean enquiry process directly affect revenue.",
+      "Yes. That is one of our strongest fits, especially businesses that depend on enquiries, calls, bookings, and trust.",
   },
   {
     question: "What happens after the free audit?",
     answer:
-      "We show you the main opportunities, explain what is limiting performance, and recommend the best next step. If it makes sense to work together, we plan the right scope from there.",
+      "We show you the main issues, explain the opportunities, and recommend the best next step based on your goals.",
   },
 ];
 
 const footerLinks = [
-  { label: "Work", href: "/#work" },
-  { label: "Services", href: "/services" },
-  { label: "Solutions", href: "/#solutions" },
-  { label: "Process", href: "/#process" },
-  { label: "Pricing", href: "/#pricing" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Work", href: SECTION_LINKS.work },
+  { label: "Services", href: SECTION_LINKS.services },
+  { label: "Solutions", href: "#solutions" },
+  { label: "Process", href: SECTION_LINKS.process },
+  { label: "Pricing", href: SECTION_LINKS.pricing },
+  { label: "Contact", href: SECTION_LINKS.contact },
 ];
 
 const sectionRevealSelectors = [
@@ -575,7 +687,6 @@ const sectionRevealSelectors = [
   "[data-outcomes-section]",
   "[data-industries-section]",
   "[data-why-section]",
-  "[data-improvement-section]",
   "[data-faq-section]",
   "[data-final-section]",
 ];
@@ -1759,6 +1870,335 @@ function ValueScrollWall() {
   );
 }
 
+function ConversionLeakTimeline() {
+  const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [activeStep, setActiveStep] = useState(0);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on("change", (value) => {
+      if (value < 0.17) {
+        setActiveStep(0);
+      } else if (value < 0.34) {
+        setActiveStep(1);
+      } else if (value < 0.51) {
+        setActiveStep(2);
+      } else if (value < 0.67) {
+        setActiveStep(3);
+      } else if (value < 0.84) {
+        setActiveStep(4);
+      } else {
+        setActiveStep(5);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [scrollYProgress]);
+
+  const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const activeLeak = leakChainSteps[activeStep];
+  const completedLeaks = leakChainSteps.slice(0, activeStep);
+  const showOutcome = activeStep === leakChainSteps.length - 1;
+
+  return (
+    <>
+      <section data-funnel-section className="bg-[#f6f1e8] lg:hidden">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,rgba(221,236,245,0.28),transparent_22%),radial-gradient(circle_at_82%_76%,rgba(244,235,223,0.5),transparent_28%)]" />
+        <div className={`relative ${sectionTwoContainer} py-24 sm:py-28`}>
+          <div data-reveal-intro className="max-w-[36rem]">
+            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+              WHY THIS WORKS
+            </p>
+            <h2 className="mt-5 max-w-[12ch] text-[2.7rem] font-medium leading-[0.94] tracking-[-0.055em] text-[#071827] sm:text-[3.55rem]">
+              Why most websites underperform
+            </h2>
+            <p className="mt-6 max-w-[34rem] text-[1rem] leading-8 text-[#42596b]">
+              A website does not fail because of one big problem. It usually underperforms because of several small conversion leaks working together.
+            </p>
+
+            <div className="mt-8 rounded-[1.8rem] border border-[rgba(7,24,39,0.08)] bg-[rgba(234,243,248,0.5)] px-6 py-5 shadow-[0_16px_40px_rgba(19,31,45,0.04)]">
+              <p className="text-[1rem] leading-8 text-[#25445a]">
+                We identify those leaks, prioritise the biggest ones, and help fix them in a way that improves business results.
+              </p>
+            </div>
+          </div>
+
+          <motion.div
+            data-reveal-card
+            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-12 overflow-hidden rounded-[2.2rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,#fffdf8_0%,#fbf7ef_100%)] p-5 shadow-[0_24px_80px_rgba(19,31,45,0.08)] sm:p-7"
+          >
+            <div className="rounded-[1.75rem] border border-[rgba(7,24,39,0.08)] bg-white/62 px-5 py-5 sm:px-6 sm:py-6">
+              <div className="flex items-center justify-between gap-4 border-b border-[rgba(7,24,39,0.08)] pb-5">
+                <div>
+                  <p className="text-[0.66rem] font-semibold uppercase tracking-[0.22em] text-[#698091]">
+                    DIAGNOSTIC
+                  </p>
+                  <h3 className="mt-3 text-[1.7rem] font-medium tracking-[-0.04em] text-[#071827] sm:text-[1.95rem]">
+                    Conversion Leak Timeline
+                  </h3>
+                </div>
+                <span className="rounded-full border border-[rgba(37,68,90,0.1)] bg-[rgba(234,243,248,0.88)] px-3 py-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#32516a]">
+                  6 common leaks
+                </span>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-4">
+                {leakChainSteps.map((step, index) => (
+                  <Fragment key={step.number}>
+                    <motion.article
+                      data-reveal-card
+                      initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+                      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: reduceMotion ? 0 : index * 0.05,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className={`flex min-h-[84px] items-center gap-4 rounded-[1.45rem] border px-4 py-4 shadow-[0_12px_30px_rgba(19,31,45,0.04)] ${
+                        step.tone === "accent"
+                          ? "border-[#071827] bg-[#071827] text-[#f8f4ec]"
+                          : "border-[rgba(7,24,39,0.08)] bg-[rgba(247,242,233,0.9)] text-[#071827]"
+                      }`}
+                    >
+                      <div
+                        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border text-[0.68rem] font-semibold uppercase tracking-[0.16em] ${
+                          step.tone === "accent"
+                            ? "border-white/16 bg-white/10 text-[#f8f4ec]"
+                            : "border-[rgba(37,68,90,0.12)] bg-[rgba(221,236,245,0.82)] text-[#25445a]"
+                        }`}
+                      >
+                        {step.number}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h4
+                          className={`text-[1.02rem] font-medium leading-6 tracking-[-0.03em] ${
+                            step.tone === "accent" ? "text-[#f8f4ec]" : "text-[#071827]"
+                          }`}
+                        >
+                          {step.title}
+                        </h4>
+                        <p
+                          className={`mt-1.5 text-[0.92rem] leading-6 ${
+                            step.tone === "accent" ? "text-white/72" : "text-[#526777]"
+                          }`}
+                        >
+                          {step.effect}
+                        </p>
+                      </div>
+                    </motion.article>
+
+                    {index < leakChainSteps.length - 1 ? (
+                      <motion.div
+                        data-reveal-line
+                        initial={reduceMotion ? false : { opacity: 0, scaleY: 0.55 }}
+                        whileInView={reduceMotion ? undefined : { opacity: 1, scaleY: 1 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{
+                          duration: 0.34,
+                          delay: reduceMotion ? 0 : index * 0.05 + 0.06,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="ml-[1.35rem] h-5 w-px origin-top bg-[linear-gradient(180deg,rgba(145,176,204,0.2),rgba(97,127,154,0.48),rgba(145,176,204,0.16))]"
+                      />
+                    ) : null}
+                  </Fragment>
+                ))}
+              </div>
+
+              <div className="mt-6 rounded-[1.6rem] border border-[rgba(7,24,39,0.08)] bg-[rgba(234,243,248,0.58)] px-5 py-5">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[#5f7789]">
+                  Outcome
+                </p>
+                <p className="mt-3 text-[0.98rem] leading-8 text-[#173044]">
+                  Lost enquiries are usually the result of several small leaks working together.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section
+        ref={sectionRef}
+        data-funnel-section
+        className="relative hidden h-[600vh] bg-[#f6f1e8] lg:block"
+      >
+        <div className="sticky top-0 h-screen overflow-hidden bg-[#f6f1e8]">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,rgba(221,236,245,0.28),transparent_22%),radial-gradient(circle_at_82%_76%,rgba(244,235,223,0.5),transparent_28%)]" />
+          <div className={`relative ${sectionTwoContainer} h-full`}>
+            <div className="grid h-full items-center gap-10 xl:grid-cols-[minmax(0,0.42fr)_minmax(0,0.58fr)] xl:gap-12">
+              <div className="max-w-[36rem]">
+                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+                  WHY THIS WORKS
+                </p>
+                <h2 className="mt-5 max-w-[12ch] text-[3rem] font-medium leading-[0.94] tracking-[-0.055em] text-[#071827] xl:text-[4.1rem]">
+                  Why most websites underperform
+                </h2>
+                <p className="mt-6 max-w-[34rem] text-[1.03rem] leading-8 text-[#42596b] xl:text-[1.08rem]">
+                  A website does not fail because of one big problem. It usually underperforms because of several small conversion leaks working together.
+                </p>
+
+                <div className="mt-8 rounded-[1.8rem] border border-[rgba(7,24,39,0.08)] bg-[rgba(234,243,248,0.5)] px-6 py-5 shadow-[0_16px_40px_rgba(19,31,45,0.04)]">
+                  <p className="text-[1rem] leading-8 text-[#25445a] xl:text-[1.04rem]">
+                    We identify those leaks, prioritise the biggest ones, and help fix them in a way that improves business results.
+                  </p>
+                </div>
+              </div>
+
+              <motion.div
+                layout
+                className="w-full max-w-[680px] justify-self-end overflow-hidden rounded-[2.2rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,#fffdf8_0%,#fbf7ef_100%)] p-7 shadow-[0_24px_80px_rgba(19,31,45,0.08)] xl:p-8"
+              >
+                <div className="rounded-[1.75rem] border border-[rgba(7,24,39,0.08)] bg-white/62 px-6 py-6">
+                  <div className="flex items-center justify-between gap-4 border-b border-[rgba(7,24,39,0.08)] pb-5">
+                    <div>
+                      <p className="text-[0.66rem] font-semibold uppercase tracking-[0.22em] text-[#698091]">
+                        DIAGNOSTIC
+                      </p>
+                      <h3 className="mt-3 text-[1.95rem] font-medium tracking-[-0.04em] text-[#071827]">
+                        Conversion Leak Timeline
+                      </h3>
+                    </div>
+                    <span className="rounded-full border border-[rgba(37,68,90,0.1)] bg-[rgba(234,243,248,0.88)] px-3 py-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#32516a]">
+                      6 common leaks
+                    </span>
+                  </div>
+
+                  <div className="mt-6 grid gap-6 lg:grid-cols-[72px_minmax(0,1fr)]">
+                    <div className="relative flex justify-center">
+                      <div className="absolute top-2 bottom-2 w-px rounded-full bg-[rgba(189,210,226,0.42)]" />
+                      <motion.div
+                        style={{ height: progressHeight }}
+                        className="absolute top-2 w-px origin-top rounded-full bg-[linear-gradient(180deg,#8fb7d6_0%,#25445a_100%)]"
+                      />
+                      <div className="relative z-10 flex w-full flex-col items-center justify-between gap-6 py-2">
+                        {leakChainSteps.map((step, index) => {
+                          const isActive = index === activeStep;
+                          const isCompleted = index < activeStep;
+
+                          return (
+                            <div
+                              key={step.number}
+                              className={`flex h-12 w-12 items-center justify-center rounded-full border text-[0.68rem] font-semibold uppercase tracking-[0.16em] transition duration-300 ${
+                                isActive
+                                  ? "border-[#071827] bg-[#071827] text-[#f8f4ec] shadow-[0_18px_34px_rgba(7,24,39,0.18)]"
+                                  : isCompleted
+                                    ? "border-[rgba(37,68,90,0.12)] bg-[rgba(221,236,245,0.92)] text-[#25445a]"
+                                    : "border-[rgba(127,146,160,0.12)] bg-[rgba(240,234,226,0.96)] text-[#7a8b97]"
+                              }`}
+                            >
+                              {step.number}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="flex min-h-[580px] flex-col">
+                      <motion.div
+                        key={activeLeak.number}
+                        initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                        animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                        transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+                        className={`rounded-[1.7rem] border px-6 py-6 shadow-[0_16px_38px_rgba(19,31,45,0.06)] ${
+                          activeLeak.tone === "accent"
+                            ? "border-[#071827] bg-[#071827] text-[#f8f4ec]"
+                            : "border-[rgba(7,24,39,0.08)] bg-[rgba(247,242,233,0.9)] text-[#071827]"
+                        }`}
+                      >
+                        <p
+                          className={`text-[0.66rem] font-semibold uppercase tracking-[0.22em] ${
+                            activeLeak.tone === "accent" ? "text-white/58" : "text-[#6a8090]"
+                          }`}
+                        >
+                          {activeLeak.number}
+                        </p>
+                        <h4
+                          className={`mt-4 text-[1.75rem] font-medium leading-[1] tracking-[-0.04em] ${
+                            activeLeak.tone === "accent" ? "text-[#f8f4ec]" : "text-[#071827]"
+                          }`}
+                        >
+                          {activeLeak.title}
+                        </h4>
+                        <p
+                          className={`mt-4 text-[1rem] font-medium leading-7 ${
+                            activeLeak.tone === "accent" ? "text-white/80" : "text-[#25445a]"
+                          }`}
+                        >
+                          {activeLeak.effect}
+                        </p>
+                        <p
+                          className={`mt-5 max-w-[30rem] text-[0.98rem] leading-8 ${
+                            activeLeak.tone === "accent" ? "text-white/72" : "text-[#526777]"
+                          }`}
+                        >
+                          {activeLeak.detail}
+                        </p>
+                      </motion.div>
+
+                      <div className="mt-5 min-h-[72px]">
+                        {completedLeaks.length ? (
+                          <>
+                            <p className="text-[0.64rem] font-semibold uppercase tracking-[0.2em] text-[#6a8090]">
+                              Completed leaks
+                            </p>
+                            <div className="mt-3 flex flex-wrap gap-2.5">
+                              {completedLeaks.map((step) => (
+                                <span
+                                  key={step.number}
+                                  className="rounded-full border border-[rgba(37,68,90,0.1)] bg-[rgba(234,243,248,0.88)] px-3.5 py-2 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-[#25445a]"
+                                >
+                                  ✓ {step.shortLabel}
+                                </span>
+                              ))}
+                            </div>
+                          </>
+                        ) : (
+                          <div className="rounded-[1.2rem] border border-dashed border-[rgba(37,68,90,0.12)] bg-[rgba(255,255,255,0.56)] px-4 py-4 text-[0.9rem] leading-6 text-[#6a8090]">
+                            Completed leaks will build here as the timeline progresses.
+                          </div>
+                        )}
+                      </div>
+
+                      <motion.div
+                        animate={
+                          reduceMotion
+                            ? undefined
+                            : showOutcome
+                              ? { opacity: 1, y: 0 }
+                              : { opacity: 0.35, y: 6 }
+                        }
+                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                        className="mt-auto rounded-[1.6rem] border border-[rgba(7,24,39,0.08)] bg-[rgba(234,243,248,0.58)] px-5 py-5"
+                      >
+                        <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[#5f7789]">
+                          Outcome
+                        </p>
+                        <p className="mt-3 text-[0.98rem] leading-8 text-[#173044]">
+                          Lost enquiries are usually the result of several small leaks working together.
+                        </p>
+                      </motion.div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
 export default function HomePage() {
   const pageRef = useRef<HTMLDivElement | null>(null);
   const heroSectionRef = useRef<HTMLElement | null>(null);
@@ -1992,16 +2432,19 @@ export default function HomePage() {
               ))}
             </nav>
 
-            <Link
-              href="/#contact"
+            <a
+              href={AUDIT_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex min-h-11 items-center justify-center rounded-full border border-[rgba(7,24,39,0.9)] bg-[#071827] px-4 text-[0.84rem] font-semibold tracking-[-0.01em] text-white shadow-[0_16px_36px_rgba(7,24,39,0.18)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#0d2232] hover:shadow-[0_20px_42px_rgba(7,24,39,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#89bee7] focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:px-5 sm:text-sm"
             >
               Get My Free Audit
-            </Link>
+            </a>
           </div>
         </header>
 
         <section
+          id="work"
           ref={heroSectionRef}
           className="relative overflow-x-hidden overflow-y-visible bg-[#f6f1e8] text-[#0f1f2d]"
         >
@@ -2080,8 +2523,10 @@ export default function HomePage() {
                 </p>
 
                 <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                  <Link
-                    href="/#contact"
+                  <a
+                    href={AUDIT_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex min-h-14 items-center justify-center rounded-full border border-[rgba(7,24,39,0.94)] bg-[#071827] px-7 text-sm font-bold tracking-[-0.01em] text-white shadow-[0_20px_40px_rgba(15,31,45,0.2)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#0b2030] hover:text-white hover:shadow-[0_24px_44px_rgba(15,31,45,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#89bee7] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f3eb]"
                     style={{
                       background: "#071827",
@@ -2094,10 +2539,10 @@ export default function HomePage() {
                     <span style={{ color: "#ffffff", opacity: 1 }}>
                       Get My Free Website Audit
                     </span>
-                  </Link>
+                  </a>
 
                   <Link
-                    href="/#services"
+                    href={SECTION_LINKS.services}
                     className="inline-flex min-h-14 items-center justify-center rounded-full border border-[rgba(7,24,39,0.14)] bg-[rgba(255,255,255,0.94)] px-7 text-sm font-semibold tracking-[-0.01em] text-[#071827] shadow-[0_12px_28px_rgba(15,31,45,0.08)] backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-[rgba(7,24,39,0.18)] hover:bg-white hover:text-[#071827] hover:shadow-[0_18px_34px_rgba(15,31,45,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#89bee7] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f3eb]"
                     style={{ color: "#071827", opacity: 1 }}
                   >
@@ -2314,7 +2759,7 @@ export default function HomePage() {
           <div className="relative mx-auto max-w-[1480px] px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-14 xl:px-20">
             <div className="grid items-center gap-10 xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] xl:gap-12">
               <motion.div
-                id="contact"
+                id="audit"
                 data-reveal-intro
                 initial={reduceMotion ? false : { opacity: 0, y: 28 }}
                 whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
@@ -2350,7 +2795,7 @@ export default function HomePage() {
 
                 <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                   <motion.a
-                    href={CALENDLY_URL}
+                    href={AUDIT_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={
@@ -2688,7 +3133,7 @@ export default function HomePage() {
                 </p>
                 <div className="mt-5">
                   <motion.a
-                    href={CALENDLY_URL}
+                    href={AUDIT_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={
@@ -2707,312 +3152,913 @@ export default function HomePage() {
           </div>
         </section>
 
-        <SceneSection data-funnel-section tone="night" className="border-y border-white/8">
-          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-            <SectionIntro
-              label="Why This Works"
-              title="We fix the conversion leaks most businesses miss."
-              body="We identify those leaks, prioritise the biggest ones, and help fix them in a way that improves business results."
-              align="center"
-            />
+        <ConversionLeakTimeline />
 
-            <div className="mt-14 overflow-hidden rounded-[2.25rem] border border-white/10 bg-[linear-gradient(180deg,rgba(8,15,26,0.84),rgba(5,10,18,0.64))] p-6 shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-8">
-              <div className="hidden items-center gap-3 lg:flex">
-                {funnelSteps.map((step, index) => (
-                  <div key={step.label} className="flex flex-1 items-center gap-3">
-                    <div data-reveal-card className="min-w-0 flex-1 rounded-[1.75rem] border border-white/10 bg-white/[0.035] p-5">
-                      <p className="text-[0.68rem] uppercase tracking-[0.34em] text-white/38">
-                        {step.label}
-                      </p>
-                      <p className="mt-4 text-[1.02rem] leading-7 text-white/74">{step.body}</p>
-                    </div>
-                    {index < funnelSteps.length - 1 ? (
-                      <div className="w-16 overflow-hidden">
-                        <div
-                          data-reveal-line
-                          className="h-px w-full bg-[linear-gradient(90deg,rgba(213,229,244,0.76),rgba(100,132,164,0.26))]"
-                        />
-                      </div>
-                    ) : null}
+        <section
+          id="process"
+          data-process-section
+          className="relative overflow-hidden bg-[#f6f1e8]"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_16%,rgba(221,236,245,0.28),transparent_22%),radial-gradient(circle_at_84%_76%,rgba(244,235,223,0.48),transparent_28%)]" />
+          <div className={`relative ${sectionTwoContainer} py-24 sm:py-28`}>
+            <div data-reveal-intro className="max-w-[42rem]">
+              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+                PROCESS
+              </p>
+              <h2 className="mt-5 max-w-[10ch] text-[2.7rem] font-medium leading-[0.94] tracking-[-0.055em] text-[#071827] sm:text-[3.55rem] md:text-[4.05rem]">
+                How we work
+              </h2>
+              <p className="mt-6 max-w-[32rem] text-[1rem] leading-8 text-[#42596b] md:text-[1.06rem]">
+                A simple process built around fixing the highest-impact gaps first.
+              </p>
+            </div>
+
+            <motion.div
+              data-reveal-card
+              initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.18 }}
+              transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-14 overflow-hidden rounded-[2.35rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,#fffdf8_0%,#fbf7ef_100%)] p-6 shadow-[0_28px_90px_rgba(19,31,45,0.08)] sm:p-8 xl:p-10"
+            >
+              <div className="hidden lg:block">
+                <div className="relative">
+                  <div className="pointer-events-none absolute left-[9%] right-[9%] top-10 h-px bg-[linear-gradient(90deg,rgba(145,176,204,0.22),rgba(97,127,154,0.48),rgba(145,176,204,0.22))]" />
+                  <motion.div
+                    data-reveal-line
+                    initial={reduceMotion ? false : { opacity: 0, scaleX: 0.4 }}
+                    whileInView={reduceMotion ? undefined : { opacity: 1, scaleX: 1 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    className="pointer-events-none absolute left-[9%] right-[9%] top-10 h-px origin-left bg-[linear-gradient(90deg,rgba(145,176,204,0.36),rgba(37,68,90,0.68),rgba(145,176,204,0.28))]"
+                  />
+
+                  <div className="grid gap-5 xl:grid-cols-4">
+                    {processSteps.map((step, index) => {
+                      const phaseLabels = ["Review", "Prioritise", "Build", "Convert"];
+                      const isFinal = index === processSteps.length - 1;
+
+                      return (
+                        <motion.article
+                          key={step.step}
+                          data-reveal-card
+                          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                          viewport={{ once: true, amount: 0.2 }}
+                          transition={{
+                            duration: 0.46,
+                            delay: reduceMotion ? 0 : index * 0.08,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className="group relative pt-16"
+                        >
+                          <div className="absolute left-1/2 top-0 flex -translate-x-1/2 flex-col items-center">
+                            <div
+                              className={`flex h-20 w-20 items-center justify-center rounded-full border text-[0.88rem] font-semibold uppercase tracking-[0.16em] shadow-[0_14px_34px_rgba(19,31,45,0.08)] ${
+                                isFinal
+                                  ? "border-[#071827] bg-[#071827] text-[#f8f4ec]"
+                                  : "border-[rgba(37,68,90,0.12)] bg-[rgba(221,236,245,0.92)] text-[#25445a]"
+                              }`}
+                            >
+                              0{index + 1}
+                            </div>
+                            <span className="mt-3 rounded-full border border-[rgba(37,68,90,0.1)] bg-white/86 px-3 py-1 text-[0.56rem] font-semibold uppercase tracking-[0.18em] text-[#698091]">
+                              {phaseLabels[index]}
+                            </span>
+                          </div>
+
+                          <div
+                            className={`rounded-[1.75rem] border p-6 pt-7 shadow-[0_16px_42px_rgba(19,31,45,0.05)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_22px_46px_rgba(19,31,45,0.09)] ${
+                              isFinal
+                                ? "border-[rgba(7,24,39,0.12)] bg-[linear-gradient(180deg,rgba(234,243,248,0.84),rgba(255,255,255,0.96))]"
+                                : "border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,246,239,0.96))]"
+                            }`}
+                          >
+                            <p className="text-[0.66rem] font-semibold uppercase tracking-[0.22em] text-[#698091]">
+                              0{index + 1}
+                            </p>
+                            <h3 className="mt-4 text-[1.45rem] font-medium tracking-[-0.04em] text-[#071827]">
+                              {step.step}
+                            </h3>
+                            <p className="mt-4 text-[0.96rem] leading-7 text-[#526777]">
+                              {step.body}
+                            </p>
+                          </div>
+                        </motion.article>
+                      );
+                    })}
                   </div>
-                ))}
+                </div>
               </div>
 
               <div className="grid gap-4 lg:hidden">
-                {funnelSteps.map((step, index) => (
-                  <div key={step.label} className="grid gap-3">
-                    <div
-                      data-reveal-card
-                      className="rounded-[1.6rem] border border-white/10 bg-white/[0.035] p-5"
-                    >
-                      <p className="text-[0.68rem] uppercase tracking-[0.34em] text-white/38">
-                        {step.label}
-                      </p>
-                      <p className="mt-3 text-[1rem] leading-7 text-white/74">{step.body}</p>
+                {processSteps.map((step, index) => {
+                  const phaseLabels = ["Review", "Prioritise", "Build", "Convert"];
+                  const isFinal = index === processSteps.length - 1;
+
+                  return (
+                    <Fragment key={step.step}>
+                      <motion.article
+                        data-reveal-card
+                        initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{
+                          duration: 0.42,
+                          delay: reduceMotion ? 0 : index * 0.06,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className={`rounded-[1.6rem] border p-5 shadow-[0_14px_34px_rgba(19,31,45,0.05)] ${
+                          isFinal
+                            ? "border-[rgba(7,24,39,0.12)] bg-[linear-gradient(180deg,rgba(234,243,248,0.84),rgba(255,255,255,0.96))]"
+                            : "border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,246,239,0.96))]"
+                        }`}
+                      >
+                        <div className="flex items-start gap-4">
+                          <div
+                            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full border text-[0.68rem] font-semibold uppercase tracking-[0.16em] ${
+                              isFinal
+                                ? "border-[#071827] bg-[#071827] text-[#f8f4ec]"
+                                : "border-[rgba(37,68,90,0.12)] bg-[rgba(221,236,245,0.92)] text-[#25445a]"
+                            }`}
+                          >
+                            0{index + 1}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-3">
+                              <h3 className="text-[1.22rem] font-medium tracking-[-0.035em] text-[#071827]">
+                                {step.step}
+                              </h3>
+                              <span className="rounded-full border border-[rgba(37,68,90,0.1)] bg-white/88 px-2.5 py-1 text-[0.54rem] font-semibold uppercase tracking-[0.18em] text-[#698091]">
+                                {phaseLabels[index]}
+                              </span>
+                            </div>
+                            <p className="mt-3 text-[0.95rem] leading-7 text-[#526777]">
+                              {step.body}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.article>
+
+                      {index < processSteps.length - 1 ? (
+                        <motion.div
+                          data-reveal-line
+                          initial={reduceMotion ? false : { opacity: 0, scaleY: 0.55 }}
+                          whileInView={reduceMotion ? undefined : { opacity: 1, scaleY: 1 }}
+                          viewport={{ once: true, amount: 0.2 }}
+                          transition={{
+                            duration: 0.34,
+                            delay: reduceMotion ? 0 : index * 0.06 + 0.06,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className="ml-6 h-8 w-px origin-top bg-[linear-gradient(180deg,rgba(145,176,204,0.22),rgba(97,127,154,0.48),rgba(145,176,204,0.2))]"
+                        />
+                      ) : null}
+                    </Fragment>
+                  );
+                })}
+              </div>
+
+              <motion.div
+                data-reveal-card
+                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-8 rounded-[1.85rem] border border-[rgba(7,24,39,0.08)] bg-[rgba(234,243,248,0.52)] px-6 py-6 shadow-[0_16px_40px_rgba(19,31,45,0.04)] sm:px-7"
+              >
+                <p className="text-[1rem] leading-8 text-[#25445a]">
+                  Start with the audit. Then fix what matters most.
+                </p>
+                <div className="mt-5">
+                  <motion.a
+                    href={AUDIT_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={
+                      reduceMotion
+                        ? undefined
+                        : { y: -3, boxShadow: "0 24px 48px rgba(7,24,39,0.2)" }
+                    }
+                    transition={{ duration: 0.24, ease: "easeOut" }}
+                    className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#071827] px-7 text-sm font-semibold tracking-[0.01em] text-[#f8f4ec] shadow-[0_18px_44px_rgba(7,24,39,0.16)]"
+                  >
+                    Claim My Free Audit
+                  </motion.a>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section
+          id="outcomes"
+          data-outcomes-section
+          className="relative overflow-hidden bg-[#f6f1e8]"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_16%,rgba(221,236,245,0.26),transparent_22%),radial-gradient(circle_at_82%_76%,rgba(244,235,223,0.5),transparent_28%)]" />
+          <div className={`relative ${sectionTwoContainer} py-24 sm:py-28`}>
+            <div data-reveal-intro className="max-w-[44rem]">
+              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+                OUTCOMES
+              </p>
+              <h2 className="mt-5 max-w-[11ch] text-[2.7rem] font-medium leading-[0.94] tracking-[-0.055em] text-[#071827] sm:text-[3.55rem] md:text-[4.05rem]">
+                What you can expect
+              </h2>
+              <p className="mt-6 max-w-[38rem] text-[1rem] leading-8 text-[#42596b] md:text-[1.06rem]">
+                The improvements are designed to help more visitors become enquiries, bookings, and customers.
+              </p>
+            </div>
+
+            <motion.div
+              data-reveal-card
+              initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.18 }}
+              transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-14 overflow-hidden rounded-[2.35rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,#fffdf8_0%,#fbf7ef_100%)] p-6 shadow-[0_28px_90px_rgba(19,31,45,0.08)] sm:p-8 xl:p-10"
+            >
+              <div className="grid gap-5 md:grid-cols-2">
+                {outcomeBoardCards.map((card, index) => (
+                  <motion.article
+                    key={card.title}
+                    data-reveal-card
+                    initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                    whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{
+                      duration: 0.46,
+                      delay: reduceMotion ? 0 : index * 0.08,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className={`group relative overflow-hidden rounded-[1.9rem] border border-[rgba(7,24,39,0.08)] ${card.cardAccent} p-6 shadow-[0_16px_42px_rgba(19,31,45,0.05)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_48px_rgba(19,31,45,0.09)] sm:p-7`}
+                  >
+                    <div className="pointer-events-none absolute right-5 top-4 text-[5.5rem] font-medium leading-none tracking-[-0.12em] text-[#071827]/[0.04]">
+                      {card.number}
                     </div>
-                    {index < funnelSteps.length - 1 ? (
-                      <div
-                        data-reveal-line
-                        className="mx-5 h-8 w-px bg-[linear-gradient(180deg,rgba(213,229,244,0.76),rgba(100,132,164,0.16))]"
-                      />
-                    ) : null}
-                  </div>
+                    <div className="pointer-events-none absolute -right-12 top-10 h-28 w-28 rounded-full bg-[radial-gradient(circle,rgba(221,236,245,0.86)_0%,rgba(221,236,245,0.24)_52%,rgba(221,236,245,0)_78%)] blur-2xl" />
+
+                    <div className="relative">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <span className={`rounded-full border border-[rgba(37,68,90,0.1)] px-3 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.18em] ${card.chipAccent}`}>
+                          {card.label}
+                        </span>
+                        <span className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-[#698091]">
+                          {card.number}
+                        </span>
+                      </div>
+
+                      <h3 className="mt-5 text-[1.45rem] font-medium tracking-[-0.04em] text-[#071827] sm:text-[1.55rem]">
+                        {card.title}
+                      </h3>
+
+                      <div className="mt-5 grid gap-2.5">
+                        {card.items.map((item) => (
+                          <div
+                            key={item}
+                            className="flex min-h-[3.75rem] items-center gap-4 rounded-[1.05rem] border border-[rgba(7,24,39,0.06)] bg-white/84 px-4 py-3"
+                          >
+                            <span className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[0.72rem] ${card.markerAccent}`}>
+                              ✓
+                            </span>
+                            <p className="text-[0.95rem] leading-7 text-[#526777]">
+                              {item}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mt-5 flex min-h-[3.5rem] flex-wrap items-center gap-3 rounded-[1rem] border border-[rgba(7,24,39,0.05)] bg-white/64 px-4 py-3">
+                        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#698091]">
+                          Before
+                        </span>
+                        <span className="text-[0.84rem] font-medium text-[#526777]">
+                          {card.transformBefore}
+                        </span>
+                        <span className="text-[#8aa8bf]">→</span>
+                        <span className="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-[#698091]">
+                          After
+                        </span>
+                        <span className="text-[0.84rem] font-medium text-[#173044]">
+                          {card.transformAfter}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.article>
                 ))}
               </div>
-            </div>
-          </div>
-        </SceneSection>
 
-        <SceneSection id="process" data-process-section tone="night">
-          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-            <div className="grid gap-12 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
-              <div className="lg:sticky lg:top-28 lg:self-start">
-                <SectionIntro
-                  label="Process"
-                  title="How we work"
-                  body="Start with the audit. Then fix what matters most."
-                />
+              <motion.div
+                data-reveal-card
+                initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.52, delay: reduceMotion ? 0 : 0.22, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-8 overflow-hidden rounded-[1.9rem] border border-[rgba(7,24,39,0.14)] bg-[#071827] px-6 py-6 text-[#f8f4ec] shadow-[0_22px_60px_rgba(7,24,39,0.16)] sm:px-7"
+              >
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                  <div className="max-w-[40rem]">
+                    <span className="rounded-full border border-white/10 bg-white/8 px-3 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#d6e7f4]">
+                      BUSINESS PERFORMANCE
+                    </span>
+                    <p className="mt-4 text-[1.08rem] leading-8 text-[#f8f4ec] sm:text-[1.16rem]">
+                      The goal is not just to improve your website. The goal is to improve business performance.
+                    </p>
+                    <p className="mt-3 text-[0.9rem] leading-7 text-white/64">
+                      Start with the free audit
+                    </p>
+                  </div>
+
+                  <div>
+                    <motion.a
+                      href={AUDIT_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={
+                        reduceMotion
+                          ? undefined
+                          : { y: -3, boxShadow: "0 24px 48px rgba(255,255,255,0.12)" }
+                      }
+                      transition={{ duration: 0.24, ease: "easeOut" }}
+                      className="inline-flex min-h-13 items-center justify-center rounded-full border border-white/14 bg-[rgba(255,255,255,0.08)] px-6 text-sm font-semibold tracking-[0.01em] text-[#f8f4ec] shadow-[0_18px_40px_rgba(0,0,0,0.12)] backdrop-blur-sm"
+                    >
+                      Claim My Free Audit
+                    </motion.a>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section
+          data-industries-section
+          className="relative overflow-hidden bg-[#f6f1e8]"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(221,236,245,0.24),transparent_22%),radial-gradient(circle_at_82%_76%,rgba(244,235,223,0.46),transparent_28%)]" />
+          <div className={`relative ${sectionTwoContainer} py-24 sm:py-28`}>
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] lg:items-start xl:gap-12">
+              <div data-reveal-intro className="max-w-[34rem]">
+                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+                  WHO IT’S FOR
+                </p>
+                <h2 className="mt-5 max-w-[12ch] text-[2.7rem] font-medium leading-[0.94] tracking-[-0.055em] text-[#071827] sm:text-[3.55rem] md:text-[4.05rem]">
+                  Best fit for businesses that rely on trust, local visibility, and enquiries
+                </h2>
+                <p className="mt-6 max-w-[33rem] text-[1rem] leading-8 text-[#42596b] md:text-[1.06rem]">
+                  We work especially well with service businesses where the website plays a key role in credibility, contact, and conversion.
+                </p>
+                <p className="mt-7 text-[0.96rem] leading-7 text-[#607585]">
+                  If people need to trust you before contacting you, your website matters.
+                </p>
               </div>
 
-              <div className="grid gap-4">
-                {processSteps.map((step, index) => (
-                  <article
-                    key={step.step}
-                    data-reveal-card
-                    className="rounded-[1.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.78),rgba(5,10,18,0.58))] p-6 shadow-[0_18px_60px_rgba(0,0,0,0.22)] backdrop-blur-xl"
-                  >
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                      <div>
-                        <p className="text-[0.7rem] font-medium uppercase tracking-[0.38em] text-white/38">
-                          Step 0{index + 1}
+              <motion.div
+                data-reveal-card
+                initial={reduceMotion ? false : { opacity: 0, y: 26 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.18 }}
+                transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+                className="overflow-hidden rounded-[2.25rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,#fffdf8_0%,#fbf7ef_100%)] p-6 shadow-[0_28px_90px_rgba(19,31,45,0.08)] sm:p-8"
+              >
+                <div className="rounded-[1.8rem] border border-[rgba(7,24,39,0.08)] bg-white/62 px-5 py-5 sm:px-6 sm:py-6">
+                  <div className="flex flex-col gap-3 border-b border-[rgba(7,24,39,0.08)] pb-5 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <h3 className="text-[1.7rem] font-medium tracking-[-0.04em] text-[#071827] sm:text-[1.95rem]">
+                        Best-fit industries
+                      </h3>
+                      <p className="mt-3 max-w-[30rem] text-[0.96rem] leading-7 text-[#526777]">
+                        Businesses where credibility, local search, and quick enquiries directly affect revenue.
+                      </p>
+                    </div>
+                    <span className="rounded-full border border-[rgba(37,68,90,0.1)] bg-[rgba(234,243,248,0.88)] px-3 py-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#32516a]">
+                      High-trust, enquiry-led businesses
+                    </span>
+                  </div>
+
+                  <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                    {industries.map((industry, index) => (
+                      <motion.div
+                        key={industry}
+                        data-reveal-chip
+                        initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+                        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{
+                          duration: 0.38,
+                          delay: reduceMotion ? 0 : index * 0.04,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className={`group rounded-[1.2rem] border px-4 py-3.5 text-sm text-[#071827] shadow-[0_10px_24px_rgba(19,31,45,0.04)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(19,31,45,0.08)] ${
+                          index % 3 === 0
+                            ? "border-[rgba(37,68,90,0.1)] bg-[rgba(234,243,248,0.74)]"
+                            : index % 3 === 1
+                              ? "border-[rgba(7,24,39,0.08)] bg-[rgba(255,255,255,0.92)]"
+                              : "border-[rgba(7,24,39,0.08)] bg-[rgba(247,242,233,0.88)]"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="inline-flex h-2.5 w-2.5 shrink-0 rounded-full bg-[#89abc5] transition duration-300 group-hover:bg-[#25445a]" />
+                          <span className="font-medium leading-6 tracking-[-0.01em] text-[#173044]">
+                            {industry}
+                          </span>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 grid gap-3 md:grid-cols-3">
+                    {[
+                      {
+                        title: "Trust-led",
+                        text: "People need confidence before enquiring.",
+                      },
+                      {
+                        title: "Local visibility",
+                        text: "Search and location matter.",
+                      },
+                      {
+                        title: "Enquiry-driven",
+                        text: "More calls, bookings, and leads matter.",
+                      },
+                    ].map((item, index) => (
+                      <motion.article
+                        key={item.title}
+                        data-reveal-card
+                        initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+                        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{
+                          duration: 0.4,
+                          delay: reduceMotion ? 0 : 0.18 + index * 0.05,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="rounded-[1.25rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,244,236,0.96))] px-4 py-4 shadow-[0_10px_24px_rgba(19,31,45,0.04)]"
+                      >
+                        <p className="text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-[#698091]">
+                          {item.title}
                         </p>
-                        <h3 className="mt-3 text-[1.36rem] font-medium tracking-[-0.04em] text-white">
-                          {step.step}
+                        <p className="mt-3 text-[0.92rem] leading-7 text-[#526777]">
+                          {item.text}
+                        </p>
+                      </motion.article>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 rounded-[1.4rem] border border-[rgba(7,24,39,0.08)] bg-[rgba(234,243,248,0.52)] px-5 py-5">
+                    <p className="text-[0.96rem] leading-7 text-[#25445a]">
+                      Not sure if this applies to your business? Start with the free audit.
+                    </p>
+                    <div className="mt-5">
+                      <motion.a
+                        href={AUDIT_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={
+                          reduceMotion
+                            ? undefined
+                            : { y: -3, boxShadow: "0 24px 48px rgba(7,24,39,0.2)" }
+                        }
+                        transition={{ duration: 0.24, ease: "easeOut" }}
+                        className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#071827] px-7 text-sm font-semibold tracking-[0.01em] text-[#f8f4ec] shadow-[0_18px_44px_rgba(7,24,39,0.16)]"
+                      >
+                        Claim My Free Audit
+                      </motion.a>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          data-why-section
+          className="relative overflow-hidden bg-[#f6f1e8]"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,rgba(221,236,245,0.24),transparent_22%),radial-gradient(circle_at_82%_76%,rgba(244,235,223,0.46),transparent_28%)]" />
+          <div className={`relative ${sectionTwoContainer} py-24 sm:py-28`}>
+            <div data-reveal-intro className="max-w-[47.5rem]">
+              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+                WHY OCIA STUDIOS
+              </p>
+              <h2 className="mt-5 max-w-[12ch] text-[2.7rem] font-medium leading-[0.94] tracking-[-0.055em] text-[#071827] sm:text-[3.55rem] md:text-[4.05rem]">
+                Why businesses choose Ocia Studios
+              </h2>
+              <p className="mt-6 max-w-[42rem] text-[1rem] leading-8 text-[#42596b] md:text-[1.06rem]">
+                We combine strategy, website improvement, lead generation thinking, automation, and follow-up systems into one practical approach.
+              </p>
+            </div>
+
+            <motion.div
+              data-reveal-card
+              initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.18 }}
+              transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-10 overflow-hidden rounded-[2.5rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,#fffdf8_0%,#fbf7ef_100%)] p-5 shadow-[0_28px_90px_rgba(19,31,45,0.08)] sm:p-7 xl:p-8"
+            >
+              <div className="rounded-[2.15rem] border border-[rgba(7,24,39,0.08)] bg-white/54 px-4 py-4 sm:px-5 sm:py-5">
+                <div className="grid gap-5 xl:grid-cols-[minmax(0,0.34fr)_minmax(0,0.66fr)] xl:gap-6">
+                  <div className="rounded-[1.7rem] border border-[rgba(7,24,39,0.07)] bg-[linear-gradient(180deg,rgba(247,242,233,0.94),rgba(245,238,228,0.9))] p-5 shadow-[0_14px_34px_rgba(19,31,45,0.04)] sm:p-6">
+                    <span className="rounded-full border border-[rgba(7,24,39,0.06)] bg-white/72 px-3 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#7b8a95]">
+                      COMMON APPROACH
+                    </span>
+                    <h3 className="mt-4 max-w-[12ch] text-[1.42rem] font-medium leading-[1.02] tracking-[-0.04em] text-[#4d6475] sm:text-[1.62rem]">
+                      Most website projects stop at
+                    </h3>
+
+                    <div className="mt-5 grid gap-2.5">
+                      {whyOciaComparison.commonApproach.map((item, index) => (
+                        <motion.article
+                          key={item}
+                          data-reveal-card
+                          initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+                          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                          viewport={{ once: true, amount: 0.2 }}
+                          transition={{
+                            duration: 0.36,
+                            delay: reduceMotion ? 0 : index * 0.05,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className="rounded-[1.15rem] border border-[rgba(7,24,39,0.06)] bg-[rgba(255,255,255,0.76)] px-4 py-3.5"
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#97a5af]">
+                              0{index + 1}
+                            </span>
+                            <span className="text-[0.98rem] font-medium leading-7 text-[#607585]">
+                              {item}
+                            </span>
+                          </div>
+                        </motion.article>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="rounded-[1.8rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,244,236,0.96))] p-5 shadow-[0_16px_40px_rgba(19,31,45,0.05)] sm:p-6">
+                    <div className="flex flex-col gap-4 border-b border-[rgba(7,24,39,0.08)] pb-5 xl:flex-row xl:items-end xl:justify-between">
+                      <div>
+                        <span className="rounded-full border border-[rgba(37,68,90,0.1)] bg-[rgba(234,243,248,0.88)] px-3 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#32516a]">
+                          OCIA APPROACH
+                        </span>
+                        <h3 className="mt-4 text-[1.58rem] font-medium tracking-[-0.04em] text-[#071827] sm:text-[1.82rem]">
+                          Ocia Studios looks at
                         </h3>
                       </div>
-                      <p className="max-w-2xl text-[0.98rem] leading-7 text-white/66">
-                        {step.body}
+
+                      <motion.div
+                        data-reveal-line
+                        initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+                        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ duration: 0.44, delay: reduceMotion ? 0 : 0.14, ease: [0.22, 1, 0.36, 1] }}
+                        className="inline-flex items-center gap-3 self-start xl:self-auto"
+                      >
+                        <div className="hidden h-px w-8 bg-[linear-gradient(90deg,rgba(145,176,204,0.1),rgba(97,127,154,0.44))] sm:block" />
+                        <span className="rounded-full border border-[rgba(37,68,90,0.1)] bg-[rgba(246,241,232,0.96)] px-3 py-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#5f7789]">
+                          Beyond design-only
+                        </span>
+                      </motion.div>
+                    </div>
+
+                    <div className="mt-5 grid gap-3 md:grid-cols-2">
+                      {whyOciaComparison.ociaApproach.map((item, index) => (
+                        <motion.article
+                          key={item.title}
+                          data-reveal-card
+                          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                          viewport={{ once: true, amount: 0.2 }}
+                          transition={{
+                            duration: 0.4,
+                            delay: reduceMotion ? 0 : 0.16 + index * 0.045,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className={`group rounded-[1.35rem] border p-4 shadow-[0_12px_30px_rgba(19,31,45,0.05)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(19,31,45,0.08)] sm:p-5 ${
+                            item.tone === "accent"
+                              ? "border-[#071827] bg-[#071827] text-[#f8f4ec]"
+                              : "border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(241,248,252,0.94))] text-[#071827]"
+                          }`}
+                        >
+                          <p
+                            className={`text-[0.64rem] font-semibold uppercase tracking-[0.22em] ${
+                              item.tone === "accent" ? "text-white/58" : "text-[#698091]"
+                            }`}
+                          >
+                            {item.number}
+                          </p>
+                          <h4
+                            className={`mt-3 text-[1.04rem] font-medium leading-6 tracking-[-0.03em] ${
+                              item.tone === "accent" ? "text-[#f8f4ec]" : "text-[#071827]"
+                            }`}
+                          >
+                            {item.title}
+                          </h4>
+                          <p
+                            className={`mt-2.5 text-[0.92rem] leading-7 ${
+                              item.tone === "accent" ? "text-white/72" : "text-[#526777]"
+                            }`}
+                          >
+                            {item.body}
+                          </p>
+                        </motion.article>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <motion.div
+                  data-reveal-card
+                  initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                  whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.24, ease: [0.22, 1, 0.36, 1] }}
+                  className="mt-5 overflow-hidden rounded-[1.7rem] border border-[rgba(7,24,39,0.1)] bg-[linear-gradient(180deg,rgba(234,243,248,0.92),rgba(255,255,255,0.96))] px-5 py-5 shadow-[0_16px_42px_rgba(19,31,45,0.06)] sm:px-6"
+                >
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="max-w-[39rem]">
+                      <p className="text-[1.04rem] leading-8 text-[#173044] sm:text-[1.12rem]">
+                        If you need more than a pretty website, we are the right kind of partner.
+                      </p>
+                      <p className="mt-2.5 text-[0.9rem] leading-7 text-[#607585]">
+                        Want to see what is holding your website back?
                       </p>
                     </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </div>
-        </SceneSection>
 
-        <SceneSection id="work" data-outcomes-section tone="night" className="border-y border-white/8">
-          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-            <SectionIntro
-              label="Outcomes"
-              title="The goal is not a prettier website. The goal is better business performance."
-              body="The work is designed to create a stronger first impression, cleaner conversion flow, and a more reliable way to turn website traffic into real opportunities."
-            />
-
-            <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {outcomeCards.map((item) => (
-                <article
-                  key={item}
-                  data-reveal-card
-                  className="rounded-[1.7rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.74),rgba(5,10,18,0.5))] p-5 backdrop-blur-xl"
-                >
-                  <div className="h-1.5 w-10 rounded-full bg-[linear-gradient(90deg,rgba(223,234,245,0.92),rgba(117,150,184,0.22))]" />
-                  <p className="mt-5 text-[0.98rem] leading-7 text-white/72">{item}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </SceneSection>
-
-        <SceneSection data-industries-section tone="night">
-          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-end">
-              <SectionIntro
-                label="Who It's For"
-                title="Built for service businesses where trust drives enquiries."
-                body="We work especially well with service businesses where the website plays a key role in credibility, contact, and conversion."
-              />
-
-              <div className="flex flex-wrap gap-3 lg:justify-end">
-                {industries.map((industry) => (
-                  <div
-                    key={industry}
-                    data-reveal-chip
-                    className="rounded-full border border-white/10 bg-[rgba(255,255,255,0.045)] px-4 py-3 text-sm text-white/74 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
-                  >
-                    {industry}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </SceneSection>
-
-        <SceneSection data-why-section tone="night" className="border-y border-white/8">
-          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-            <SectionIntro
-              label="Why Ocia Studios"
-              title="Why businesses choose Ocia Studios."
-              body="If you need more than a pretty website, we are the right kind of partner."
-            />
-
-            <div className="mt-14 grid gap-5 lg:grid-cols-3">
-              {whyOciaCards.map((card) => (
-                <article
-                  key={card.title}
-                  data-reveal-card
-                  className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.78),rgba(5,10,18,0.58))] p-7 shadow-[0_20px_70px_rgba(0,0,0,0.24)] backdrop-blur-xl"
-                >
-                  <h3 className="text-[1.38rem] font-medium tracking-[-0.04em] text-white">
-                    {card.title}
-                  </h3>
-                  <p className="mt-4 text-[0.98rem] leading-7 text-white/66">{card.body}</p>
-                </article>
-              ))}
-            </div>
-
-            <p data-reveal-card className="mt-10 max-w-3xl text-[0.98rem] leading-7 text-white/58">
-              If you need more than a pretty website, we are the right kind of partner.
-            </p>
-          </div>
-        </SceneSection>
-
-        <SceneSection data-improvement-section tone="night">
-          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-            <SectionIntro
-              label="Improvement"
-              title="What improvement usually looks like."
-              body="Most wins come from improving the basics that directly affect trust and conversion."
-            />
-
-            <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {improvementCards.map((item, index) => (
-                <article
-                  key={item}
-                  data-reveal-card
-                  className="rounded-[1.8rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.74),rgba(5,10,18,0.54))] p-6 backdrop-blur-xl"
-                >
-                  <p className="text-[0.7rem] font-medium uppercase tracking-[0.38em] text-white/38">
-                    0{index + 1}
-                  </p>
-                  <p className="mt-4 text-[1rem] leading-7 text-white/72">{item}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </SceneSection>
-
-        <SceneSection data-faq-section tone="night" className="border-y border-white/8">
-          <div className="mx-auto max-w-[1120px] px-5 py-24 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-            <SectionIntro
-              label="FAQ"
-              title="Frequently Asked Questions"
-              body="A few of the questions businesses usually ask before we review the site and recommend the right next step."
-              align="center"
-            />
-
-            <div className="mt-14 grid gap-4">
-              {faqs.map((faq, index) => {
-                const isOpen = openFaq === index;
-
-                return (
-                  <div
-                    key={faq.question}
-                    data-reveal-card
-                    className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,28,0.78),rgba(5,10,18,0.56))] backdrop-blur-xl"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                      className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition hover:bg-white/[0.03]"
-                    >
-                      <span className="text-[1rem] font-medium leading-7 text-white/86">
-                        {faq.question}
-                      </span>
-                      <span className="text-white/48">{isOpen ? "−" : "+"}</span>
-                    </button>
-
-                    <div
-                      className={`grid transition-[grid-template-rows] duration-300 ${
-                        isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                      }`}
-                    >
-                      <div className="overflow-hidden">
-                        <p className="px-6 pb-6 text-[0.98rem] leading-7 text-white/64">
-                          {faq.answer}
-                        </p>
-                      </div>
+                    <div>
+                      <motion.a
+                        href={AUDIT_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={
+                          reduceMotion
+                            ? undefined
+                            : { y: -3, boxShadow: "0 24px 48px rgba(7,24,39,0.18)" }
+                        }
+                        transition={{ duration: 0.24, ease: "easeOut" }}
+                        className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#071827] px-7 text-sm font-semibold tracking-[0.01em] text-[#f8f4ec] shadow-[0_18px_44px_rgba(7,24,39,0.16)]"
+                      >
+                        Claim My Free Audit
+                      </motion.a>
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
-        </SceneSection>
+        </section>
 
-        <SceneSection data-final-section tone="dawn" className="border-b border-white/8">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(172,196,220,0.12),transparent_22%),radial-gradient(circle_at_50%_100%,rgba(160,188,214,0.08),transparent_30%)]" />
-          <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-14 xl:px-20">
-            <div
-              data-final-cta
-              data-reveal-card
-              className="rounded-[2.4rem] border border-white/12 bg-[linear-gradient(180deg,rgba(11,20,32,0.9),rgba(6,12,20,0.78))] px-6 py-12 shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:px-8 md:px-12 md:py-14"
-            >
-              <div className="mx-auto max-w-4xl text-center">
-                <p className="text-[0.68rem] font-medium uppercase tracking-[0.42em] text-white/42 sm:text-[0.72rem]">
-                  Final CTA
+        <section
+          id="faq"
+          data-faq-section
+          className="relative overflow-hidden bg-[#f6f1e8]"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_16%,rgba(221,236,245,0.24),transparent_22%),radial-gradient(circle_at_82%_76%,rgba(244,235,223,0.46),transparent_28%)]" />
+          <div className={`relative ${sectionTwoContainer} py-24 sm:py-28`}>
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.38fr)_minmax(0,0.62fr)] lg:items-start xl:gap-12">
+              <div data-reveal-intro className="max-w-[33rem]">
+                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+                  FAQ
                 </p>
-                <h2 className="mt-6 text-[2.5rem] font-medium leading-[0.95] tracking-[-0.055em] text-white sm:text-[3.4rem] md:text-[4.25rem]">
-                  If your website is underperforming, the fix should be clear.
+                <h2 className="mt-5 max-w-[10ch] text-[2.7rem] font-medium leading-[0.94] tracking-[-0.055em] text-[#071827] sm:text-[3.55rem] md:text-[4.05rem]">
+                  Frequently Asked Questions
                 </h2>
-                <p className="mx-auto mt-6 max-w-3xl text-[1rem] leading-8 text-white/68 md:text-[1.08rem]">
-                  Get a free website audit and see what is blocking more enquiries,
-                  better conversion, and stronger lead flow.
+                <p className="mt-6 max-w-[31rem] text-[1rem] leading-8 text-[#42596b] md:text-[1.06rem]">
+                  Clear answers before you start. The audit helps us recommend what actually matters.
                 </p>
 
-                <div className="mt-10 flex flex-wrap justify-center gap-4">
-                  <OciaButton href="/#contact" arrow>
-                    Get My Free Audit
-                  </OciaButton>
-                  <OciaButton href={CALENDLY_URL} variant="secondary" arrow>
-                    Talk to Ocia Studios
-                  </OciaButton>
+                <div className="mt-8 rounded-[1.8rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,244,236,0.96))] px-6 py-6 shadow-[0_16px_40px_rgba(19,31,45,0.05)]">
+                  <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[#698091]">
+                    Still unsure?
+                  </p>
+                  <p className="mt-4 text-[0.98rem] leading-7 text-[#526777]">
+                    Start with the free audit and we will show you the clearest next step.
+                  </p>
+                  <div className="mt-5">
+                    <motion.a
+                      href={AUDIT_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={
+                        reduceMotion
+                          ? undefined
+                          : { y: -3, boxShadow: "0 24px 48px rgba(7,24,39,0.18)" }
+                      }
+                      transition={{ duration: 0.24, ease: "easeOut" }}
+                      className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#071827] px-7 text-sm font-semibold tracking-[0.01em] text-[#f8f4ec] shadow-[0_18px_44px_rgba(7,24,39,0.16)]"
+                    >
+                      Claim My Free Audit
+                    </motion.a>
+                  </div>
                 </div>
               </div>
+
+              <motion.div
+                data-reveal-card
+                initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.18 }}
+                transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+                className="relative"
+              >
+                <div className="pointer-events-none absolute inset-0 rounded-[2.3rem] bg-[radial-gradient(circle_at_18%_16%,rgba(221,236,245,0.26),transparent_28%)] blur-2xl" />
+                <div className="relative overflow-hidden rounded-[2.3rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,#fffdf8_0%,#fbf7ef_100%)] p-5 shadow-[0_28px_90px_rgba(19,31,45,0.08)] sm:p-6">
+                  <div className="flex items-center justify-between gap-4 border-b border-[rgba(7,24,39,0.08)] pb-5">
+                    <div>
+                      <span className="rounded-full border border-[rgba(37,68,90,0.1)] bg-[rgba(234,243,248,0.88)] px-3 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#32516a]">
+                        Answers
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 grid gap-3">
+                    {faqs.map((faq, index) => {
+                      const isOpen = openFaq === index;
+
+                      return (
+                        <motion.div
+                          key={faq.question}
+                          data-reveal-card
+                          initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+                          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                          viewport={{ once: true, amount: 0.2 }}
+                          transition={{
+                            duration: 0.38,
+                            delay: reduceMotion ? 0 : index * 0.05,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className={`overflow-hidden rounded-[1.55rem] border shadow-[0_12px_30px_rgba(19,31,45,0.04)] transition duration-300 ${
+                            isOpen
+                              ? "border-[rgba(37,68,90,0.16)] bg-[rgba(234,243,248,0.58)] shadow-[0_18px_38px_rgba(19,31,45,0.08)]"
+                              : "border-[rgba(7,24,39,0.08)] bg-[rgba(255,255,255,0.9)] hover:bg-[rgba(248,244,236,0.84)]"
+                          }`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => setOpenFaq(index)}
+                            className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left sm:px-6"
+                          >
+                            <span className="text-[1rem] font-medium leading-7 text-[#071827] sm:text-[1.04rem]">
+                              {faq.question}
+                            </span>
+                            <motion.span
+                              animate={reduceMotion ? undefined : { rotate: isOpen ? 180 : 0 }}
+                              transition={{ duration: 0.24, ease: "easeOut" }}
+                              className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-base ${
+                                isOpen
+                                  ? "border-[rgba(37,68,90,0.14)] bg-[rgba(221,236,245,0.92)] text-[#25445a]"
+                                  : "border-[rgba(7,24,39,0.08)] bg-white/82 text-[#7d99ad]"
+                              }`}
+                            >
+                              {isOpen ? "−" : "+"}
+                            </motion.span>
+                          </button>
+
+                          <motion.div
+                            initial={false}
+                            animate={
+                              isOpen
+                                ? { height: "auto", opacity: 1 }
+                                : { height: 0, opacity: 0 }
+                            }
+                            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                            className="overflow-hidden"
+                          >
+                            <motion.p
+                              initial={false}
+                              animate={
+                                isOpen
+                                  ? { y: 0, opacity: 1 }
+                                  : { y: -6, opacity: 0 }
+                              }
+                              transition={{ duration: 0.24, ease: "easeOut" }}
+                              className="px-5 pb-5 text-[0.96rem] leading-7 text-[#526777] sm:px-6 sm:pb-6"
+                            >
+                              {faq.answer}
+                            </motion.p>
+                          </motion.div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
-        </SceneSection>
+        </section>
 
-        <footer className="relative z-20">
-          <div className="mx-auto max-w-[1320px] px-5 py-12 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-            <div className="grid gap-8 border-t border-white/8 pt-8 lg:grid-cols-[minmax(0,0.9fr)_auto] lg:items-start">
+        <section
+          id="contact"
+          data-final-section
+          className="relative overflow-hidden bg-[#f6f1e8]"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(221,236,245,0.24),transparent_22%),radial-gradient(circle_at_84%_78%,rgba(244,235,223,0.42),transparent_28%)]" />
+          <div className={`relative ${sectionTwoContainer} py-24 sm:py-28`}>
+            <motion.div
+              data-final-cta
+              data-reveal-card
+              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden rounded-[2.5rem] border border-[rgba(7,24,39,0.08)] bg-[linear-gradient(180deg,#fffdf8_0%,#fbf7ef_100%)] p-6 shadow-[0_28px_90px_rgba(19,31,45,0.08)] sm:p-8 xl:p-10"
+            >
+              <div className="grid gap-8 lg:grid-cols-[minmax(0,0.58fr)_minmax(0,0.42fr)] lg:items-center">
+                <div className="max-w-[40rem]">
+                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[#5a7082]">
+                    READY TO FIND THE GAPS?
+                  </p>
+                  <h2 className="mt-5 max-w-[11ch] text-[2.5rem] font-medium leading-[0.95] tracking-[-0.055em] text-[#071827] sm:text-[3.35rem] md:text-[3.9rem]">
+                    Start with a free website opportunity audit
+                  </h2>
+                  <p className="mt-6 max-w-[34rem] text-[1rem] leading-8 text-[#42596b] md:text-[1.06rem]">
+                    We will review your website, identify the biggest issues affecting trust, enquiries, visibility, and conversion, then show you what to fix first.
+                  </p>
+
+                  <div className="mt-8">
+                    <motion.a
+                      href={AUDIT_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={
+                        reduceMotion
+                          ? undefined
+                          : { y: -3, boxShadow: "0 24px 48px rgba(7,24,39,0.18)" }
+                      }
+                      transition={{ duration: 0.24, ease: "easeOut" }}
+                      className="inline-flex min-h-14 items-center justify-center rounded-full bg-[#071827] px-7 text-sm font-semibold tracking-[0.01em] text-[#f8f4ec] shadow-[0_18px_44px_rgba(7,24,39,0.16)]"
+                    >
+                      Claim My Free Audit
+                    </motion.a>
+                  </div>
+
+                  <p className="mt-4 text-[0.92rem] leading-7 text-[#607585]">
+                    No pressure. Just a clear review of what can be improved.
+                  </p>
+                </div>
+
+                <div className="rounded-[2rem] border border-[rgba(7,24,39,0.08)] bg-white/78 px-5 py-5 shadow-[0_16px_42px_rgba(19,31,45,0.05)] sm:px-6 sm:py-6">
+                  <div className="flex items-center justify-between gap-4 border-b border-[rgba(7,24,39,0.08)] pb-5">
+                    <h3 className="text-[1.35rem] font-medium tracking-[-0.04em] text-[#071827]">
+                      Free Audit Includes
+                    </h3>
+                    <span className="rounded-full border border-[rgba(37,68,90,0.1)] bg-[rgba(234,243,248,0.88)] px-3 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#32516a]">
+                      Preview
+                    </span>
+                  </div>
+
+                  <div className="mt-5 grid gap-3">
+                    {[
+                      "Messaging review",
+                      "Trust review",
+                      "CTA and enquiry flow",
+                      "SEO basics",
+                      "Quick-win opportunities",
+                    ].map((item) => (
+                      <div
+                        key={item}
+                        className="flex min-h-[3.5rem] items-center gap-3 rounded-[1.1rem] border border-[rgba(7,24,39,0.06)] bg-[rgba(255,255,255,0.88)] px-4 py-3"
+                      >
+                        <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[rgba(221,236,245,0.92)] text-[0.72rem] text-[#25445a]">
+                          ✓
+                        </span>
+                        <p className="text-[0.95rem] leading-7 text-[#526777]">
+                          {item}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <footer className="relative z-20 bg-[#f6f1e8]">
+          <div className={`mx-auto ${sectionTwoContainer} py-12`}>
+            <div className="grid gap-8 border-t border-[rgba(7,24,39,0.08)] pt-8 lg:grid-cols-[minmax(0,0.9fr)_auto] lg:items-start">
               <div>
                 <Link
                   href="/"
-                  className="text-[0.72rem] font-medium uppercase tracking-[0.42em] text-white/92 transition hover:text-white"
+                  className="text-[0.72rem] font-medium uppercase tracking-[0.42em] text-[#071827] transition hover:text-[#071827]"
                 >
                   OCIA Studios
                 </Link>
-                <p className="mt-4 max-w-3xl text-[0.95rem] leading-7 text-white/54">
-                  Ocia Studios helps service businesses improve websites, SEO,
-                  conversion, lead generation, automation, booking flow, and follow-up
-                  systems so more visitors become real opportunities.
+                <p className="mt-4 text-[0.82rem] uppercase tracking-[0.18em] text-[#607585]">
+                  © {currentYear} Ocia Studios
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-x-6 gap-y-3 text-[0.72rem] uppercase tracking-[0.28em] text-white/48">
+              <div className="flex flex-wrap gap-x-6 gap-y-3 text-[0.72rem] uppercase tracking-[0.28em] text-[#607585]">
                 {footerLinks.map((item) => (
-                  <Link key={item.label} href={item.href} className="transition hover:text-white/84">
+                  <Link key={item.label} href={item.href} className="transition hover:text-[#071827]">
                     {item.label}
                   </Link>
                 ))}
               </div>
             </div>
 
-            <p className="mt-8 text-[0.75rem] uppercase tracking-[0.24em] text-white/34">
-              © {currentYear} Ocia Studios. Built for service businesses that need
-              more enquiries.
-            </p>
           </div>
         </footer>
       </main>

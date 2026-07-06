@@ -671,10 +671,22 @@ const faqs = [
 const footerLinks = [
   { label: "Work", href: SECTION_LINKS.work },
   { label: "Services", href: SECTION_LINKS.services },
-  { label: "Solutions", href: "#solutions" },
   { label: "Process", href: SECTION_LINKS.process },
   { label: "Pricing", href: SECTION_LINKS.pricing },
+  { label: "FAQ", href: "#faq" },
   { label: "Contact", href: SECTION_LINKS.contact },
+];
+
+const footerServiceLinks = [
+  { label: "Website Redesign", href: SECTION_LINKS.services },
+  { label: "SEO", href: SECTION_LINKS.services },
+  { label: "Automation", href: SECTION_LINKS.services },
+  { label: "CRM / Follow-up", href: SECTION_LINKS.services },
+];
+
+const footerLegalLinks = [
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms of Service", href: "/terms-of-service" },
 ];
 
 const sectionRevealSelectors = [
@@ -689,6 +701,7 @@ const sectionRevealSelectors = [
   "[data-why-section]",
   "[data-faq-section]",
   "[data-final-section]",
+  "[data-footer-section]",
 ];
 
 function SectionIntro({
@@ -2229,11 +2242,11 @@ export default function HomePage() {
       gsap.set("[data-hero-accent]", { y: 0, rotate: 0, opacity: 1 });
       gsap.set("[data-hero-orb]", { y: 0, x: 0, opacity: 0.8 });
 
-      gsap.set("[data-reveal-intro]", { y: 28, opacity: 0 });
-      gsap.set("[data-reveal-card]", { y: 32, opacity: 0 });
-      gsap.set("[data-reveal-chip]", { y: 22, opacity: 0 });
-      gsap.set("[data-reveal-line]", { scaleX: 0.35, opacity: 0.18, transformOrigin: "left center" });
-      gsap.set("[data-reveal-form]", { y: 28, opacity: 0 });
+      gsap.set("[data-reveal-intro]", { y: 24, opacity: 0 });
+      gsap.set("[data-reveal-card]", { y: 26, opacity: 0 });
+      gsap.set("[data-reveal-chip]", { y: 18, opacity: 0 });
+      gsap.set("[data-reveal-line]", { scaleX: 0.52, opacity: 0.22, transformOrigin: "left center" });
+      gsap.set("[data-reveal-form]", { y: 24, opacity: 0 });
 
       gsap.to("[data-hero-accent]", {
         y: -6,
@@ -2284,16 +2297,15 @@ export default function HomePage() {
             defaults: { ease: "power2.out" },
             scrollTrigger: {
               trigger: section,
-              start: "top 78%",
-              end: "top 30%",
-              scrub: 1,
+              start: "top 82%",
+              end: "top 58%",
               invalidateOnRefresh: true,
             },
           }).to(intro, {
             y: 0,
             opacity: 1,
-            stagger: 0.08,
-            duration: 0.82,
+            stagger: 0.07,
+            duration: 0.72,
             immediateRender: false,
           });
         }
@@ -2303,16 +2315,15 @@ export default function HomePage() {
             defaults: { ease: "power2.out" },
             scrollTrigger: {
               trigger: section,
-              start: "top 72%",
-              end: "top 24%",
-              scrub: 1,
+              start: "top 80%",
+              end: "top 52%",
               invalidateOnRefresh: true,
             },
           }).to(cards, {
             y: 0,
             opacity: 1,
-            stagger: 0.1,
-            duration: 0.84,
+            stagger: 0.08,
+            duration: 0.76,
             immediateRender: false,
           });
         }
@@ -2322,16 +2333,15 @@ export default function HomePage() {
             defaults: { ease: "power2.out" },
             scrollTrigger: {
               trigger: section,
-              start: "top 70%",
-              end: "top 20%",
-              scrub: 1,
+              start: "top 78%",
+              end: "top 48%",
               invalidateOnRefresh: true,
             },
           }).to(chips, {
             y: 0,
             opacity: 1,
             stagger: 0.06,
-            duration: 0.72,
+            duration: 0.66,
             immediateRender: false,
           });
         }
@@ -2341,16 +2351,15 @@ export default function HomePage() {
             defaults: { ease: "power2.out" },
             scrollTrigger: {
               trigger: section,
-              start: "top 68%",
-              end: "top 18%",
-              scrub: 1,
+              start: "top 78%",
+              end: "top 46%",
               invalidateOnRefresh: true,
             },
           }).to(lines, {
             scaleX: 1,
-            opacity: 1,
+            opacity: 0.92,
             stagger: 0.08,
-            duration: 0.72,
+            duration: 0.62,
             immediateRender: false,
           });
         }
@@ -4033,32 +4042,136 @@ export default function HomePage() {
               </div>
             </motion.div>
           </div>
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(180deg,rgba(246,241,232,0)_0%,rgba(228,235,241,0.3)_52%,rgba(7,24,39,0.08)_100%)]" />
         </section>
 
-        <footer className="relative z-20 bg-[#f6f1e8]">
-          <div className={`mx-auto ${sectionTwoContainer} py-12`}>
-            <div className="grid gap-8 border-t border-[rgba(7,24,39,0.08)] pt-8 lg:grid-cols-[minmax(0,0.9fr)_auto] lg:items-start">
-              <div>
-                <Link
-                  href="/"
-                  className="text-[0.72rem] font-medium uppercase tracking-[0.42em] text-[#071827] transition hover:text-[#071827]"
-                >
-                  OCIA Studios
-                </Link>
-                <p className="mt-4 text-[0.82rem] uppercase tracking-[0.18em] text-[#607585]">
-                  © {currentYear} Ocia Studios
-                </p>
+        <footer
+          data-footer-section
+          className="relative w-full overflow-hidden border-t border-[rgba(214,231,244,0.14)] bg-[#071827] text-[#F8F4EC]"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_24%,rgba(121,155,182,0.16),transparent_24%),radial-gradient(circle_at_84%_18%,rgba(255,255,255,0.06),transparent_18%)]" />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.08]"
+            style={{
+              backgroundImage:
+                "linear-gradient(135deg, rgba(214,231,244,0.22) 1px, transparent 1px), linear-gradient(45deg, rgba(214,231,244,0.12) 1px, transparent 1px)",
+              backgroundSize: "80px 80px, 120px 120px",
+            }}
+          />
+          <div className="pointer-events-none absolute inset-x-0 bottom-6 text-center text-[clamp(4.5rem,14vw,12rem)] font-medium uppercase tracking-[-0.08em] text-[rgba(248,244,236,0.05)]">
+            OCIA STUDIOS
+          </div>
+
+          <div className={`mx-auto w-full ${sectionTwoContainer} py-16 lg:py-20`}>
+            <motion.div
+              data-reveal-card
+              initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.64, ease: [0.22, 1, 0.36, 1] }}
+              className="relative"
+            >
+              <div className="grid gap-10 border-b border-[rgba(214,231,244,0.14)] pb-10 lg:grid-cols-[minmax(0,1.15fr)_repeat(3,minmax(0,0.62fr))] lg:gap-8 xl:gap-12">
+                <div data-reveal-intro className="max-w-[28rem]">
+                  <div className="inline-flex items-center gap-3 text-[0.72rem] font-semibold uppercase tracking-[0.26em] text-[#c7dced]">
+                    <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[#9fc0d8]" />
+                    Ocia Studios
+                  </div>
+                  <h3 className="mt-5 max-w-[15ch] text-[1.9rem] font-medium leading-[0.96] tracking-[-0.05em] text-[#f8f4ec] sm:text-[2.2rem]">
+                    Websites, funnels, and follow-up systems built to turn interest into enquiries.
+                  </h3>
+                  <p className="mt-5 max-w-[25rem] text-[0.98rem] leading-7 text-[rgba(248,244,236,0.74)]">
+                    For service businesses that rely on enquiries, bookings, and trust.
+                  </p>
+
+                  <div className="mt-7">
+                    <Link
+                      href={SECTION_LINKS.work}
+                      className="inline-flex min-h-11 items-center justify-center rounded-full border border-[rgba(214,231,244,0.22)] px-4 text-sm font-semibold text-[#f8f4ec] transition duration-300 hover:bg-[rgba(255,255,255,0.06)] hover:border-[rgba(214,231,244,0.34)]"
+                    >
+                      Back to top
+                    </Link>
+                  </div>
+                </div>
+
+                <div data-reveal-card>
+                  <p className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-[#bfd5e6]">
+                    Navigate
+                  </p>
+                  <div className="mt-5 grid gap-3">
+                    {footerLinks.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="text-[0.94rem] leading-7 text-[rgba(248,244,236,0.8)] transition duration-300 hover:text-[#f8f4ec] hover:underline"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div data-reveal-card>
+                  <p className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-[#bfd5e6]">
+                    Services
+                  </p>
+                  <div className="mt-5 grid gap-3">
+                    {footerServiceLinks.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="text-[0.94rem] leading-7 text-[rgba(248,244,236,0.8)] transition duration-300 hover:text-[#f8f4ec] hover:underline"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div data-reveal-card className="max-w-[16rem]">
+                  <p className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-[#bfd5e6]">
+                    Start
+                  </p>
+                  <p className="mt-5 text-[0.96rem] leading-7 text-[rgba(248,244,236,0.74)]">
+                    Not sure what is holding your website back?
+                  </p>
+                  <div className="mt-6">
+                    <motion.a
+                      href={AUDIT_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={
+                        reduceMotion
+                          ? undefined
+                          : { y: -3, boxShadow: "0 24px 48px rgba(0,0,0,0.24)" }
+                      }
+                      transition={{ duration: 0.24, ease: "easeOut" }}
+                      className="inline-flex min-h-13 items-center justify-center rounded-full bg-[#f8f4ec] px-6 text-sm font-semibold tracking-[0.01em] text-[#071827] shadow-[0_18px_44px_rgba(0,0,0,0.18)] hover:brightness-[1.03]"
+                      style={{ background: "#F8F4EC", color: "#071827", fontWeight: 700 }}
+                    >
+                      <span style={{ color: "#071827", opacity: 1 }}>
+                        Claim My Free Audit
+                      </span>
+                    </motion.a>
+                  </div>
+                </div>
               </div>
 
-              <div className="flex flex-wrap gap-x-6 gap-y-3 text-[0.72rem] uppercase tracking-[0.28em] text-[#607585]">
-                {footerLinks.map((item) => (
-                  <Link key={item.label} href={item.href} className="transition hover:text-[#071827]">
-                    {item.label}
-                  </Link>
-                ))}
+              <div className="flex flex-col gap-4 pt-6 text-[0.84rem] text-[rgba(248,244,236,0.62)] sm:flex-row sm:items-center sm:justify-between">
+                <p>© {currentYear} Ocia Studios. All rights reserved.</p>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+                  {footerLegalLinks.map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="transition duration-300 hover:text-[#f8f4ec] hover:underline"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-
+            </motion.div>
           </div>
         </footer>
       </main>

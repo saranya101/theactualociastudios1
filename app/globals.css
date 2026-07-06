@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * {
@@ -9,7 +9,7 @@
 }
 
 html {
-  background: #02060c;
+  background: #f6f1e8;
   scroll-behavior: smooth;
 }
 
@@ -20,8 +20,10 @@ section[id] {
 body {
   margin: 0;
   min-height: 100vh;
-  background: #02060c;
-  color: #f4f7fb;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.54), transparent 28%),
+    linear-gradient(180deg, #f8f3eb 0%, #f6f1e8 36%, #f4eee5 100%);
+  color: #071827;
   font-family: var(--font-outfit), system-ui, sans-serif;
 }
 
@@ -35,13 +37,11 @@ a {
   background:
     linear-gradient(
       180deg,
-      #02060c 0%,
-      #030912 16%,
-      #05101a 34%,
-      #07121d 54%,
-      #081521 72%,
-      #091621 86%,
-      #0a1722 100%
+      #f8f3eb 0%,
+      #f6f1e8 22%,
+      #f5f0e7 54%,
+      #f4eee5 78%,
+      #f6f1e8 100%
     );
 }
 
@@ -51,9 +51,11 @@ a {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 20% 18%, rgba(90, 128, 164, 0.1), transparent 22%),
-    radial-gradient(circle at 82% 42%, rgba(84, 114, 146, 0.08), transparent 24%),
-    radial-gradient(circle at 35% 78%, rgba(60, 82, 108, 0.08), transparent 28%);
+    radial-gradient(circle at 14% 14%, rgba(255, 255, 255, 0.62), transparent 22%),
+    radial-gradient(circle at 82% 16%, rgba(211, 226, 238, 0.34), transparent 22%),
+    radial-gradient(circle at 24% 62%, rgba(244, 235, 223, 0.5), transparent 26%),
+    radial-gradient(circle at 78% 74%, rgba(221, 236, 245, 0.24), transparent 24%),
+    radial-gradient(circle at 50% 110%, rgba(239, 229, 214, 0.34), transparent 26%);
   z-index: 0;
 }
 
@@ -63,11 +65,12 @@ a {
   inset: 0;
   pointer-events: none;
   background-image:
-    radial-gradient(rgba(233, 241, 248, 0.14) 0.7px, transparent 0.7px),
-    linear-gradient(180deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 26px 26px, 72px 72px;
-  opacity: 0.1;
+    radial-gradient(rgba(87, 102, 118, 0.08) 0.7px, transparent 0.7px),
+    linear-gradient(180deg, rgba(255,255,255,0.14) 0px, rgba(255,255,255,0) 100%);
+  background-size: 24px 24px, 100% 100%;
+  opacity: 0.26;
   z-index: 0;
+  mix-blend-mode: multiply;
 }
 
 .ocia-atmosphere-bg {
@@ -132,4 +135,17 @@ a {
 
 .scene-drift-reverse {
   animation: scene-drift-reverse 26s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .scene-float-slow,
+  .scene-float-reverse,
+  .scene-drift,
+  .scene-drift-reverse {
+    animation: none;
+  }
 }
